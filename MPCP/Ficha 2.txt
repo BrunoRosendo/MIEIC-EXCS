@@ -1,0 +1,347 @@
+1)
+a)
+.text
+.global SOMA_V
+.type SOMA_V,"function"
+
+SOMA_V:   	  mov X2, X0
+		  mov W0, #0
+ciclo:	  	  ldr W3, [X2]
+		  add W0, W0, W3
+		  sub X1, X1, #1
+		  add X2, X2, #4 //numero de bytes
+		  cbz X1, fim
+		  b ciclo
+fim:	  	  ret
+
+b) Fazer add X2, X2, #8
+
+a) (stor)
+.text
+.global SOMA_V
+.type SOMA_V,"function"
+
+SOMA_V: EOR W4, W4, W4
+ciclo:  cbz X1, fim
+	LDR W3, [X0]
+	SUB X1, X1, 1
+	ADD W4, W4, W3
+	ADD X0, X0, #4
+	B ciclo
+fim: 	mov W0, W4
+	ret
+
+b)
+em c mudar de int para long
+usar X em vez de W
+#8 em vez de #4
+
+
+3)
+b)
+#include <stdio.h>
+#include <stdlib.h>
+
+extern int CAR(int *v, int end, int seek); //pointer
+
+int main(void)
+{
+	int v[] = {'a', 'b', 'b', 'c', 'b', '\0'};
+	int end = '\0';
+	int seek = 'b';
+	int res = CAR(v, end, seek);
+	printf("%d\n", res);
+	return EXIT_SUCCESS;
+}
+
+
+.text
+.global CAR
+.type CAR,"function"
+
+CAR:	mov X3, X0
+		mov W0, #0
+ciclo:	ldr W4, [X3]
+		cmp W4, W1
+		b.EQ fim
+		add X3, X3, #4
+		cmp W4, W2
+		b.NE ciclo
+		add W0, W0, #1
+		b ciclo
+fim:	ret
+4)
+a)
+#include <stdio.h>
+#include <stdlib.h>
+
+extern void COPY(char *v, long int *n, int dim);
+
+int main(void)
+{
+	char v[] = {'a', 'b', 'c', 'd', 'e'};
+	long int new[] = {0, 0, 0, 0, 0};
+	int dim = 5;
+	COPY(v, new, dim);
+	for(int loop = 0; loop < dim; loop++)
+	      printf("%li ", new[loop]);
+	return EXIT_SUCCESS;
+}
+
+
+.text
+.global COPY
+.type COPY,"function"
+
+COPY:	cbz X2, fim // pode ser um vetor vazio
+ciclo:	ldrb W3, [X0]
+		and W3, W3, 0xFF
+		str W3, [X1]
+		SUB X2, X2, #1
+		cbz X2, fim
+		add X0, X0, #1
+		add X1, X1, #8
+		b ciclo
+fim:	ret
+
+
+5)
+a)
+#include <stdio.h>
+#include <stdlib.h>
+
+extern int POS1msb(long int n);
+
+int main(void)
+{
+	long int a = 69;
+	int res = POS1msb(a);
+	printf("Posiçao = %d", res);
+	return EXIT_SUCCESS;
+}
+
+.text
+.global POS1msb
+.type POS1msb,"function"
+
+POS1msb:	mov X1, X0
+			mov X0, #64
+ciclo:		AND X2, X1, 0x8000000000000000
+			lsl X1, X1, #1
+			sub X0, X0, #1
+			cmp X2, #0
+			b.EQ ciclo
+			ret
+c)
+#include <stdio.h>
+#include <stdlib.h>
+
+extern int NCAP(int n);
+
+int main(void)
+{
+	int a = 2095104;
+	int res = NCAP(a);
+	printf("Palindrome= %d", res);
+	return EXIT_SUCCESS;
+}
+
+.text
+.global NCAP
+.type NCAP,"function"
+
+NCAP:	mov W1, W0
+		mov W5, #32
+		RBIT W2, W1
+		mov W0, #1
+ciclo:	AND W3, W1, #1 // last bit
+		AND W4, W2, #1 // first bit
+		cmp W4, W3
+		b.NE salto
+		sub W5, W5, #1
+		lsr W1, W1, #1
+		lsr W2, W2, #1
+		cbz W5, fim
+		b ciclo
+salto:	mov W0, 0
+fim:	ret
+
+
+6)
+a)
+#include <stdio.h>
+#include <stdlib.h>
+
+extern void SHIFT(int a);
+
+int main(void)
+{
+	int a = 10;
+	SHIFT(a);
+	return EXIT_SUCCESS;
+}
+
+
+.text
+.global SHIFT
+.type SHIFT,"function"
+
+SHIFT:	mov X12, X0
+		mov X1, #0
+		BFI X10, X12, #8, #56
+		BFI X10, X1, #0, #8
+		ret
+
+7)
+d)
+#include <stdio.h>
+#include <stdlib.h>
+extern int interno(int *v1, int *v2, int dim);
+int main(void)
+{
+	int v1[]= {1, 2, 3};
+	int v2[]= {1, 2, 3};
+	printf("%d\n", interno(v1, v2, 3));
+}
+
+.text
+.global interno
+.type  interno, "function"
+
+interno:	mov x3, x0
+			mov x0, 0
+ciclo:		ldrsw x4, [x1]
+			ldrsw x5, [x3]
+			madd x0, x5, x4, x0
+			add x1, x1, 4
+			add x3, x3, 4
+			sub x2, x2, 1
+			cbz x2, fim
+			b ciclo
+fim:		ret
+
+e)
+#include <stdio.h>
+#include <stdlib.h>
+extern int interno(int *v1, int *v2, int dim);
+int main(void)
+{
+	int v1[]= {30000, 30000, 30000};
+	int v2[]= {30000, 30000, 30000};
+	printf("%d\n", interno(v1, v2, 3));
+}
+
+
+.text
+.global interno
+.type  interno, "function"
+
+interno:	mov x3, x0
+			mov x0, 0
+ciclo:		ldrsw x4, [x1]
+			ldrsw x5, [x3]
+			madd x11, x5, x4, x11
+			asr x11, x11, 31
+			cmp x11, 0
+			b.eq continue
+			cmp x11, 0xFFFFFFFFFFFFFFFF
+			b.eq continue
+			b overflow
+continue:		mul w6, w5, w4  // passar para x11 e ver se os primeiros 33 bits sao iguais
+			adds w0, w0, w6
+			b.vs overflow
+			add x1, x1, 4
+			add x3, x3, 4
+			sub x2, x2, 1
+			cbz x2, fim
+			b ciclo
+overflow:	mov w0, 0x7FFFFFFF
+fim:		ret
+
+
+9)
+a)
+w2: 0x00000012
+w1: AB120000
+
+b)
+w1: 78563412
+w1: 78563012
+w1: 00003012
+w1: 12300000
+w1: 00045678
+
+c)
+x1: FFFFFFFFFFFFFFFF
+x0: 0000000023456780
+x1: 0000000023456780
+
+
+10)
+a)
+Valor absoluto de X0 inicial
+b)
+O maior dos 3 valores de X1, X2 e X3
+
+.text
+.global Calculator
+.type Calculator, "function"
+.global power
+.type power, "function"
+
+
+Calculator:	mov x5, x0
+			add x12, x0, 1
+			stp X29, X30, [SP, -16]!
+			mov x9, x1
+ciclo:		cbz x5, fim		// N
+			ldrb w6, [x9]	// seq OP
+			ldr w7, [x2]	// seq B
+			ldr w8, [x3]	// seq A
+			cmp w6, 43
+			b.eq ADD
+			cmp w6, 45
+			b.eq SUB
+			cmp w6, 42
+			b.eq MUL
+			cmp w6, 80
+			b.eq POW
+ADD:		adds w0, w7, w8
+			b.vs overflow
+			b right
+SUB:		subs w0, w8, w7
+			b.vs overflow
+			b right
+MUL:		smull x0, w7, w8
+			b continue
+POW:		mov w0, w8
+			mov w1, w7
+			bl power
+			b continue
+continue:	mov x11, x0
+			asr x11, x11, 31
+			cmp x11, 0x0000000000000000
+			b.eq right
+			cmp x11, 0xffffffffffffffff
+			b.eq right
+			b overflow
+right:		str w0, [x3]
+			add x9, x9, 1
+			add x2, x2, 4
+			add x3, x3, 4
+			sub x5, x5, 1
+			mov w0, 0
+			b ciclo
+overflow:	sub x0, x12, x5
+fim:		ldp X29, X30, [SP], 16
+			ret
+
+
+power:		mov w10, w0
+			mov w0, 1
+ciclop:		cbz w1, end
+			smull x0, w0, w10
+			sub w1, w1, 1
+			b ciclop
+end:		ret
+

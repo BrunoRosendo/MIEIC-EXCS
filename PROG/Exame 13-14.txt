@@ -1,0 +1,479 @@
+1)
+a)
+
+unsigned int countValues(int a[], unsigned int nelem, int value)
+{
+unsigned int i, count = 0;
+for (i = 1; i <= nelem; i++)
+	if (a[i-1] == value)  //FALTA PARENTESES, TINHA QUE SER i-1, == E NAO =
+		count++;
+return count;
+}
+
+b)
+
+Usar um template:
+
+template<class T>
+unsigned int countValues(T a[], unsigned int nelem, T value)
+{
+	unsigned int i, count = 0;
+	for (i = 1; i <= nelem; i++)
+		if (a[i - 1] == value)  //FALTA PARENTESES, TINHA QUE SER i-1, == E NAO =
+			count++;
+	return count;
+}
+
+int main()
+{
+	float a[2] = { 2, 2 };
+	cout << countValues<float>(a, 2, 2);
+	return 0;
+}
+
+c)
+A classe não apresenta um default constructor, pelo que a declaração de p1 nesta forma não é possível.
+
+d)
+A função usa o operador '==' para comparar 2 objetos da classe Person, portanto, é preciso fazer o
+overloading desse operador
+
+
+bool operator==(Person p1, Person p2) {
+	if (p1.getName() == p2.getName() && p1.getAge() == p2.getAge()) return true;
+	return false;
+}
+Não seriam precisas alterações
+
+//TESTE
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+class Person
+{
+public:
+	Person(string name, unsigned int age);
+	string getName() const;
+	unsigned int getAge() const;
+	// other methods
+private:
+	string name;
+	unsigned int age;
+};
+
+Person::Person(string name, unsigned int age) {
+	this->name = name;
+	this->age = age;
+}
+
+string Person::getName() const {
+	return name;
+}
+
+unsigned int Person::getAge() const {
+	return age;
+}
+
+template<class T>
+unsigned int countValues(T a[], unsigned int nelem, T value)
+{
+	unsigned int i, count = 0;
+	for (i = 1; i <= nelem; i++)
+		if (a[i - 1] == value)  //FALTA PARENTESES, TINHA QUE SER i-1, == E NAO =
+			count++;
+	return count;
+}
+
+bool operator==(Person p1, Person p2) {
+	if (p1.getName() == p2.getName() && p1.getAge() == p2.getAge()) return true;
+	return false;
+}
+
+int main()
+{
+	Person p1("Adeus", 2);
+	Person p2("Ola", 2);
+	Person a[2] = { p1, p2 };
+	cout << countValues(a, 2, p2);
+	return 0;
+}
+
+e)
+
+class Player : public Person {
+public:
+	Player(string name, unsigned int age, string team);
+private:
+	string team;
+};
+
+Player::Player(string name, unsigned int age, string team) : Person(name, age) {
+	this->team = team;
+}
+
+f)
+Usaria um multimap, em que a key serie a posiçao e o value seria o nome do jogador
+Assim, seria possível pesquisar eficientemente quem joga a uma determinada posiçao (equal_range)
+e é também possível haver mais que um jogador em cada posição
+
+2)
+a)
+
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+vector<string> convertResultList(const vector<unsigned int>& number, const vector<string>& name, const vector<float>& grade) {
+	vector<string> v;
+	for (size_t i = 0; i < number.size(); ++i) {
+		string num = to_string(number.at(i)), nam = name.at(i), grad = to_string(grade.at(i));
+		for (size_t i = 0; i < grad.size(); ++i) {
+			if (grad.at(i) == '.') grad = grad.substr(0, i + 2);
+		}
+		while (num.size() < 7) num = "0" + num;
+		while (nam.size() < 20) nam = " " + nam;
+		while (grad.size() < 4) grad = "0" + grad;
+		v.push_back(num + " | " + nam + " | " + grad);
+	}
+	return v;
+}
+
+int main()
+{
+	vector<unsigned int> number = { 123, 1234567 };
+	vector<string> name = { "Joao Leites", "BBBBBBBBBBBBBBBBBBBB" };
+	vector<float> grade = { 16.9, 2 };
+	vector<string> v = convertResultList(number, name, grade);
+	for (auto x : v) cout << x << endl;
+	return 0;
+}
+
+b)
+
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+unsigned int countValues(const int a[], unsigned int nelem, int value)
+{
+	unsigned int i, count = 0;
+	for (i = 1; i <= nelem; i++)
+		if (a[i - 1] == value)  //FALTA PARENTESES, TINHA QUE SER i-1, == E NAO =
+			count++;
+	return count;
+}
+
+int mode(const int number[], unsigned int numElems) {
+	vector<int> freqs;
+	for (size_t i = 0; i < numElems; ++i) {
+		freqs.push_back(countValues(number, numElems, number[i]));
+	}
+	size_t index = 0;
+	int bigger = 0;
+	for (size_t i = 0; i < freqs.size(); ++i) {
+		if (freqs.at(i) > bigger) {
+			index = i;
+			bigger = freqs.at(i);
+		}
+		if (freqs.at(i) == bigger) {
+			if (number[i] > number[index]) {
+				index = i;
+				bigger = freqs.at(i);
+			}
+		}
+	}
+	return number[index];
+}
+
+int main()
+{
+	int a[4] = { 1, 2, 1 , 1};
+	cout << mode(a, 4);
+	return 0;
+}
+
+3)
+a)
+
+Text::Text(string filename) {
+	ifstream fin;
+	fin.open(filename);
+	getline(fin, title);
+	getline(fin, author);
+	while (!fin.eof()) {
+		string line;
+		getline(fin, line);
+		text.push_back(line);
+	}
+	fin.close();
+}
+
+b)
+
+bool Text::existsWord(string word) {
+	stringstream titlestream, authorstream;
+	titlestream.str(title);
+	authorstream.str(author);
+	while (!titlestream.eof()) {
+		string word2;
+		titlestream >> word2;
+		if (word == word2) return true;
+	}
+	while (!authorstream.eof()) {
+		string word2;
+		authorstream >> word2;
+		if (word == word2) return true;
+	}
+	for (size_t i = 0; i < text.size(); ++i) {
+		string line = text.at(i);
+		stringstream linestream(line);
+		while (!linestream.eof()) {
+			string word2;
+			linestream >> word2;
+			if (word == word2) return true;
+		}
+	}
+	return false;
+}
+
+c)
+
+int main()
+{
+	string word, file;
+	cout << "Word: ";
+	cin >> word;
+	cout << "Name of file: ";
+	cin >> file;
+	Text t(file);
+	if (t.existsWord(word)) cout << "The word exists" << endl;
+	else cout << "The word does not exist" << endl;
+	return 0;
+}
+
+4)
+a)
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+typedef struct {
+	string clientBI, dateBegin, dateEnd;
+} RentRecord;
+
+class Vehicle {
+public:
+	Vehicle(string matricula, string marca, string modelo);
+	Vehicle(string matricula, string marca, string modelo, vector<RentRecord> records);
+	string getMatricula() const;
+	string getMarca() const;
+	string getModelo() const;
+	RentRecord getRecord(string BI) const;	// gets the record of a given person
+	void addRecord(RentRecord record);
+private:
+	string matricula, marca, modelo;
+	vector<RentRecord> records;
+};
+
+Vehicle::Vehicle(string matricula, string marca, string modelo) {
+	this->matricula = matricula;
+	this->marca = marca;
+	this->modelo = modelo;
+}
+
+Vehicle::Vehicle(string matricula, string marca, string modelo, vector<RentRecord> records) {
+	this->matricula = matricula;
+	this->marca = marca;
+	this->modelo = modelo;
+	this->records = records;
+}
+
+string Vehicle::getMatricula() const {
+	return matricula;
+}
+
+string Vehicle::getMarca() const {
+	return marca;
+}
+
+string Vehicle::getModelo() const {
+	return modelo;
+}
+
+RentRecord Vehicle::getRecord(string BI) const {
+	for (size_t i = 0; i < records.size(); ++i) {
+		RentRecord r = records.at(i);
+		if (r.clientBI == BI) return r;
+	}
+}
+
+void Vehicle::addRecord(RentRecord record) {
+	records.push_back(record);
+}
+
+class Client {
+public:
+	Client(string bi, string name);
+	string getBI() const;
+	string getName() const;
+private:
+	string bi, name;
+};
+
+Client::Client(string bi, string name) {
+	this->bi = bi;
+	this->name = name;
+}
+
+string Client::getBI() const {
+	return bi;
+}
+
+string Client::getName() const {
+	return name;
+}
+
+int main()	// estruturas a usar
+{
+	vector<Vehicle> vehicles;
+	vector<Client> clients;
+	return 0;
+}
+
+b)
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+typedef struct {
+	string clientBI, dateBegin, dateEnd;
+} RentRecord;
+
+class Vehicle {
+public:
+	Vehicle(string matricula, string marca, string modelo);
+	Vehicle(string matricula, string marca, string modelo, vector<RentRecord> records);
+	string getMatricula() const;
+	string getMarca() const;
+	string getModelo() const;
+	RentRecord getRecord(string BI) const;	// gets the record of a given person
+	RentRecord getLastRecord() const;
+	void addRecord(RentRecord record);
+private:
+	string matricula, marca, modelo;
+	vector<RentRecord> records;
+};
+
+Vehicle::Vehicle(string matricula, string marca, string modelo) {
+	this->matricula = matricula;
+	this->marca = marca;
+	this->modelo = modelo;
+}
+
+Vehicle::Vehicle(string matricula, string marca, string modelo, vector<RentRecord> records) {
+	this->matricula = matricula;
+	this->marca = marca;
+	this->modelo = modelo;
+	this->records = records;
+}
+
+string Vehicle::getMatricula() const {
+	return matricula;
+}
+
+string Vehicle::getMarca() const {
+	return marca;
+}
+
+string Vehicle::getModelo() const {
+	return modelo;
+}
+
+RentRecord Vehicle::getRecord(string BI) const {
+	for (size_t i = 0; i < records.size(); ++i) {
+		RentRecord r = records.at(i);
+		if (r.clientBI == BI) return r;
+	}
+}
+
+RentRecord Vehicle::getLastRecord() const {
+	return records.at(records.size() - 1);
+}
+
+void Vehicle::addRecord(RentRecord record) {
+	records.push_back(record);
+}
+
+class Client {
+public:
+	Client(string bi, string name);
+	string getBI() const;
+	string getName() const;
+private:
+	string bi, name;
+};
+
+Client::Client(string bi, string name) {
+	this->bi = bi;
+	this->name = name;
+}
+
+string Client::getBI() const {
+	return bi;
+}
+
+string Client::getName() const {
+	return name;
+}
+
+
+
+void showAvailableVehicles(vector<Vehicle> vehicles, string date) {
+	for (size_t i = 0; i < vehicles.size(); ++i) {
+		Vehicle v = vehicles.at(i);
+		RentRecord last = v.getLastRecord();
+		if (date > last.dateEnd) {
+			cout << v.getMatricula() << " - " << v.getMarca() << " - " << v.getModelo() << endl;
+		}
+	}
+}
+
+int main()
+{
+	Vehicle v1("123", "Ford", "Focues");
+	Vehicle v2("124", "Renault", "Megan");
+	RentRecord r1, r2;
+	r1.dateEnd = "2019-06-24";
+	r2.dateEnd = "2019-06-22";
+	v1.addRecord(r1);
+	v2.addRecord(r2);
+	vector<Vehicle> vehicles = { v1, v2 };
+	showAvailableVehicles(vehicles, "2019-06-23");
+	return 0;
+}

@@ -1,0 +1,570 @@
+Exc5:
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+int main()
+{
+    double a, b, c;
+    cout << "Solution of Ax ^ 2 + Bx + C = 0" << endl;
+    cout << "Insert the coeficients (A B C):" << endl;
+    cin >> a >> b >> c;
+    cout << fixed << setprecision(3);  // sets decimal (fixed) precision to 3
+    while (cin.fail()) {
+        cin.clear();
+        cin.ignore(10000, '\n');
+        cout << "Insert the coeficients (A B C):" << endl;
+        cin >> a >> b >> c;
+    }
+    double delta = pow(b, 2) - 4 * a * c;
+    if (delta > 0) {
+        double sol1 = (-b + sqrt(delta)) / (2 * a);
+        double sol2 = (-b - sqrt(delta)) / (2 * a);
+        cout << "The equation has 2 different real roots: " << sol1 << " and " << sol2 << endl;
+    }
+    else if (delta == 0) {
+        double sol = -b / (2*a);
+        cout << "The equation has 2 equal real roots: " << sol << endl;
+    }
+    else {
+        double real = -b / (2 * a);
+        double i1 = sqrt(-delta) / (2 * a);
+        double i2 = -sqrt(-delta) / (2 * a);
+        cout << "The equation has 2 complex roots: " << real << " + " << i1 << "i and " << real << " + " << i2 << "i" << endl;
+    }
+    return 0;
+}
+
+Exc 6:
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+int main()
+{
+    double n, q, j;
+    cout << "Insert the years, amount of deposit and the annual interest rate" << endl;
+    cin >> n >> q >> j;
+    double amount = 0;
+    j = j / 100;
+    for (int i = 1; i <= n; i++) {
+        amount = (amount + q) * (1 + j);
+    }
+    cout << "The amount is " << amount << endl;
+    return 0;
+}
+
+Exc7:
+a)
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+int main()
+{
+    int n, stop;
+    cout << "Insert the number n" << endl;
+    cin >> n;
+    stop = sqrt(n);
+    for (int i = 2; i <= stop; i++) {
+        if (n % i == 0) {
+            cout << "n is not a prime number" << endl;
+            exit(0);
+        }
+    }
+    cout << "n is a prime number" << endl;
+    return 0;
+}
+
+b)
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+int main()
+{
+    for (int i = 1; i < 1000; i++) {
+        int sq = sqrt(i);
+        bool prime = true;
+        for (int a = 2; a <= sq; a++) {
+            if (i % a == 0) {
+                prime = false;
+                break;
+            }
+        }
+        if (prime) cout << i << endl;
+    }
+    return 0;
+}
+
+c)
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+int main()
+{
+    int primes = 0;
+    int i = 1;
+    while (primes < 100) {
+        int sq = sqrt(i);
+        bool prime = true;
+        for (int a = 2; a <= sq; a++) {
+            if (i % a == 0) {
+                prime = false;
+                break;
+            }
+        }
+        if (prime) {
+            cout << i << endl;
+            primes += 1;
+        }
+        i += 1;
+    }
+    return 0;
+}
+
+d)
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+int main()
+{
+    
+    for (unsigned long i = ULONG_MAX; i > 0; --i) {
+        int sq = sqrt(i);
+        bool prime = true;
+        for (int a = 2; a <= sq; a++) {
+            if (i % a == 0) {
+                prime = false;
+                break;
+            }
+        }
+        if (prime) {
+            cout << "The largest prime number is " << i << endl;
+            break;
+        }
+    }
+    return 0;
+}
+
+Exc8:
+a)
+#include <iostream>
+#define _USE_MATH_DEFINES
+#include <cmath>
+#include <math.h>
+#include <iomanip>
+using namespace std;
+
+int main()
+{
+    cout << "ang\t   sin\t          cos\t          tan" << endl;
+    cout << fixed << setprecision(6);
+    for (int i = 0; i <= 90; i = i + 15) {
+        double ang = (i * M_PI) / 180;
+        if (i % 90 == 0 && i % 180 != 0) cout << i << '\t' << sin(ang) << '\t' << cos(ang) << '\t' << "infinite" << endl;
+        else cout << i << '\t' << sin(ang) << '\t' << cos(ang) << '\t' << tan(ang) << endl;
+    }
+    return 0;
+}
+
+b)
+#include <iostream>
+#define _USE_MATH_DEFINES
+#include <cmath>
+#include <math.h>
+#include <iomanip>
+using namespace std;
+
+int main()
+{
+    double a, b, c;
+    cout << "Insert the interval of [a, b] and the increment" << endl;
+    cin >> a >> b >> c;
+    cout << "ang\t   sin\t          cos\t          tan" << endl;
+    cout << fixed << setprecision(6);
+    for (int i = a; i <= b; i = i + c) {
+        double ang = (i * M_PI) / 180;
+        if (i % 90 == 0 && i % 180 != 0) cout << i << '\t' << sin(ang) << '\t' << cos(ang) << '\t' << "infinite" << endl;
+        else cout << i << '\t' << sin(ang) << '\t' << cos(ang) << '\t' << tan(ang) << endl;
+    }
+    return 0;
+}
+Exc9:
+a)
+
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int num;
+    cout << "Insert the number you wish to check if it is a palindrome" << endl;
+    cin >> num;
+    int last = num % 10;
+    int first = num / 100;
+    if (last == first) cout << "The number is a palindrome" << endl;
+    else cout << "The number is not a palindrome" << endl;
+    return 0;
+}
+
+b)
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+int main()
+{
+    unsigned int num;
+    cout << "Insert the number you wish to check if it is a palindrome" << endl;
+    cin >> num;
+    bool pal = true;
+    while (num >= 10) {
+        int len = 0;
+        int n = num;
+        do {
+            ++len;
+            n /= 10;
+        } while (n != 0);
+        int last = num % 10;
+        int first = num / pow(10, len - 1);
+        if (first != last) {
+            pal = false;
+            cout << "The number is not a palindrome" << endl;
+            break;
+        }
+        num = num - (first * pow(10, len - 1));
+        num = num / 10;
+    }
+    if (pal) cout << "The number is a palindrome" << endl;
+    return 0;
+}
+
+Exc10:
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int n;
+    cin >> n;
+    bool cont = true;
+    int prime = 2;
+    while (cont) {
+        while (n % prime == 0) {
+            n = n / prime;
+            if (n == 1) {
+                cout << prime << endl;
+            }
+            else cout << prime << "x";
+        }
+        if (n == 1) cont = false;
+        while (true) {
+            ++prime;
+            int sq = sqrt(prime);
+            bool isprime = true;
+            for (int i = 2; i <= sq; ++i) {
+                if (prime % i == 0) isprime = false;
+            }
+            if (isprime) break;
+        }
+    }
+    return 0;
+}
+
+Exc11:
+a)
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int n;
+    cin >> n;
+    double sum = 0;
+    for (int i = 0; i <= n; ++i) {
+        double term = pow(-1, i) * (4 / (2 * (double) i + 1));
+        sum += term;
+    }
+    cout << sum << endl;
+    return 0;
+}
+
+b)
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int n;
+    cin >> n;
+    double sum = 1;
+    double prec = 1;
+    for (int i = 1; i <= n; ++i) {
+        double term = prec * (1 / (double) i);
+        sum += term;
+        prec = term;
+    }
+    cout << sum << endl;
+    return 0;
+}
+
+c)
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int n;
+    double x;
+    cin >> n >> x;
+    double sum = 1;
+    double prec = 1;
+    for (int i = 1; i <= n; ++i) {
+        double term = pow(-1, i) * abs(prec) * (x / (double) i);
+        if (i % 2 == 0) term = abs(term);
+        sum += term;
+        prec = term;
+    }
+    cout << sum << endl;
+    return 0;
+}
+
+Exc12:
+
+
+Exc13: (standard deviation missing)
+a)
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int len;
+    cin >> len;
+    int sum = 0;
+    int largest = INT_MIN;
+    int smallest = INT_MAX;
+    double sumd = 0;
+    int arra [100];
+    for (int i = 1; i <= len; ++i) {
+        int num;
+        cin >> num;
+        sum += num;
+        if (num > largest) largest = num;
+        if (num < smallest) smallest = num;
+        arra[i - 1] = num;
+    }
+    double mean = (double)sum / len;
+    for (int i = 0; i < len; ++i) {
+        sumd += pow(arra[i] - mean, 2);
+    }
+    double deviation = sqrt(sumd / len);
+    cout << "sum = " << sum << endl << "mean = " << mean << endl << "largest = " << largest << endl << "smallest = " << smallest << endl << "standard deviation = " << deviation << endl;
+    return 0;
+}
+
+b)
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int len = 0;
+    int sum = 0;
+    int largest = INT_MIN;
+    int smallest = INT_MAX;
+    double sumd = 0;
+    int arra [100];
+    while (true) {
+        int num;
+        cin >> num;
+        if (num == 0) break;
+        arra[len] = num;
+        len += 1;
+        sum += num;
+        if (num > largest) largest = num;
+        if (num < smallest) smallest = num;
+    }
+    double mean = (double)sum / len;
+    for (int i = 0; i < len; ++i) {
+        sumd += pow(arra[i] - mean, 2);
+    }
+    double deviation = sqrt(sumd / len);
+    cout << "sum = " << sum << endl << "mean = " << mean << endl << "largest = " << largest << endl << "smallest = " << smallest << endl << "standard deviation = " << deviation << endl << "length = " << len << endl;
+    return 0;
+}
+
+c)
+
+
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int len = 0;
+    int sum = 0;
+    int largest = INT_MIN;
+    int smallest = INT_MAX;
+    double sumd = 0;
+    int arra [100];
+    while (true) {
+        int num;
+        cin >> num;
+        if (cin.eof()) break;
+        arra[len] = num;
+        len += 1;
+        sum += num;
+        if (num > largest) largest = num;
+        if (num < smallest) smallest = num;
+    }
+    double mean = (double)sum / len;
+    for (int i = 0; i < len; ++i) {
+        sumd += pow(arra[i] - mean, 2);
+    }
+    double deviation = sqrt(sumd / len);
+    cout << "sum = " << sum << endl << "mean = " << mean << endl << "largest = " << largest << endl << "smallest = " << smallest << endl << "standard deviation = " << deviation << endl << "length = " << len << endl;
+    return 0;
+}
+
+Exc14:
+#include <iostream>
+using namespace std;
+
+void main()
+{
+	double n, delta, dif;
+	int max;
+	double rq = 1;
+	cout << "Insert the values of n, delta and nMaxIter" << endl;
+	cin >> n >> delta >> max;
+	int it = 0;
+	while (true) {
+		++it;
+		rq = (rq + n / rq) / 2;
+		dif = abs(n - pow(rq, 2));
+		if (dif < delta || it == max) break;
+	}
+	cout << "The square root of " << n << " is " << rq << endl;
+}
+
+Exc15:
+#include <iostream>
+#include <ctime>
+using namespace std;
+
+int main()
+{
+    srand(time(NULL));
+    int n1 = rand() % 8 + 2;
+    int n2 = rand() % 8 + 2;
+    int res = n1 * n2;
+    int guess;
+    cout << "What's the result of " << n1 << " * " << n2 << "?" << endl;
+    time_t begin = time(NULL);
+    cin >> guess;
+    time_t end = time(NULL);
+    int time = (end - begin);
+    if (guess != res) cout << "Very Bad" << endl;
+    else if (time < 5) cout << "Good" << endl;
+    else if (time <= 10) cout << "Satisfactory" << endl;
+    else cout << "Insufficient" << endl;
+    return 0;
+}
+
+Exc16:
+#include <iostream>
+using namespace std;
+
+void main()
+{
+    double result = INT_MAX, memory = INT_MAX;
+    while (true) {
+        string operation;
+        double a, b;
+        cout << "What's the operation you wish to do?" << endl;
+        cin >> operation;
+        if (operation == "+") {
+            cout << "Insert 2 numbers" << endl;
+            cin >> a >> b;
+            while (cin.fail()) {
+                cin.clear();
+                cin.ignore(10000, '\n');
+                cout << "Insert 2 numbers" << endl;
+                cin >> a >> b;
+            }
+            result = a + b;
+            cout << result << endl;
+        }
+        else if (operation == "-") {
+            cout << "Insert 2 numbers" << endl;
+            cin >> a >> b;
+            while (cin.fail()) {
+                cin.clear();
+                cin.ignore(10000, '\n');
+                cout << "Insert 2 numbers" << endl;
+                cin >> a >> b;
+            }
+            result = a - b;
+            cout << result << endl;
+        }
+        else if (operation == "/") {
+            cout << "Insert 2 numbers" << endl;
+            cin >> a >> b;
+            while (cin.fail()) {
+                cin.clear();
+                cin.ignore(10000, '\n');
+                cout << "Insert 2 numbers" << endl;
+                cin >> a >> b;
+            }
+            result = a / b;
+            cout << result << endl;
+        }
+        else if (operation == "*") {
+            cout << "Insert 2 numbers" << endl;
+            cin >> a >> b;
+            while (cin.fail()) {
+                cin.clear();
+                cin.ignore(10000, '\n');
+                cout << "Insert 2 numbers" << endl;
+                cin >> a >> b;
+            }
+            result = a * b;
+            cout << result << endl;
+        }
+        else if (operation == "M") {
+            memory = result;
+        }
+        else if (operation == "MC") {
+            memory = INT_MAX;
+        }
+        else if (operation == "M+") {
+            if (memory == INT_MAX) cout << "The memory is empty" << endl;
+            else {
+                result = result + memory;
+                cout << result << endl;
+            }
+        }
+        else if (operation == "M-") {
+            if (memory == INT_MAX) cout << "The memory is empty" << endl;
+            else {
+                result = result - memory;
+                cout << result << endl;
+            }
+        }
+        else if (operation == "MR") {
+            if (memory == INT_MAX) cout << "The memory is empty" << endl;
+            else cout << memory << endl;
+        }
+        else if (operation == "C") {
+            system("cls");
+            result = INT_MAX;
+        }
+        else {
+            cout << "Insert a valid command. ";
+        }
+    }
+}

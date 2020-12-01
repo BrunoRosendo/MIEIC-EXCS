@@ -1,0 +1,453 @@
+1)
+a)
+while (0 <= grade && grade <= 20)
+
+b)
+Ele incrementou o valor de n para o caso onde grade < 0
+Poderia ser corrigido por iniciar n a 0 e incrementa-lo no inicio do ciclo
+
+c)
+Para o resultado ser apresentado com parte decimal era preciso fazer:
+average = (float) sum / n;
+Como estava anteriormente, o compilador executa a divisao inteira e depois guarda-a na variavel average
+
+d)
+O programa vai indefinitivamente pedir novos valores, sem ser possível escrever nenhum deles
+Isto acontece porque 'o' nao é um valor para a variável grade, que dá origem a um erro,
+o que faz com que todas as tentativas de leitura dêm erro. (o fica no buffer e 1 nao) 
+Isto pode ser corrigido verificando o cin.fail(), dando cin.clear() e cin.ignore(100, '\n') se tal acontecer
+
+2)
+a)
+A funçao devia ter o vetor passado por referência, ou seja, vector<int> &v
+Como está, apenas uma cópia do vetor é alterada
+
+b)
+Em vez de vector<int>& v ter 2 parametros, int a[] e int numElems
+Em vez de v.size() ser numElems
+
+c)
+Escrever template<Class T> na linha antes da funçao
+vector<T> v em vez de vector<int> v
+T t em vez de int t
+
+3)
+a)
+
+class Time {
+public:
+	Time();
+	Time(int hours, int mins, int secs);
+	void show() const;
+private:
+	int hours, mins, secs;
+};
+
+b)
+Time::Time() {
+	hours = 0;
+	mins = 0;
+	secs = 0;
+}
+
+Time::Time(int hours, int mins, int secs) {
+	this->hours = hours;
+	this->mins = mins;
+	this->secs = secs;
+}
+
+void Time::show() const {
+	cout << hours << ":" << mins << ":" << secs;
+}
+
+c)
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+class Time {
+	friend ostream& operator<<(ostream& out, const Time t);
+public:
+	Time();
+	Time(int hours, int mins, int secs);
+private:
+	int hours, mins, secs;
+};
+
+Time::Time() {
+	hours = 0;
+	mins = 0;
+	secs = 0;
+}
+
+Time::Time(int hours, int mins, int secs) {
+	this->hours = hours;
+	this->mins = mins;
+	this->secs = secs;
+}
+
+ostream& operator<<(ostream& out, const Time t) {
+	out << t.hours << ":" << t.mins << ":" << t.secs;
+	return out;
+}
+
+int main() {
+	Time t1, t2(17, 25, 43); // t2 representa 17h 25m 43s
+	cout << t1 << endl << t2 << endl;
+	return 0;
+}
+
+d)
+struct Activity{
+	Time begin;
+	Time duration;
+};
+
+multimap<string, Activity> activities;
+
+4)
+a)
+bool fileopen(string filename, ifstream& fin) {
+	fin.open(filename);
+	return fin.is_open();
+}
+
+b)
+bool getBets(string filename, vector<vector<int>>& bets) {
+	ifstream fin;
+	if (fileopen(filename, fin)) {
+		int linha = 1;
+		while (!fin.eof()) {
+			string line;
+			stringstream linestream;
+			vector<int> vline;
+			getline(fin, line);
+			linestream.str(line);
+			while (!linestream.eof()) {
+				int a;
+				linestream >> a;
+				vline.push_back(a);
+			}
+			if (vline.size() == 7) bets.push_back(vline);
+			else {
+				cout << "A aposta " << linha << " esta incompleta." << endl;
+			}
+			++linha;
+		}
+		return true;
+	}
+	else return false;
+}
+
+int main() {
+	vector<vector<int>> bets;
+	getBets("bets.txt", bets);
+	for (auto& x : bets) {
+		for (auto y : x) cout << y << " ";
+		cout << endl;
+	}
+	return 0;
+}
+
+c)
+void printBet(vector<int> bet) {
+	vector<int> main;
+	vector<int> stars;
+	main.assign(bet.begin(), bet.begin() + 5);
+	stars.assign(bet.begin() + 5, bet.end());
+	for (int l = 0; l < 5; ++l) {
+		int first = l * 9 + 1;
+		for (int c = 0; c < 9; ++c) {
+			int num = first + c;
+			vector<int>::iterator it = find(main.begin(), main.end(), num);
+			if (it != main.end()) cout << num << " ";
+			else cout << "  ";
+		}
+		cout << endl;
+	}
+	cout << endl;
+	for (int i = 1; i <= 9; ++i) {
+		vector<int>::iterator it = find(stars.begin(), stars.end(), i);
+		if (it != stars.end()) cout << i << " ";
+		else cout << "  ";
+	}
+	cout << endl;
+}
+
+d)
+void printResult(vector<int> bet, vector<int> key) {
+	vector<int> main;
+	vector<int> stars;
+	vector<int> keymain;
+	vector<int> keystars;
+	int mainp = 0, starp = 0;
+	main.assign(bet.begin(), bet.begin() + 5);
+	stars.assign(bet.begin() + 5, bet.end());
+	keymain.assign(key.begin(), key.begin() + 5);
+	keystars.assign(key.begin() + 5, key.end());
+
+	for (int i = 0; i < 5; ++i) {
+		for (int k = 0; k < 5; ++k) {
+			if (main.at(i) == keymain.at(k)) {
+				mainp++;
+				break;
+			}
+			if (main.at(i) < keymain.at(k)) break;
+		}
+	}
+
+	for (int i = 0; i < 2; ++i) {
+		for (int k = 0; k < 2; ++k) {
+			if (stars.at(i) == keystars.at(k)) {
+				starp++;
+				break;
+			}
+			if (stars.at(i) < keystars.at(k)) break;
+		}
+	}
+	cout << "pontos: " << mainp << "+" << starp << endl;
+}
+
+int main() {
+	vector<int> bet = { 1,7,21,36,37,2,5 };
+	vector<int> key = { 1, 5, 27, 36, 40, 3, 5 };
+	printResult(bet, key);
+	return 0;
+}
+
+5)
+a)
+Tabuleiro::Tabuleiro() {
+	for (int a = 0; a < 8; ++a) {
+		vector<Peca> v;
+		for (int b = 0; b < 8; ++b) {
+			Peca p;
+			v.push_back(p);
+		}
+		tabuleiro.push_back(v);
+	}
+}
+
+b)
+string Tabuleiro::getPecaNaPos(string pos) const {
+	int col = stoi(pos.substr(0, 1)) - 1;
+	int lin = pos[1] - 65;
+	Peca p = tabuleiro.at(lin).at(col);
+	return p.getNome();
+}
+
+c)
+vector<Peca> Tabuleiro::torrePodeTomar(unsigned int lin, unsigned int col, bool cor) const {
+	vector<Peca> v;
+	for (int i = lin + 1; i < 8; ++i) {
+		Peca p = tabuleiro.at(i).at(col);
+		if (p.getNome() != "") {
+			if (p.getCor() == cor) break;
+			else {
+				v.push_back(p);
+				break;
+			}
+		}
+	}
+	for (int i = lin - 1; i >= 0; --i) {
+		Peca p = tabuleiro.at(i).at(col);
+		if (p.getNome() != "") {
+			if (p.getCor() == cor) break;
+			else {
+				v.push_back(p);
+				break;
+			}
+		}
+	}
+	for (int c = col + 1; c < 8; ++c) {
+		Peca p = tabuleiro.at(lin).at(c);
+		if (p.getNome() != "") {
+			if (p.getCor() == cor) break;
+			else {
+				v.push_back(p);
+				break;
+			}
+		}
+	}
+	for (int c = col - 1; c >= 0; --c) {
+		Peca p = tabuleiro.at(lin).at(c);
+		if (p.getNome() != "") {
+			if (p.getCor() == cor) break;
+			else {
+				v.push_back(p);
+				break;
+			}
+		}
+	}
+	return v;
+}
+
+d)
+void Tabuleiro::pecasTomadas() const {
+	cout << "Pecas tomadas pelas brancas: ";
+	for (const auto& x : pretasTomadas) cout << x << " ";
+	cout << endl << endl << "Pecas tomadas pelas pretas: ";
+	for (const auto& x : brancasTomadas) cout << x << " ";
+}
+
+//TESTAR
+
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <algorithm>
+#include <set>
+using namespace std;
+
+class Peca {
+public:
+	Peca(); // constrói uma "peça vazia"
+	Peca(string nome, bool cor);
+	string getNome() const; // retorna o nome de Peca
+	bool getCor() const; // retorna a cor de Peca
+	void setPeca(string nome, bool cor); // atualiza os atributos de Peca
+private:
+	string nome; // o nome da peça pode ser: “Rei”, “Rainha”, “Torre”, “Bispo”, “Cavalo”, ou “Peao”
+	// a ausência de uma peça é assinalada usando a string vazia no nome
+	bool cor; // true para as peças brancas; false para as peças pretas
+};
+
+Peca::Peca() {
+	cor = 0;
+}
+
+Peca::Peca(string nome, bool cor) {
+	this->nome = nome;
+	this->cor = cor;
+}
+
+string Peca::getNome() const {
+	return nome;
+}
+
+bool Peca::getCor() const {
+	return cor;
+}
+
+void Peca::setPeca(string nome, bool cor) {
+	this->nome = nome;
+	this->cor = cor;
+}
+
+
+class Tabuleiro {
+public:
+	Tabuleiro(); // reserva espaço para um tabuleiro (matriz 8 x 8) e preenche
+	// todas as posições com uma "peça vazia" (ver texto acima)
+	string getPecaNaPos(string pos) const; //retorna nome da peça na pos. dada
+	vector<Peca> torrePodeTomar(unsigned int lin, unsigned int col,
+		bool cor) const; // retorna os nomes das
+		// peças que podem ser tomadas pela torre cuja posição e cor é dada
+	void pecasTomadas() const; //mostra nome das peças tomadas por cada jogador
+	void setPeca(Peca p, int lin, int col);
+	void addPretaTomada(string nome);
+private:
+	vector< vector<Peca> > tabuleiro; // tabuleiro de jogo
+	set<string> pretasTomadas; // peças pretas tomadas pelas brancas
+	set<string> brancasTomadas; // peças brancas tomadas pelas pretas
+};
+
+Tabuleiro::Tabuleiro() {
+	for (int a = 0; a < 8; ++a) {
+		vector<Peca> v;
+		for (int b = 0; b < 8; ++b) {
+			Peca p;
+			v.push_back(p);
+		}
+		tabuleiro.push_back(v);
+	}
+}
+
+void Tabuleiro::pecasTomadas() const {
+	cout << "Pecas tomadas pelas brancas: ";
+	for (const auto& x : pretasTomadas) cout << x << " ";
+	cout << endl << endl << "Pecas tomadas pelas pretas: ";
+	for (const auto& x : brancasTomadas) cout << x << " ";
+}
+
+string Tabuleiro::getPecaNaPos(string pos) const {
+	int col = pos[0] - 65;	//D1
+	int lin = pos[1] - 49;
+	Peca p = tabuleiro.at(lin).at(col);
+	return p.getNome();
+}
+
+void Tabuleiro::setPeca(Peca p, int lin, int col) {
+	tabuleiro.at(lin).at(col) = p;
+}
+
+vector<Peca> Tabuleiro::torrePodeTomar(unsigned int lin, unsigned int col, bool cor) const {
+	vector<Peca> v;
+	for (int i = lin + 1; i < 8; ++i) {
+		Peca p = tabuleiro.at(i).at(col);
+		if (p.getNome() != "") {
+			if (p.getCor() == cor) break;
+			else {
+				v.push_back(p);
+				break;
+			}
+		}
+	}
+	for (int i = lin - 1; i >= 0; --i) {
+		Peca p = tabuleiro.at(i).at(col);
+		if (p.getNome() != "") {
+			if (p.getCor() == cor) break;
+			else {
+				v.push_back(p);
+				break;
+			}
+		}
+	}
+	for (int c = col + 1; c < 8; ++c) {
+		Peca p = tabuleiro.at(lin).at(c);
+		if (p.getNome() != "") {
+			if (p.getCor() == cor) break;
+			else {
+				v.push_back(p);
+				break;
+			}
+		}
+	}
+	for (int c = col - 1; c >= 0; --c) {
+		Peca p = tabuleiro.at(lin).at(c);
+		if (p.getNome() != "") {
+			if (p.getCor() == cor) break;
+			else {
+				v.push_back(p);
+				break;
+			}
+		}
+	}
+	return v;
+}
+
+void Tabuleiro::addPretaTomada(string nome) {
+	pretasTomadas.insert(nome);
+}
+
+int main() {
+	Tabuleiro t;
+	Peca b("Rei", 1);
+	Peca p("Torre", 0);
+	t.setPeca(b, 0, 3);
+	t.setPeca(p, 3, 3);
+	vector<Peca> v = t.torrePodeTomar(3, 3, 0);
+	for (auto x : v) cout << x.getNome() << endl;
+	cout << t.getPecaNaPos("D1") << endl;
+	t.addPretaTomada("Rainha");
+	t.pecasTomadas();
+	return 0;
+}

@@ -1,0 +1,59 @@
+1)
+b)
+.text
+.global compara
+.type compara,"function"
+
+compara: mov X10, X0
+	 mov X11, X1
+	 cmp X10, X11
+	 b.GE fim
+	 mov X9, X11
+fim:     mov X0, X9
+	ret
+
+
+c:
+#include <stdio.h>
+#include <stdlib.h>
+
+extern int compara(int aa, int bb);
+
+int main(void) {
+int a = 1;
+int b = 2;
+int maior;
+maior = compara(a, b);
+printf("Maior: %d\n", maior);
+return EXIT_SUCCESS;
+}
+
+3)
+b)
+#include <stdio.h>
+#include <stdlib.h>
+
+extern int contabits(int aa);
+
+int main(void) {
+int a = 15;
+int nbits=0;
+nbits = contabits(a)
+printf("Numero Bits: %d\n", nbits);
+return EXIT_SUCCESS;
+}
+
+
+
+.text
+.global contabits
+.type contabits,"function"
+
+contabits: mov X1, #0
+ciclo:	   cbz X0, fim
+	   and X1, X0, #1
+	   add X7, X7, X1
+	   lsr X0, X0, #1
+	   b ciclo
+fim: 	   mov X0, X7
+	   ret

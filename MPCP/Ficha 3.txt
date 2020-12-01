@@ -1,0 +1,102 @@
+1)
+B, nao pode ser 0 1
+2)
+0x6FF0: 0x0E
+SP: 0x6FF0
+X2: 0x02
+SP:0x7000
+X1:0x00
+X0:0x02
+SP:0x6FF0
+
+
+4)
+a)
+.text
+.global Char
+.type  Char, "function"
+
+Char:	mov x4, x0
+ciclo:	cbz x0, next
+		ldrb w3, [x1]
+		add x1, x1, 1
+		strb w3, [SP, -16]!
+		sub x0, x0, 1
+		b ciclo
+next:	cbz x4, fim
+		ldrb w5, [SP], 16
+		strb w5, [x2]
+		add x2, x2, 1
+		sub x4, x4, 1
+		b next
+fim: 	ret
+
+fazer 5a e 5c
+5)
+a)
+.text
+.global soma
+.type  soma, "function"
+
+soma:	mov x2, x0
+		mov w0, 0
+ciclo:	cbz x1, fim
+		ldrsw x3, [x2]
+		add w0, w0, w3
+		add x2, x2, 4
+		sub x1, x1, 1
+		b ciclo
+fim:	ret
+
+b)
+
+.text
+.global media
+.type media, "function"
+
+media:	mov x4, x1
+		stp x29, x30, [sp, -16]!
+		bl soma
+		ldp x29, x30, [sp], 16
+		sdiv x0, x0, x4
+		ret
+
+c)
+.text
+.global maxmed
+.type maxmed, "function"
+.type media, "function"
+.type  soma, "function"
+
+soma:	mov x2, x0
+		mov w0, 0
+ciclo:	cbz x1, fim
+		ldrsw x3, [x2]
+		add w0, w0, w3
+		add x2, x2, 4
+		sub x1, x1, 1
+		b ciclo
+fim:	ret
+
+
+media:	mov x4, x1
+		stp x29, x30, [sp, -16]!
+		bl soma
+		ldp x29, x30, [sp], 16
+		sdiv x0, x0, x4
+		ret
+
+maxmed:	mov x7, x2
+		mov x8, x3
+		stp x29, x30, [sp, -16]!
+		mov x29, sp
+		bl media
+		mov x9, x0
+		mov x0, x7
+		mov x1, x8
+		bl media
+		cmp x9, x0
+		b.le salto
+		mov x0, x9
+salto:	ldp x29, x30, [sp], 16
+		ret

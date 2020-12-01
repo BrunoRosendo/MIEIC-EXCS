@@ -1,0 +1,866 @@
+1)
+a)
+void readArray(int a[], size_t nElem) {
+	for (int i = 0; i < nElem; ++i) {
+		int num;
+		cout << "Insert and integer" << endl;
+		cin >> num;
+		a[i] = num;
+	}
+}
+b)
+int findValueInArray(const int a[], size_t nElem, int value, size_t pos1, size_t pos2) {
+	for (int i = pos1; i <= pos2; ++i) {
+		if (a[i] == value) return i;
+	}
+	return -1;
+}
+
+c)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+using namespace std;
+
+void readArray(int a[], size_t nElem) {
+	for (int i = 0; i < nElem; ++i) {
+		int num;
+		cout << "Insert and integer" << endl;
+		cin >> num;
+		a[i] = num;
+	}
+}
+
+int findValueInArray(const int a[], size_t nElem, int value, size_t pos1, size_t pos2) {
+	for (int i = pos1; i <= pos2; ++i) {
+		if (a[i] == value) return i;
+	}
+	return -1;
+}
+
+void main() {
+	const int n = 5;
+	int a[n];
+	readArray(a, 5);
+	cout << findValueInArray(a, n, 1, 0, 4);
+}
+
+d)
+I would just use the size of the array, start at 0 and go all the way up until size - 1
+
+e)
+size_t findMultValuesInArray(const int a[], size_t nElem, int value, size_t pos1, size_t pos2, size_t index[]) {
+	int res = 0;
+	for (size_t i = pos1; i <= pos2; ++i) {
+		if (a[i] == value) {
+			index[res] = i;
+			++res;
+		}
+	}
+	return res;
+}
+Overloading is possible in C++ but not in C
+
+f)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+using namespace std;
+
+
+void readArray(int a[], size_t nElem) {
+	for (int i = 0; i < nElem; ++i) {
+		int num;
+		cout << "Insert and integer" << endl;
+		cin >> num;
+		a[i] = num;
+	}
+}
+
+size_t findMultValuesInArray(const int a[], size_t nElem, int value, size_t pos1, size_t pos2, size_t index[]) {
+	int res = 0;
+	for (size_t i = pos1; i <= pos2; ++i) {
+		if (a[i] == value) {
+			index[res] = i;
+			++res;
+		}
+	}
+	return res;
+}
+
+void main() {
+	const int n = 5;
+	int a[n];
+	size_t index[n];
+	readArray(a, 5);
+	cout << findMultValuesInArray(a, n, 0, 0, 4, index);
+	}
+
+
+
+
+
+2)
+a)
+void readVector(vector<int>& v, size_t nElem) {
+	for (int i = 0; i < nElem; ++i) {
+		int num;
+		cout << "Insert and integer" << endl;
+		cin >> num;
+		v.push_back(num);
+	}
+}
+
+size_t findValueInVector(const vector<int>& v, int value, size_t pos1, size_t pos2) {
+	for (int i = pos1; i <= pos2; ++i) {
+		if (v[i] == value) return i;
+	}
+	return -1;
+}
+
+void findMultValuesInVector(const vector<int>& v, int value, size_t pos1, size_t pos2, vector<size_t>& index) {
+		for (size_t i = pos1; i <= pos2; ++i) {
+			if (v[i] == value) {
+				index.push_back(i);
+			}
+		}
+}
+
+b)
+void readVector(vector<int>& v) {
+	while (true){
+		int num;
+		cout << "Insert and integer" << endl;
+		cin >> num;
+		if (cin.eof()) break;
+		v.push_back(num);
+	}
+}
+
+c)
+vector<int> readVector(vector<int> v) {
+	while (true){
+		int num;
+		cout << "Insert and integer" << endl;
+		cin >> num;
+		if (cin.eof()){
+			 break;
+			cin.clear()
+		}
+		v.push_back(num);
+	}
+	return v;
+}
+
+vector<size_t> findMultValuesInVector(const vector<int>& v, int value, size_t pos1, size_t pos2, vector<size_t> index) {
+		for (size_t i = pos1; i <= pos2; ++i) {
+			if (v[i] == value) {
+				index.push_back(i);
+			}
+		}
+		return index;
+}
+
+We can make copies of the vector, instead of modifying it.
+We can't return an array in a function but we can return a pointer.
+
+
+
+
+3)
+a)
+void bubbleSort(vector<int>& v) {
+	for (int a = 1; a <= v.size(); ++a) {
+		for (int i = 0; i < v.size() - 1; ++i) {
+			if (v[i] > v[i + 1]) {
+				int temp = v[i + 1];
+				v[i + 1] = v[i];
+				v[i] = temp;
+			}
+		}
+	}
+}
+
+b)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+using namespace std;
+
+void bubbleSort(vector<int>& v) {
+	for (int a = 1; a <= v.size(); ++a) {
+		for (int i = 0; i < v.size() - 1; ++i) {
+			if (v[i] > v[i + 1]) {
+				int temp = v[i + 1];
+				v[i + 1] = v[i];
+				v[i] = temp;
+			}
+		}
+	}
+}
+
+void main() {
+	vector<int> v = { 1, 5, 8, 5, 3, 0 };
+	bubbleSort(v);
+	for (int i = 0; i < v.size(); ++i) cout << v.at(i) << endl;
+}
+
+c)
+void bubbleSort(vector<int>& v) {
+	for (int a = 1; a <= v.size(); ++a) {
+		bool end = true;
+		for (int i = 0; i < v.size() - 1; ++i) {
+			if (v[i] > v[i + 1]) {
+				int temp = v[i + 1];
+				v[i + 1] = v[i];
+				v[i] = temp;
+				end = false;
+			}
+		}
+		if (end) break;
+	}
+}
+
+d)
+void bubbleSort(vector<int>& v, char order) {
+	for (int a = 1; a <= v.size(); ++a) {
+		bool end = true;
+		for (int i = 0; i < v.size() - 1; ++i) {
+			if (order == 'a') {
+				if (v[i] > v[i + 1]) {
+					int temp = v[i + 1];
+					v[i + 1] = v[i];
+					v[i] = temp;
+					end = false;
+				}
+			}
+			else {
+				if (v[i] < v[i + 1]) {
+					int temp = v[i + 1];
+					v[i + 1] = v[i];
+					v[i] = temp;
+					end = false;
+				}
+			}
+		}
+		if (end) break;
+	}
+}
+
+e)
+void bubbleSort(vector<int>& v, bool f(int x, int y)) {
+	int x, y;
+	cin >> x >> y;
+	for (int a = 1; a <= v.size(); ++a) {
+		bool end = true;
+		for (int i = 0; i < v.size() - 1; ++i) {
+			if (f(x, y)) {
+				if (v[i] > v[i + 1]) {
+					int temp = v[i + 1];
+					v[i + 1] = v[i];
+					v[i] = temp;
+					end = false;
+				}
+			}
+			else {
+				if (v[i] < v[i + 1]) {
+					swap(v[i], v[i + 1]);
+					end = false;
+				}
+			}
+		}
+		if (end) break;
+	}
+}
+
+
+
+
+
+4)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+using namespace std;
+
+int binarySearch(const vector<int>& v, int value) {
+	int first = 0;
+	int last = v.size() - 1;
+	bool found = false;
+	do {
+		int middle = (last + first) / 2;
+		if (v[middle] == value) {
+			found = true;
+			return middle;
+		}
+		else if (v[middle] > value) last = middle - 1;
+		else first = middle + 1;
+	} while (found || first <= last);
+	return -1;
+}
+
+int main()
+{
+	vector<int> v = { 1, 2, 4, 6, 8, 10, 23, 5 };
+	cout << binarySearch(v, 23);
+}
+
+
+
+
+5)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+using namespace std;
+
+void removeDuplicates(vector<int>& v) {
+	for (int i = 0; i < v.size(); ++i) {
+		int num = v[i];
+		for (int a = i + 1; a < v.size(); ++a) {
+			if (v[a] == num) {
+				for (int b = a; b < v.size() - 1; ++b) {
+					swap(v[b], v[b + 1]);
+				}
+				v.resize(v.size() - 1);
+			}
+		}
+	}
+}
+
+int main()
+{
+	vector<int> v = { 1, 2, 3, 1, 7, 8 , 5, 2, 2, 3, 7, 9, 1};
+	removeDuplicates(v);
+	for (int i = 0; i < v.size(); ++i) cout << v[i] << endl;
+}
+
+
+
+6)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+void removeDuplicates(vector<int>& v) {
+	for (int i = 0; i < v.size(); ++i) {
+		int num = v[i];
+		for (int a = i + 1; a < v.size(); ++a) {
+			if (v[a] == num) {
+				for (int b = a; b < v.size() - 1; ++b) {
+					swap(v[b], v[b + 1]);
+				}
+				v.resize(v.size() - 1);
+			}
+		}
+	}
+}
+
+void bubbleSort(vector<int>& v) {
+	for (int a = 1; a <= v.size(); ++a) {
+		bool end = true;
+		for (int i = 0; i < v.size() - 1; ++i) {
+			if (v[i] > v[i + 1]) {
+				int temp = v[i + 1];
+				v[i + 1] = v[i];
+				v[i] = temp;
+				end = false;
+			}
+		}
+		if (end) break;
+	}
+}
+
+bool binarySearch(const vector<int>& v, int value) {
+	int first = 0;
+	int last = v.size() - 1;
+	bool found = false;
+	do {
+		int middle = (last + first) / 2;
+		if (v[middle] == value) {
+			found = true;
+			return true;
+		}
+		else if (v[middle] > value) last = middle - 1;
+		else first = middle + 1;
+	} while (found || first <= last);
+	return false;
+}
+
+void vectorUnion(const vector<int>& v1, const vector<int>& v2, vector<int>& v3) {
+	for (int i = 0; i < v1.size(); ++i) v3.push_back(v1[i]);
+	for (int i = 0; i < v2.size(); ++i) v3.push_back(v2[i]);
+	removeDuplicates(v3);
+	bubbleSort(v3);
+}
+
+void vectorIntersection(const vector<int>& v1, vector<int>& v2, vector<int>& v3) {
+	bubbleSort(v2);
+	for (int i = 0; i < v1.size(); ++i) {
+		if (binarySearch(v2, v1[i])) v3.push_back(v1[i]);
+	}
+	removeDuplicates(v3);
+	bubbleSort(v3);
+}
+
+int main()
+{
+	vector<int> v1 = { 1, 2, 3 };
+	vector<int> v2 = { 3, 1, 4, 5 };
+	vector<int> v3;
+	vectorUnion(v1, v2, v3);
+	for (int i = 0; i < v3.size(); ++i) cout << v3[i] << " ";
+	cout << endl;
+	vector<int> v4;
+	vectorIntersection(v1, v2, v4);
+	for (int i = 0; i < v4.size(); ++i) cout << v4[i] << " ";
+}
+
+
+
+7)
+a) b)
+
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+const int NE = 5;
+
+void localMax(const int a[][NE], int NE) {
+	for (int i = 1; i < NE - 1; ++i) {			// Aqui eu ponho = 1 e < NE - 1 porque tu nao queres ver os cantos da matriz, só quando tem vizinhos
+		for (int b = 1; b < NE - 1; ++b) {
+			int num = a[i][b];
+			bool greater = true;
+			if (a[i - 1][b] > num) greater = false;
+			if (a[i + 1][b] > num) greater = false;
+			if (a[i][b - 1] > num) greater = false;
+			if (a[i][ b + 1] > num) greater = false;
+			if (a[i - 1][b - 1] > num) greater = false;
+			if (a[i - 1][b + 1] > num) greater = false;
+			if (a[i + 1][b - 1] > num) greater = false;
+			if (a[i + 1][b + 1] > num) greater = false;
+			if (greater) cout << num << " is a local maxima in the position [" << i << "][" << b << "]" << endl;
+		}
+	}
+}
+
+void main() {
+	int a[5][5] = { {7, 3, 4, 1, 3}, {2, 9, 6, 2, 1}, {1, 3, 5, 1, 4}, {6, 5, 2, 7, 5}, {4, 2, 1, 3, 6} };
+	localMax(a, NE);
+}
+
+c)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+using namespace std;
+
+
+void localMax(vector<vector<int>> a, int NE, bool any) {
+	if (!any) {
+		for (int i = 1; i < NE - 1; ++i) {
+			for (int b = 1; b < NE - 1; ++b) {
+				int num = a[i][b];
+				bool greater = true;
+				if (a[i - 1][b] > num) greater = false;
+				if (a[i + 1][b] > num) greater = false;
+				if (a[i][b - 1] > num) greater = false;
+				if (a[i][b + 1] > num) greater = false;
+				if (a[i - 1][b - 1] > num) greater = false;
+				if (a[i - 1][b + 1] > num) greater = false;
+				if (a[i + 1][b - 1] > num) greater = false;
+				if (a[i + 1][b + 1] > num) greater = false;
+				if (greater) cout << num << " is a local maxima in the position [" << i << "][" << b << "]" << endl;
+			}
+		}
+	}
+	else {
+		for (int i = 0; i < NE; ++i) {
+			for (int b = 0; b < NE; ++b) {
+				int num = a[i][b];
+				bool greater = true;
+				if (i > 0) {
+					if (a[i - 1][b] > num) greater = false;
+					if (b > 0) if (a[i - 1][b - 1] > num) greater = false;
+					if (b < NE - 1) if (a[i - 1][b + 1] > num) greater = false;
+				}
+				if (i < NE - 1) {
+					if (a[i + 1][b] > num) greater = false;
+					if (b > 0) if (a[i + 1][b - 1] > num) greater = false;
+					if (b < NE - 1) if (a[i + 1][b + 1] > num) greater = false;
+				}
+				if (b > 0) if (a[i][b - 1] > num) greater = false;
+				if (b < NE - 1) if (a[i][b + 1] > num) greater = false;
+				if (greater) cout << num << " is a local maxima in the position [" << i << "][" << b << "]" << endl;
+			}
+		}
+	}
+}
+
+void main() {
+	vector<vector<int>> a = { {7, 3, 4, 1, 3}, {2, 9, 6, 2, 1}, {1, 3, 5, 1, 4}, {6, 5, 2, 7, 5}, {4, 2, 1, 3, 6} };
+	localMax(a, 5, true);
+}
+
+
+8)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+using namespace std;
+
+
+bool isleap(int year) {
+	if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) return true;
+	return false;
+}
+
+int daysOfMonth(int month, int year) {
+	if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) return 31;
+	else if (month == 4 || month == 6 || month == 9 || month == 11) return 30;
+	else {
+		if (isleap(year)) return 29;
+		else return 28;
+	}
+}
+
+void read(vector<vector<int>>& pluv, int year) {
+	for (int month = 1; month <= 12; ++month) {
+		int days = daysOfMonth(month, year);
+		vector<int> v;
+		for (int i = 0; i < days; ++i) {
+			int num = 1 + rand() % 100;
+			v.push_back(num);
+		}
+		pluv.push_back(v);
+	}
+}
+
+double average_daily(vector<vector<int>> pluv) {
+	int sum = 0;
+	int days = 0;
+	for (int month = 0; month < pluv.size(); ++month) {
+		for (int day = 0; day < pluv[month].size(); ++day) {
+			++days;
+			sum += pluv[month][day];
+		}
+	}
+	return (double)sum / days;
+}
+
+double average_monthly(vector<vector<int>> pluv, int month) {
+	int sum = 0;
+	for (int i = 0; i < pluv[month - 1].size(); ++i) {
+		sum += pluv[month - 1][i];
+	}
+	return (double)sum / pluv[month - 1].size();
+}
+
+string max_pluv(vector<vector<int>> pluv) {
+	int max = -1;
+	string result = "";
+	for (int month = 0; month < pluv.size(); ++month) {
+		for (int day = 0; day < pluv[month].size(); ++day) {
+			if (pluv[month][day] > max) {
+				max = pluv[month][day];
+				result = to_string(day+1) + "/" + to_string(month+1);
+			}
+			else if (pluv[month][day] == max) {
+				result += " ; " + to_string(day+1) + "/" + to_string(month+1);
+			}
+		}
+	}
+	return result;
+}
+
+string above_average(vector<vector<int>> pluv, double average) {
+	string result = "";
+	for (int month = 0; month < pluv.size(); ++month) {
+		for (int day = 0; day < pluv[month].size(); ++day) {
+			if (pluv[month][day] > average){
+				if (result == "") result = to_string(day+1) + "/" + to_string(month+1);
+				else result += " ; " + to_string(day+1) + "/" + to_string(month+1);
+			}
+		}
+	}
+	return result;
+}
+
+
+int main()
+{
+	srand(time(NULL));
+	int year;
+	cout << "Insert the year: ";
+	cin >> year;
+	vector<vector<int>> pluv;
+	read(pluv, year);
+	cout << "The average daily pluviosity is " << average_daily(pluv) << endl;
+	cout << "The average pluviosity in January is " << average_monthly(pluv, 1) << endl;
+	cout << "The dates with the maximum pluviosity are:" << endl << max_pluv(pluv) << endl;
+	cout << "The dates above the average daily pluviosity are:" << endl << above_average(pluv, average_daily(pluv)) << endl;
+}
+
+
+
+
+9)
+x = 2 y = 2
+ref_x = 2 ref_y = 2
+
+x = 1 y = 2
+ptr_x = MEMY ptr_y = MEMY
+*ptr_x = 2 *ptr_y = 2
+
+10)
+2nd element of array
+position in mememory of the 2nd element of the array
+value of the 2nd element of array
+value of the 4th element of array
+position in memory of the 3rd element of array
+3rd element of array
+1 (because p = values + 1)
+
+11)
+a)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+using namespace std;
+
+int comparator(const void* x, const void* y) {
+	
+	int* a = (int*)x;
+	int* b = (int*)y;
+	return *a - *b;
+}
+
+int main()
+{
+	int a[6] = { 5, 6, 2, 1, 8, 5 };
+	qsort(a, 6, sizeof(int), comparator);
+	for (int i = 0; i < 6; ++i) cout << a[i] << " ";
+}
+
+b)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+using namespace std;
+
+int comparator(const void* x, const void* y) {
+	
+	int* a = (int*)x;
+	int* b = (int*)y;
+	return *b - *a;
+}
+
+int main()
+{
+	int a[6] = { 5, 6, 2, 1, 8, 5 };
+	qsort(a, 6, sizeof(int), comparator);
+	for (int i = 0; i < 6; ++i) cout << a[i] << " ";
+}
+
+c)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+using namespace std;
+
+int comparator(const void* x, const void* y) {
+	
+	int* a = (int*)x;
+	int* b = (int*)y;
+	return *a - *b;
+}
+
+int main()
+{
+	int a[6] = { 5, 6, 2, 1, 8, 5 };
+	qsort(a, 3, sizeof(int), comparator);
+	qsort(a + 3, 3, sizeof(int), comparator);
+	for (int i = 0; i < 6; ++i) cout << a[i] << " ";
+}
+
+12)
+a)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+using namespace std;
+
+void readArray(int* a, size_t nElem){
+	for (int i = 0; i < nElem; ++i) {
+		int num;
+		cout << "Insert and integer" << endl;
+		cin >> num;
+		a[i] = num;
+	}
+}
+
+int findValueInArray(const int* a, size_t nElem, int value, size_t pos1, size_t pos2) {
+	for (int i = pos1; i <= pos2; ++i) {
+		if (a[i] == value) return i;
+	}
+	return -1;
+}
+
+size_t findMultValuesInArray(const int* a, size_t nElem, int value, size_t pos1, size_t pos2, size_t* index) {
+	int res = 0;
+	for (size_t i = pos1; i <= pos2; ++i) {
+		if (a[i] == value) {
+			index[res] = i;
+			++res;
+		}
+	}
+	return res;
+}
+
+int main()
+{
+	int n;
+	cout << "How many element will your array have?" << endl;
+	cin >> n;
+	int* p = new int[n];
+	size_t* i = new size_t[n];
+	readArray(p, n);
+	cout << "1 is in index " << findValueInArray(p, n, 1, 0, n - 1) << endl;
+	cout << "1 is in the array " << findMultValuesInArray(p, n, 1, 0, n - 1, i) << " times" << endl;
+	for (int a = 0; a < findMultValuesInArray(p, n, 1, 0, n - 1, i); ++a) cout << i[a] << " ";
+}
+
+b)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+using namespace std;
+
+void readArray(int* a, size_t nElem){
+	for (int i = 0; i < nElem; ++i) {
+		int num;
+		cout << "Insert and integer" << endl;
+		cin >> num;
+		a[i] = num;
+	}
+}
+
+int findValueInArray(const int* pos1, const int* pos2, int value) {
+	for (int i = 0; i <= pos2 - pos1; ++i) {
+		if (*(pos1 + i) == value) return i;
+	}
+	return -1;
+}
+
+size_t findMultValuesInArray(const int* pos1, const int* pos2, int value, size_t* index) {
+	int res = 0;
+	for (size_t i = 0; i <= pos2 - pos1; ++i) {
+		if (*(pos1 + i) == value) {
+			index[res] = i;
+			++res;
+		}
+	}
+	return res;
+}
+
+int main()
+{
+	int n;
+	cout << "How many element will your array have?" << endl;
+	cin >> n;
+	int* p = new int[n];
+	size_t* i = new size_t[n];
+	readArray(p, n);
+	cout << "1 is in index " << findValueInArray(p, &p[n-1], 1) << endl;
+	cout << "1 is in the array " << findMultValuesInArray(p, &p[n-1], 1, i) << " times" << endl;
+	for (int a = 0; a < findMultValuesInArray(p, &p[n - 1], 1, i); ++a) cout << i[a] << " ";
+}
+
+13)
+#include <iostream>
+#include <iomanip>
+#include <cstdlib>
+using namespace std;
+void fill_grades(int **grade, int NUMBER_STUDENTS, int NUMBER_QUIZZES);
+void compute_st_ave(int **grade, double *st_ave, int NUMBER_STUDENTS, int NUMBER_QUIZZES);
+void compute_quiz_ave(int **grade, double *quiz_ave, int NUMBER_STUDENTS, int NUMBER_QUIZZES);
+void display(int **grade,double *st_ave, double *quiz_ave, int NUMBER_STUDENTS, int NUMBER_QUIZZES);
+
+int main()
+{
+    int NUMBER_STUDENTS, NUMBER_QUIZZES;
+    cout << "What's the number of the students?" << endl;
+    cin >> NUMBER_STUDENTS;
+    cout << "What's the number of the questions?" << endl;
+    cin >> NUMBER_QUIZZES;
+    int** grade = new int*[NUMBER_STUDENTS];
+    for (int i = 0; i < NUMBER_STUDENTS; ++i) {
+        grade[i] = new int[NUMBER_QUIZZES];
+    }
+    double* st_ave = new double[NUMBER_STUDENTS];
+    double* quiz_ave = new double[NUMBER_QUIZZES];
+    fill_grades(grade, NUMBER_STUDENTS, NUMBER_QUIZZES); // randomly !!!
+    compute_st_ave(grade, st_ave, NUMBER_STUDENTS, NUMBER_QUIZZES);
+    compute_quiz_ave(grade, quiz_ave, NUMBER_STUDENTS, NUMBER_QUIZZES);
+    display(grade, st_ave, quiz_ave, NUMBER_STUDENTS, NUMBER_QUIZZES);
+    return 0;
+}
+
+void fill_grades(int** grade, int NUMBER_STUDENTS, int NUMBER_QUIZZES) // ..... fill... RANDOMLY !
+{
+    for (int st_num = 1; st_num <= NUMBER_STUDENTS; st_num++)
+        for (int quiz_num = 1; quiz_num <= NUMBER_QUIZZES; quiz_num++)
+            grade[st_num - 1][quiz_num - 1] = 10 + rand() % 11;
+}
+
+void compute_st_ave(int** grade, double* st_ave, int NUMBER_STUDENTS, int NUMBER_QUIZZES)
+{
+    for (int st_num = 1; st_num <= NUMBER_STUDENTS; st_num++)
+    {
+        double sum = 0;
+        for (int quiz_num = 1; quiz_num <= NUMBER_QUIZZES; quiz_num++)
+            sum = sum + grade[st_num - 1][quiz_num - 1];
+
+        st_ave[st_num - 1] = sum / NUMBER_QUIZZES;
+
+    }
+}
+
+void compute_quiz_ave(int** grade, double* quiz_ave, int NUMBER_STUDENTS, int NUMBER_QUIZZES)
+{
+    for (int quiz_num = 1; quiz_num <= NUMBER_QUIZZES; quiz_num++)
+    {
+        double sum = 0;
+        for (int st_num = 1; st_num <= NUMBER_STUDENTS; st_num++)
+            sum = sum + grade[st_num - 1][quiz_num - 1];
+
+        quiz_ave[quiz_num - 1] = sum / NUMBER_STUDENTS;
+
+    }
+}
+
+
+void display(int** grade,double* st_ave, double* quiz_ave, int NUMBER_STUDENTS, int NUMBER_QUIZZES)
+{
+    cout.setf(ios::fixed);
+    cout.setf(ios::showpoint);
+    cout.precision(1);
+    cout << setw(10) << "Student"
+        << setw(5) << "Ave"
+        << setw(12) << "Quizzes\n";
+    for (int st_num = 1; st_num <= NUMBER_STUDENTS; st_num++)
+    {
+        cout << setw(10) << st_num << setw(5) << st_ave[st_num - 1] << " ";
+        for (int quiz_num = 1; quiz_num <= NUMBER_QUIZZES; quiz_num++)
+            cout << setw(5) << grade[st_num - 1][quiz_num - 1];
+        cout << endl;
+    }
+    cout << "Quiz averages = ";
+    for (int quiz_num = 1; quiz_num <= NUMBER_QUIZZES; quiz_num++)
+        cout << setw(5) << quiz_ave[quiz_num - 1];
+    cout << endl;
+}

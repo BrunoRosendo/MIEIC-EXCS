@@ -1,0 +1,924 @@
+Exc1:
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+double distance(double x1, double y1, double x2, double y2) {
+	return sqrt(pow((double)x2 - x1, 2) + pow((double)y2 - y1, 2));
+}
+
+double area(double x1, double y1, double x2, double y2, double x3, double y3) {
+	double s, a, b, c, area;
+	a = distance(x1, y1, x2, y2);
+	b = distance(x2, y2, x3, y3);
+	c = distance(x1, y1, x3, y3);
+	s = (a + b + c) / 2;
+	area = sqrt(s * (s - a) * (s - b) * (s - c));
+	return area;
+}
+
+void main()
+{
+	int x1, x2, x3, y1, y2, y3;
+	cout << "Type the coordinates of the vertices as: x1, y1, x2, y2, x3, y3" << endl;
+	cin >> x1 >> y1 >> x2 >> y2 >> x3 >> y3;
+	double result = area(x1, y1, x2, y2, x3, y3);
+	cout << "The area of the triangle is " << result;
+}
+
+Exc2:
+
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+bool isprime(int n) {
+	int stop = sqrt(n);
+	for (int i = 2; i <= stop; i++) {
+		if (n % i == 0) {
+			return false;
+		}
+	}
+	return true;
+}
+
+void main()
+{
+	int n, stop;
+	cout << "Insert the number n" << endl;
+	cin >> n;
+	if (isprime(n)) cout << "n is a prime number";
+	else cout << "n is not a prime number";
+}
+
+Exc3:
+
+#include <iostream>
+using namespace std;
+
+double sqr(double n, double delta, int max) {
+	double rq = 1;
+	int it = 0;
+	while (true) {
+		++it;
+		rq = (rq + n / rq) / 2;
+		double dif = abs(n - pow(rq, 2));
+		if (dif < delta || it == max) break;
+	}
+	return rq;
+}
+
+void main()
+{
+	double n, delta;
+	int max;
+	cout << "Insert the values of n, delta and nMaxIter" << endl;
+	cin >> n >> delta >> max;
+	cout << "The square root of " << n << " is " << sqr(n, delta, max) << endl;
+}
+
+Exc4:
+
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+double round(double x, unsigned n) {
+	return floor(x * pow(10, n) + 0.5) / pow(10, n);
+}
+
+void main()
+{
+	double x;
+	unsigned n;
+	cout << "Insert the value of x an the number of decimal places" << endl;
+	cin >> x >> n;
+	double rounded = round(x, n);
+	cout << fixed << setprecision(n) << "The rounded number is " << rounded << endl;
+}
+
+Exc5:
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+int gcd(int a, int b) {
+	if (a == b) return a;
+	else if (a == 0) return b;
+	else if (b == 0) return a;
+	else {
+		while (a != b) {
+			if (a > b) a = a - b;
+			else b = b - a;
+		}
+		return a;
+	}
+}
+
+void main()
+{
+	int a, b;
+	cout << "Insert the two numbers in order to find their greatest common divisor" << endl;
+	cin >> a >> b;
+	cout << "The greatest common divisor is " << gcd(a, b) << endl;
+}
+
+Ex6:
+
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+time_t timeElapsed() {
+	static time_t first = time(NULL);
+	return time(NULL) - first;
+}
+
+void main()
+{
+	timeElapsed();
+	while (timeElapsed() < 20) {
+		cin.get();
+		cout << timeElapsed() << endl;
+	}
+}
+
+Exc7:
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+bool readint(int& x) {
+    cin >> x;
+    if (cin.fail() || cin.peek() != '\n') {
+        cin.clear();
+        cin.ignore(10000, '\n');
+        return false;
+    }
+    else {
+        cin.ignore(100000, '\n');
+        return true;
+    }
+}
+
+int main()
+{
+    int x;
+    cout << "Insert an integer" << endl;
+    cout << readint(x);
+}
+
+Exc8:
+a)
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+bool readFraction(int& numerator, int& denominator) {
+    cin >> numerator;
+    if (cin.fail()) {
+        numerator = 0;
+        denominator = 0;
+        return false;
+    }
+    if (cin.get() != '/') {
+        numerator = 0;
+        denominator = 0;
+        return false;
+    }
+    cin >> denominator;
+    if (cin.fail()) {
+        numerator = 0;
+        denominator = 0;
+        return false;
+    }
+    if (cin.peek() != '\n') {
+        numerator = 0;
+        denominator = 0;
+        return false;
+    }
+    return true;
+}
+
+int main()
+{
+    int numerator, denominator;
+    cout << "Insert a fuction in the format numerator/denominator" << endl;
+    cout << readFraction(numerator, denominator) << endl;
+}
+
+b)
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+int gcd(int a, int b) {
+	if (a == b) return a;
+	else if (a == 0) return b;
+	else if (b == 0) return a;
+	else {
+		while (a != b) {
+			if (a > b) a = a - b;
+			else b = b - a;
+		}
+		return a;
+	}
+}
+
+void reduceFraction(int& numerator, int& denominator) {
+    cin >> numerator;
+    cin.ignore();
+    cin >> denominator;
+	int divisor = gcd(numerator, denominator);
+	numerator = numerator / divisor;
+	denominator = denominator / divisor;
+}
+
+int main()
+{
+    int numerator, denominator;
+    cout << "Insert a fraction in the format numerator/denominator" << endl;
+	reduceFraction(numerator, denominator);
+    cout << "Your fraction is " << numerator << "/" << denominator << endl;
+}
+
+c)
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+int gcd(int a, int b) {
+	if (a == b) return a;
+	else if (a == 0) return b;
+	else if (b == 0) return a;
+	else {
+		while (a != b) {
+			if (a > b) a = a - b;
+			else b = b - a;
+		}
+		return a;
+	}
+}
+
+void reduceFraction(int& numerator, int& denominator) {
+	int divisor = gcd(abs(numerator), abs(denominator));
+	numerator /= divisor;
+	denominator /= divisor;
+}
+
+void addition(int& numerator, int& denominator, int& numerator2, int& denominator2) {
+	numerator *= denominator2;
+	numerator2 *= denominator;
+	denominator *= denominator2;
+	denominator2 = denominator;
+	numerator += numerator2;
+}
+
+void subtraction(int& numerator, int& denominator, int& numerator2, int& denominator2) {
+	numerator *= denominator2;
+	numerator2 *= denominator;
+	denominator *= denominator2;
+	denominator2 = denominator;
+	numerator -= numerator2;
+}
+
+void multiplication(int& numerator, int& denominator, int& numerator2, int& denominator2) {
+	numerator *= numerator2;
+	denominator *= denominator2;
+}
+
+void division(int& numerator, int& denominator, int& numerator2, int& denominator2) {
+	numerator *= denominator2;
+	denominator *= numerator2;
+}
+
+int main()
+{
+	int numerator, denominator, numerator2, denominator2;
+	cout << "Insert a fraction in the format numerator/denominator" << endl;
+	cin >> numerator;
+	cin.ignore();
+	cin >> denominator;
+	cout << "Insert another one" << endl;
+	cin >> numerator2;
+	cin.ignore();
+	cin >> denominator2;
+	char operation;
+	cout << "Choose the operation" << endl;
+	cin >> operation;
+	switch (operation) {
+	case '+':
+		addition(numerator, denominator, numerator2, denominator2);
+		break;
+	case '-':
+		subtraction(numerator, denominator, numerator2, denominator2);
+		break;
+	case '*':
+		multiplication(numerator, denominator, numerator2, denominator2);
+		break;
+	case '/':
+		division(numerator, denominator, numerator2, denominator2);
+		break;
+	}
+	reduceFraction(numerator, denominator);
+	cout << "The result is " << numerator << "/" << denominator << endl;
+}
+
+d)
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+int gcd(int a, int b) {
+	if (a == b) return a;
+	else if (a == 0) return b;
+	else if (b == 0) return a;
+	else {
+		while (a != b) {
+			if (a > b) a = a - b;
+			else b = b - a;
+		}
+		return a;
+	}
+}
+
+bool readFraction(int& numerator, int& denominator) {
+	cin >> numerator;
+	if (cin.fail()) {
+		numerator = 0;
+		denominator = 0;
+		return false;
+	}
+	if (cin.get() != '/') {
+		numerator = 0;
+		denominator = 0;
+		return false;
+	}
+	cin >> denominator;
+	if (cin.fail()) {
+		numerator = 0;
+		denominator = 0;
+		return false;
+	}
+	if (cin.peek() != '\n') {
+		numerator = 0;
+		denominator = 0;
+		return false;
+	}
+	return true;
+}
+
+void reduceFraction(int& numerator, int& denominator) {
+	int divisor = gcd(abs(numerator), abs(denominator));
+	numerator /= divisor;
+	denominator /= divisor;
+}
+
+void addition(int& numerator, int& denominator, int& numerator2, int& denominator2) {
+	numerator *= denominator2;
+	numerator2 *= denominator;
+	denominator *= denominator2;
+	denominator2 = denominator;
+	numerator += numerator2;
+}
+
+void subtraction(int& numerator, int& denominator, int& numerator2, int& denominator2) {
+	numerator *= denominator2;
+	numerator2 *= denominator;
+	denominator *= denominator2;
+	denominator2 = denominator;
+	numerator -= numerator2;
+}
+
+void multiplication(int& numerator, int& denominator, int& numerator2, int& denominator2) {
+	numerator *= numerator2;
+	denominator *= denominator2;
+}
+
+void division(int& numerator, int& denominator, int& numerator2, int& denominator2) {
+	numerator *= denominator2;
+	denominator *= numerator2;
+}
+
+int main()
+{
+	int numerator, denominator, numerator2, denominator2;
+	bool test, test2, valid;
+	do {
+		cout << "Insert a fraction in the format numerator/denominator" << endl;
+		test = readFraction(numerator, denominator);
+		cin.clear();
+		cin.ignore(1000, '\n');
+	}
+	while (test == 0);
+	do {
+		cout << "Insert another one" << endl;
+		test2 = readFraction(numerator2, denominator2);
+		cin.clear();
+		cin.ignore(1000, '\n');
+	} while (test2 == 0);
+	char operation;
+	do {
+		valid = true;
+		cout << "Choose the operation" << endl;
+		cin >> operation;
+		switch (operation) {
+		case '+':
+			addition(numerator, denominator, numerator2, denominator2);
+			break;
+		case '-':
+			subtraction(numerator, denominator, numerator2, denominator2);
+			break;
+		case '*':
+			multiplication(numerator, denominator, numerator2, denominator2);
+			break;
+		case '/':
+			division(numerator, denominator, numerator2, denominator2);
+			break;
+		default:
+			valid = false;
+			cin.ignore(10000, '\n');
+		}
+	} while (!valid);
+	reduceFraction(numerator, denominator);
+	cout << "The result is " << numerator << "/" << denominator << endl;
+}
+
+Exc9:
+a)
+#include <iostream>
+using namespace std;
+
+bool isleap(int year) {
+	if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) return true;
+	return false;
+}
+
+void main() {
+	int year;
+	cout << "Insert the year" << endl;
+	cin >> year;
+	cout << isleap(year);
+}
+b)
+#include <iostream>
+using namespace std;
+
+bool isleap(int year) {
+	if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) return true;
+	return false;
+}
+
+int daysOfMonth(string month, int year) {
+	if (month == "january" || month == "march" || month == "may" || month == "july" || month == "august" || month == "october" || month == "december") return 31;
+	else if (month == "april" || month == "june" || month == "september" || month == "november") return 30;
+	else {
+		if (isleap(year)) return 29;
+		else return 28;
+	}
+}
+
+void main() {
+	int year;
+	string month;
+	cout << "Insert the year and month" << endl;
+	cin >> year >> month;
+	cout << daysOfMonth(month, year);
+}
+
+c)
+#include <iostream>
+using namespace std;
+
+bool isleap(int year) {
+	if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) return true;
+	return false;
+}
+
+int daysOfMonth(string month, int year) {
+	if (month == "january" || month == "march" || month == "may" || month == "july" || month == "august" || month == "october" || month == "december") return 31;
+	else if (month == "april" || month == "june" || month == "september" || month == "november") return 30;
+	else {
+		if (isleap(year)) return 29;
+		else return 28;
+	}
+}
+
+int daysOfWeek(int year, int month, int day) {
+	int s = year / 100;
+	int a = year % 100;
+	int c;
+	switch (month) {
+	case 1:
+		if (isleap(year)) c = 6;
+		else c = 0;
+		break;
+	case 2:
+		if (isleap(year)) c = 2;
+		else c = 3;
+		break;
+	case 3:
+		c = 3;
+		break;
+	case 4:
+		c = 6;
+		break;
+	case 5:
+		c = 1;
+		break;
+	case 6:
+		c = 4;
+		break;
+	case 7:
+		c = 6;
+		break;
+	case 8:
+		c = 2;
+		break;
+	case 9:
+		c = 5;
+		break;
+	case 10:
+		c = 0;
+		break;
+	case 11:
+		c = 3;
+		break;
+	case 12:
+		c = 5;
+		break;
+	}
+	return ((5 * a) / 4 + c + day - 2 * (s % 4) + 7) % 7;
+}
+
+void main() {
+	int year, month, day;
+	string week[7] = { "saturday", "sunday", "monday", "tuesday", "wednesday", "thursday", "friday" };
+	cout << "Insert the year, month and day" << endl;
+	cin >> year >> month >> day;
+	cout << week[daysOfWeek(year, month, day)];
+}
+
+d)
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+bool isleap(int year) {
+	if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) return true;
+	return false;
+}
+
+int daysOfMonth(int month, int year) {
+	if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) return 31;
+	else if (month == 4 || month == 6 || month == 9 || month == 11) return 30;
+	else {
+		if (isleap(year)) return 29;
+		else return 28;
+	}
+}
+
+int daysOfWeek(int year, int month, int day) {
+	int s = year / 100;
+	int a = year % 100;
+	int c;
+	switch (month) {
+	case 1:
+		if (isleap(year)) c = 6;
+		else c = 0;
+		break;
+	case 2:
+		if (isleap(year)) c = 2;
+		else c = 3;
+		break;
+	case 3:
+		c = 3;
+		break;
+	case 4:
+		c = 6;
+		break;
+	case 5:
+		c = 1;
+		break;
+	case 6:
+		c = 4;
+		break;
+	case 7:
+		c = 6;
+		break;
+	case 8:
+		c = 2;
+		break;
+	case 9:
+		c = 5;
+		break;
+	case 10:
+		c = 0;
+		break;
+	case 11:
+		c = 3;
+		break;
+	case 12:
+		c = 5;
+		break;
+	}
+	return ((5 * a) / 4 + c + day - 2 * (s % 4) + 7) % 7;
+}
+
+void monthCalendar(int year, int month) {
+	int days = daysOfMonth(month, year);
+	int weekday = daysOfWeek(year, month, 1);
+	int scale = 7;
+	int day = 1;
+	int width[7] = { 7 * scale, 1 * scale, 2 * scale, 3 * scale, 4 * scale, 5 * scale, 6 * scale };
+	string weekdays[7] = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
+	string months[12] = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+	cout << "    " << months[month - 1] << "/" << year << endl;
+	for (int i = 1; i <= 7; i++) {
+		cout << setw(scale) << weekdays[i-1];
+	}
+	cout << endl;
+	cout << setw(width[weekday]) << day;
+	while (true) {
+		if (day == daysOfMonth(month, year)) break;
+		else ++day;
+		if (weekday == 6) weekday = 0;
+		else ++weekday;
+		if (weekday == 1) cout << endl;
+		cout << setw(scale) << day;
+	}
+}
+
+void main() {
+	int year, month;
+	cout << "Insert an year and a month" << endl;
+	cin >> year >> month;
+	monthCalendar(year, month);
+}
+e)
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+bool isleap(int year) {
+	if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) return true;
+	return false;
+}
+
+int daysOfMonth(int month, int year) {
+	if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) return 31;
+	else if (month == 4 || month == 6 || month == 9 || month == 11) return 30;
+	else {
+		if (isleap(year)) return 29;
+		else return 28;
+	}
+}
+
+int daysOfWeek(int year, int month, int day) {
+	int s = year / 100;
+	int a = year % 100;
+	int c;
+	switch (month) {
+	case 1:
+		if (isleap(year)) c = 6;
+		else c = 0;
+		break;
+	case 2:
+		if (isleap(year)) c = 2;
+		else c = 3;
+		break;
+	case 3:
+		c = 3;
+		break;
+	case 4:
+		c = 6;
+		break;
+	case 5:
+		c = 1;
+		break;
+	case 6:
+		c = 4;
+		break;
+	case 7:
+		c = 6;
+		break;
+	case 8:
+		c = 2;
+		break;
+	case 9:
+		c = 5;
+		break;
+	case 10:
+		c = 0;
+		break;
+	case 11:
+		c = 3;
+		break;
+	case 12:
+		c = 5;
+		break;
+	}
+	return ((5 * a) / 4 + c + day - 2 * (s % 4) + 7) % 7;
+}
+
+void monthCalendar(int year, int month) {
+	int days = daysOfMonth(month, year);
+	int weekday = daysOfWeek(year, month, 1);
+	int scale = 7;
+	int day = 1;
+	int width[7] = { 7 * scale, 1 * scale, 2 * scale, 3 * scale, 4 * scale, 5 * scale, 6 * scale };
+	string weekdays[7] = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
+	string months[12] = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+	cout << "    " << months[month - 1] << "/" << year << endl;
+	for (int i = 1; i <= 7; i++) {
+		cout << setw(scale) << weekdays[i-1];
+	}
+	cout << endl;
+	cout << setw(width[weekday]) << day;
+	while (true) {
+		if (day == daysOfMonth(month, year)) break;
+		else ++day;
+		if (weekday == 6) weekday = 0;
+		else ++weekday;
+		if (weekday == 1) cout << endl;
+		cout << setw(scale) << day;
+	}
+	cout << endl << endl << endl;
+}
+
+void main() {
+	int year;
+	cout << "Insert the year" << endl;
+	cin >> year;
+	for (int month = 1; month <= 12; ++month) {
+		monthCalendar(year, month);
+	}
+}
+
+
+Exc10:
+a)
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+unsigned long long factorial_ite(unsigned int n) {
+	unsigned long long factorial = 1;
+	for (int i = 2; i <= n; i++) {
+		factorial *= i;
+	}
+	return factorial;
+}
+
+void main() {
+	unsigned long long factorial;
+	unsigned int num;
+	cout << "Insert the number whose factorial you wish to calculate" << endl;
+	cin >> num;
+	if (num > 20) {
+		cout << "That number is too big to calculate";
+		exit(0);
+	}
+	factorial = factorial_ite(num);
+	cout << "The factorial is " << factorial << endl;
+}
+
+b)
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+unsigned long long factorial_rec(unsigned int n) {
+	if (n < 2) return 1;
+	else return n * factorial_rec(n - 1);
+}
+
+void main() {
+	unsigned long long factorial;
+	unsigned int num;
+	cout << "Insert the number whose factorial you wish to calculate" << endl;
+	cin >> num;
+	if (num > 20) {
+		cout << "That number is too big to calculate";
+		exit(0);
+	}
+	factorial = factorial_rec(num);
+	cout << "The factorial is " << factorial << endl;
+}
+
+Exc11:
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+int gcd(int m, int n) {
+	if (m % n == 0) return n;
+	else return gcd(n, m % n);
+}
+
+void main() {
+	int m, n;
+	cout << "Insert 2 numbers in order to determinate their greatest common divisor" << endl;
+	cin >> m >> n;
+	cout << "Their greatest common divisor is " << gcd(m, n) << endl;
+}
+
+Exc12:
+#include <iostream>
+#define _USE_MATH_DEFINES
+#include <math.h>
+using namespace std;
+
+double area(double radius) {
+	return 2 * M_PI * radius;
+}
+
+double distance(double x1, double y1, double x2, double y2) {
+	return sqrt(pow((double)x2 - x1, 2) + pow((double)y2 - y1, 2));
+}
+
+double area(double x1, double y1, double x2, double y2, double x3, double y3) {
+	double s, a, b, c, area;
+	a = distance(x1, y1, x2, y2);
+	b = distance(x2, y2, x3, y3);
+	c = distance(x1, y1, x3, y3);
+	s = (a + b + c) / 2;
+	area = sqrt(s * (s - a) * (s - b) * (s - c));
+	return area;
+}
+
+double area(double x1, double y1, double x2, double y2) {
+	double width = distance(x1, y1, x1, y2);
+	double height = distance(x2, y2, x2, y1);
+	return width * height;
+}
+
+void main() {
+	string poligon;
+	cout << "Choose a poligon" << endl;
+	cin >> poligon;
+	if (poligon == "circle") {
+		double radius;
+		cout << "What's the circle's radius? (in radians)" << endl;
+		cin >> radius;
+		cout << "The area is " << area(radius);
+	}
+	else if (poligon == "triangle") {
+		double x1, y1, x2, y2, x3, y3;
+		cout << "Insert the coordinates of the 3 vertices" << endl;
+		cin >> x1 >> y1 >> x2 >> y2 >> x3 >> y3;
+		cout << "The area is " << area(x1, y1, x2, y2, x3, y3);
+	}
+	else if (poligon == "rectangle" || poligon == "square") {
+		double x1, y1, x2, y2;
+		cout << "Insert the coordinates of 2 opposite vertices" << endl;
+		cin >> x1 >> y1 >> x2 >> y2;
+		cout << "The area is " << area(x1, y1, x2, y2);
+	}
+}
+
+Exc13:
+a)
+Returns a random number between 1 and 6. The assert terminates the program and gives an error if high < low.
+b)
+The first int declares the type that will be returned. The other two are the types of the parameters.
+c)
+Yes, we just have to declare a different number of parameters and/or differente signatures
+
+Exc14:
+a)
+double integrateTR(double f(double), double a, double b, int n) {
+	double h = (b - a) / n;
+	double integral = 0;
+	for (int i = 1; i <= n; i++) {
+		double area = (h / 2) * (f(a + (i - 1) * h) + f(a + i * h));
+		integral += area;
+	}
+}
+b)
+#include <iostream>
+using namespace std;
+
+double h(double x) {
+	return sqrt(4 - pow(x, 2));
+}
+
+double g(double x) {
+	return pow(x, 2);
+}
+
+double integrateTR(double f(double), double a, double b, int n) {
+	double h = (b - a) / n;
+	double integral = 0;
+	for (int i = 1; i <= n; i++) {
+		double area = (h / 2) * (f(a + (i - 1) * h) + f(a + i * h));
+		integral += area;
+	}
+	return integral;
+}
+
+int main() {
+	double areag = integrateTR(g, 0, 10, 1000);
+	double areah = integrateTR(h, -2, 2, 1000);
+	cout << "The area of g(x) is " << areag << " and the area of h(x) is " << areah << endl;
+}

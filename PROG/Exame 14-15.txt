@@ -1,0 +1,332 @@
+1)
+a)
+void get_code_sum(const string& code_grades, int num_grades, string& code, double& sum) {
+	stringstream linestream;
+	linestream.str(code_grades);
+	linestream >> code;
+	linestream.ignore(100, '-');
+	sum = 0;
+	for (int i = 0; i < num_grades; ++i) {
+		double num;
+		linestream >> num;
+		sum += num;
+	}
+}
+
+b)
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+void get_code_sum(const string& code_grades, int num_grades, string& code, double& sum) {
+	stringstream linestream;
+	linestream.str(code_grades);
+	linestream >> code;
+	linestream.ignore(100, '-');
+	sum = 0;
+	for (int i = 0; i < num_grades; ++i) {
+		double num;
+		linestream >> num;
+		sum += num;
+	}
+}
+
+int main()
+{
+	string root;
+	cout << "Indique o nome raiz do ficheiro: ";
+	cin >> root;
+	string infile = root + ".txt";
+	string outfile = root + "_final.txt";
+	ifstream fin;
+	ofstream fout;
+	int numLines;
+	fin.open(infile);
+	if (fin.fail()) {
+		cerr << "Nao foi possivel abrir o ficheiro" << endl;
+		exit(1);
+	}
+	fout.open(outfile);
+	fin >> numLines;
+	fin.ignore(100, '\n');
+	while (!fin.eof()) {
+		string line, code;
+		double grade;
+		getline(fin, line);
+		if (line == "") continue;
+		get_code_sum(line, numLines, code, grade);
+		fout << setw(10) << code << " - " << setw(5) << grade << endl;
+	}
+	return 0;
+}
+
+2)
+a)
+void Student::setGrades(double shortExam, double project, double exam) {
+	this->shortExam = shortExam;
+	this->project = project;
+	this->exam = exam;
+	finalGrade = round(shortExam * weightShortExam * 0.01 + project * weightProject * 0.01 + exam * weightExam * 0.01);
+}
+
+int Student::weightShortExam = 20;	// sao os mesmo pesos para todos os objetos
+int Student::weightProject = 30;
+int Student::weightExam = 50;
+
+b)
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+class Student {
+public:
+	Student();
+	Student(const string& code, const string& name);
+	void setGrades(double shortExam, double project, double exam);
+	string getCode() const;
+	string getName() const;
+	int getFinalGrade() const;
+	// other get and set methods
+	bool isApproved() const; // is the student approved or not ?
+	static int weightShortExam, weightProject, weightExam; // weights in percentage (ex:20,30,50)
+private:
+	string code; // student code
+	string name; // student complete name
+	double shortExam, project, exam; // grades obtained by the student in the different components
+	int finalGrade;
+};
+
+Student::Student() {
+	shortExam = 0;
+	project = 0;
+	exam = 0;
+	finalGrade = 0;
+}
+
+Student::Student(const string& code, const string& name) {
+	shortExam = 0;
+	project = 0;
+	exam = 0;
+	finalGrade = 0;
+	this->code = code;
+	this->name = name;
+}
+
+string Student::getCode() const {
+	return code;
+}
+
+string Student::getName() const {
+	return name;
+}
+
+bool Student::isApproved() const {
+	if (finalGrade >= 10) return true;
+	return false;
+}
+
+int Student::getFinalGrade() const {
+	return finalGrade;
+}
+
+void Student::setGrades(double shortExam, double project, double exam) {
+	this->shortExam = shortExam;
+	this->project = project;
+	this->exam = exam;
+	finalGrade = round(shortExam * weightShortExam * 0.01 + project * weightProject * 0.01 + exam * weightExam * 0.01);
+}
+
+int Student::weightShortExam = 20;	// sao os mesmo pesos para todos os objetos
+int Student::weightProject = 30;
+int Student::weightExam = 50;
+
+int main()
+{
+	string code, name;
+	double shortExam, project, exam;
+	cout << "Student code? ";
+	getline(cin, code);
+	cout << "Student name? ";
+	getline(cin, name);
+	cout << "Short exam grade? ";
+	cin >> shortExam;
+	cout << "Project grade? ";
+	cin >> project;
+	cout << "Exam grade? ";
+	cin >> exam;
+	Student s(code, name);
+	s.setGrades(shortExam, project, exam);
+	cout << endl << s.getCode() << " " << s.getName() << " " << s.getFinalGrade() << endl;
+	return 0;
+}
+
+c)
+void showApproved(ostream& out, const vector<Student>& students) {
+	for (size_t i = 0; i < students.size(); ++i) {
+		Student s = students.at(i);
+		if (s.isApproved()) {
+			out << setw(50) << s.getName() << " - " << s.getFinalGrade() << endl;
+		}
+	}
+}
+
+int main()
+{
+	Student s1("up201906334", "Bruno Rosendo");
+	Student s2("up200000", "Manela Leites");
+	Student s3("up2349539", "Sonia Brasao");
+	s1.setGrades(15, 18, 14);
+	s2.setGrades(10, 8, 9);
+	s3.setGrades(20, 20, 19);
+	vector<Student> vs = { s1, s2 , s3};
+	showApproved(cout, vs);
+	return 0;
+}
+
+3)
+a)
+Pluviosity::Pluviosity(int year) {
+	this->year = year;
+	for (int i = 1; i <= 12; ++i) {
+		vector<int> p(numDaysOfMonth(i, year), 0);
+		pluv.push_back(p);
+	}
+}
+
+b)
+int Pluviosity::maxPluv() const {
+	int max = 0;
+	for (int i = 0; i < pluv.size(); ++i) {
+		for (int a = 0; a < pluv.at(i).size(); ++a) {
+			if (pluv.at(i).at(a) > max) max = pluv.at(i).at(a);
+		}
+	}
+	return max;
+}
+
+
+//TESTAR
+
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+class Pluviosity {
+public:
+	Pluviosity();
+	Pluviosity(int year);
+	bool setPluv(int month, int day, int pluviosity);
+	int getPluv(int month, int day) const;
+	int maxPluv() const;
+	// other methods, including maxPluv(), to be defined in question 3.b
+private:
+	unsigned int year; // year that the pluviosity data refers to vector<vector<int> > pluv; // pluviosity data, indexed by month & day
+	vector<vector<int>> pluv;
+};
+
+Pluviosity::Pluviosity(int year) {
+	this->year = year;
+	for (int i = 1; i <= 12; ++i) {	// Considerei 30 para testar
+		vector<int> p(30, 0);
+		pluv.push_back(p);
+	}
+}
+
+Pluviosity::Pluviosity() {
+	year = 0;
+	for (int i = 1; i <= 12; ++i) {
+		vector<int> p(30, 0);
+		pluv.push_back(p);
+	}
+}
+
+bool Pluviosity::setPluv(int month, int day, int pluviosity) {	// Considerei sempre possivel
+	pluv.at(month - 1).at(day - 1) = pluviosity;
+	return true;
+}
+
+int Pluviosity::getPluv(int month, int day) const {
+	return pluv.at(month - 1).at(day - 1);
+}
+
+int Pluviosity::maxPluv() const {
+	int max = 0;
+	for (int i = 0; i < pluv.size(); ++i) {
+		for (int a = 0; a < pluv.at(i).size(); ++a) {
+			if (pluv.at(i).at(a) > max) max = pluv.at(i).at(a);
+		}
+	}
+	return max;
+}
+
+
+
+int main()
+{
+	Pluviosity p(2000);
+	p.setPluv(2, 25, 200);
+	p.setPluv(1, 2, 150);
+	cout << p.maxPluv();
+	return 0;
+}
+
+c)
+map < string, map<int, Pluviosity>> m;
+
+Como queremos organizar por cidades, usaria um map com o nome da cidade como key. Os elementos deste map
+seriam também um map, visto que queremos organizar a pluviosidade por ano em cada cidade, assim a key
+seria o ano e o elemento a pluviosidade desse ano. Não usaria um multimap visto que não queremos cidades ou
+anos repetidos.
+
+4)
+a)
+int p[100]
+double av = average(p, 100)
+
+unsigned int n = 100;
+int* p = new int[n]
+double av = average(p, n)
+
+b)
+Throw an exception
+
+c)
+Quando os objetos são construídos com alocação dinámica de memória
+
+d)
+Para ser possível "emparalhar" vários <<, desta forma:
+out << x << y;
+Se não fosse retornado uma referência ao operando à esquerda não seria possível fazê-lo
+
+e)
+bool operator<(const Student& s1, const Student& s2) {
+	return (s1.getName() < s2.getName());
+}
+
+int main()
+{
+	Student s1("23", "Bruno");
+	Student s2("43", "Ana");
+	vector<Student> studProg = { s1, s2 };
+	sort(studProg.begin(), studProg.end());
+	for (const auto& x : studProg) cout << x.getName() << endl;
+	return 0;
+}
+
+f)
+vector<Shape*> shapes;

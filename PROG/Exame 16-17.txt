@@ -1,0 +1,341 @@
+1)
+a)
+#include <iostream>
+#include <string>
+#include <fstream>
+using namespace std;
+
+int main()
+{
+	ifstream fin;
+	ofstream fout;
+	fin.open("people1.txt");
+	if (fin.fail()) {
+		cerr << "people1.txt not found";
+		exit(1);
+	}
+	fout.open("people2.txt");
+	while (!fin.eof()) {
+		string name, sname;
+		getline(fin, name);
+		simplify(name, sname);
+		if (sname == "") continue;
+		fout << sname << endl;
+	}
+	fin.close();
+	fout.close();
+}
+
+b)
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <sstream>
+using namespace std;
+
+void simplify(const string& name, string& sname) {
+	stringstream namestream;
+	namestream.str(name);
+	string first, last;
+	namestream >> first;
+	while (!namestream.eof()) {
+		string next;
+		namestream >> next;
+		last = next;
+	}
+	if (last == "") sname = first;
+	else sname = first + " " + last;
+}
+
+c)
+Usaria um set para guardar os nomes todos, visto que é um container ordenado, e depois usava
+esse set para escrever no ficheiro de texto
+
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <set>
+using namespace std;
+
+void simplify(const string& name, string& sname) {
+	stringstream namestream;
+	namestream.str(name);
+	string first, last;
+	namestream >> first;
+	while (!namestream.eof()) {
+		string next;
+		namestream >> next;
+		last = next;
+	}
+	if (last == "") sname = first;
+	else sname = first + " " + last;
+}
+
+int main()
+{
+	ifstream fin;
+	ofstream fout;
+	fin.open("people1.txt");
+	if (fin.fail()) {
+		cerr << "people1.txt not found";
+		exit(1);
+	}
+	fout.open("people2.txt");
+	set<string> names;
+	while (!fin.eof()) {
+		string name, sname;
+		getline(fin, name);
+		simplify(name, sname);
+		if (sname == "") continue;
+		names.insert(sname);
+	}
+	for (auto x : names) fout << x << endl;
+	fin.close();
+	fout.close();
+}
+
+2)
+a)
+Date::Date(int y, int m, int d) {
+	this->y = y;
+	this->m = m;
+	this->d = d;
+}
+
+b) // sugestao dava mais trabalho, pelo cuidado com o mesmo numero de carateres
+bool operator<(const Date& left, const Date& right) {
+	if (left.y < right.y) return true;
+	if (left.y > right.y) return false;
+	if (left.m < right.m) return true;
+	if (left.m > right.m) return false;
+	if (left.d < right.d) return true;
+	return false;
+}
+
+c)
+istream& operator >>(istream& f, Date& date) {
+	int y, m, d;
+	char h1, h2;
+	f >> y >> h1 >> m >> h2 >> d;
+	if (f.fail() || h1 != '-' || h2 != '-' || y < 0 || m < 0 || d < 0) {
+		throw runtime_error("invalid Date");
+	}
+	date.y = y;
+	date.m = m;
+	date.d = d;
+	return f;
+}
+
+d)
+//VERSAO COMPLETA
+
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <set>
+using namespace std;
+
+class Date
+{
+	friend istream& operator>>(istream& f, Date& date);
+	friend ostream& operator<<(ostream& f, const Date& date);
+	friend bool operator<(const Date& left, const Date& right);
+	friend bool operator==(const Date& left, const Date& right);
+public:
+	Date(int y = 1, int m = 1, int d = 1);
+	// ... other methods
+private:
+	int y, m, d; // year, month, day
+};
+
+Date::Date(int y, int m, int d) {
+	if (y < 0 || m < 0 || d < 0) throw runtime_error("invalid Date");
+	this->y = y;
+	this->m = m;
+	this->d = d;
+}
+
+bool operator<(const Date& left, const Date& right) {
+	if (left.y < right.y) return true;
+	if (left.y > right.y) return false;
+	if (left.m < right.m) return true;
+	if (left.m > right.m) return false;
+	if (left.d < right.d) return true;
+	return false;
+}
+
+istream& operator >>(istream& f, Date& date) {
+	int y, m, d;
+	char h1, h2;
+	f >> y >> h1 >> m >> h2 >> d;
+	if (f.fail() || h1 != '-' || h2 != '-' || y < 0 || m < 0 || d < 0) {
+		throw runtime_error("invalid Date");
+	}
+	date.y = y;
+	date.m = m;
+	date.d = d;
+	return f;
+}
+
+ostream& operator <<(ostream& f, const Date& date) {
+	f << date.y << "-" << date.m << "-" << date.d;
+	return f;
+}
+
+bool operator==(const Date& left, const Date& right) {
+	string lefts, rights;
+	lefts = to_string(left.y) + to_string(left.m) + to_string(left.d);
+	rights = to_string(right.y) + to_string(right.m) + to_string(right.d);
+	return lefts == rights;
+}
+
+int main()
+{
+	Date d1, d3;
+	Date d2(2001, 7, 28);
+	int y, m, d;
+	char h1, h2;
+	cout << "Date3 (yyyy-mm-dd) ? ";
+	cin >> d3;
+	cout << d1 << " " << d2 << " " << d3 << endl;
+	if (d3 < d2) cout << "Date3 is before Date2" << endl;
+	else cout << "Date3 is not before Date2" << endl;
+	if (d3 == d1) cout << "Date1 is the same as Date2" << endl;
+	else cout << "Date1 and Date2 are not the same" << endl;
+
+	return 0;
+}
+
+3)
+a)
+int getPixel(size_t lin, size_t col);
+
+b)
+Image Image::getRegion(size_t lin, size_t col, size_t nLins, size_t nCols) const {
+	Image img = Image(nLins, nCols);
+	for (size_t l = lin; l < lin + nLins; ++l) {
+		for (size_t c = col; c < col + nCols; ++c) {
+			img.setPixel(l, c, this->img.at(l).at(c));
+		}
+	}
+	return img;
+}
+
+c)
+Usaria um multimap, visto que queremos uma estrutura de dados num formato "key-value", para podermos
+aceder às imagens (values) através das Datas (keys). Usaria um multimap em vez de um map porque se
+quer que uma data possa estar associada a várias imagens.
+
+d)	// Nao implementei o read por falta de informação, nao esta testado
+int main()
+{
+	Date d;
+	cout << "Insert the date: ";
+	cin >> d;
+	multimap<Date, Image> m;
+	while (true) {
+		string file;
+		cin >> file;
+		if (file == "") break;
+		ifstream fin;
+		fin.open(file);
+		Image i;
+		i.read(file);
+		m.insert(make_pair(d, i));
+		fin.close();
+	}
+	return 0;
+}
+
+e)
+template<class T>
+class Image {
+public:
+	Image(size_t nLins = 0, size_t nCols = 0, T pixVal = 0); //nLins & nCols are the dimensions 
+
+	//  of the image; pixVal is the initial value of every pixel
+	void setPixel(size_t lin, size_t col, int pixVal); //modifies the value of the pixel at (lin,col)
+	bool read(string fileName); // reads the image saved in file fileName, storing it in img ;
+	//  returns true if sucessful, false otherwise
+
+	Image getRegion(size_t lin, size_t col, size_t nLins, size_t nCols) const;
+	// returns an image containing a rectangular region of img
+	// ... other methods
+	T getPixel(size_t lin, size_t col);
+private:
+	vector < vector<T> > img; // image representation
+	// ... other attributes
+};
+
+template<class T>
+Image<T>::Image(size_t nLins, size_t nCols, T pixVal) {
+	for (auto &v : img) {
+		for (auto &x : v) {
+			x = pixVal;
+		}
+	}
+}
+
+// Fazer o mesmo para todos os metodos
+Declarar com Image<int> i(1, 1, 1);
+
+4)
+a)
+
+int readNumber(string msg) {
+	int number;
+	cout << msg; cin >> number;
+	return number;
+}
+
+int main()
+{
+	int grade;
+	grade = readNumber("Number: ");
+	return 0;
+}
+
+
+OU
+
+
+void readNumber(string msg, int& number) {
+	cout << msg; cin >> number;
+}
+
+int main()
+{
+	int grade;
+	readNumber("Grade: ", grade);
+	return 0;
+}
+
+b)
+Sim, porque existem um default constructor, devido aos "= 1" presentes nos parametros
+
+c)
+Usaria um 2D array, usando dynamic memory allocation
+O atributo seria int** img
+Será necessário adicionar um destructor, para libertar a memória usada
+
+d)
+
+Image::Image(size_t nLins, size_t nCols, int pixVal) {
+	int** img = new int* [nLins];
+	for (int i = 0; i < nLins; ++i) {
+		img[i] = new int[nCols];
+	}
+}
+
+e)
+list não desfruta de random access iterators, portanto, não pode usar esta função
+Isto é devido ao facto que list não é um container contínuo na memória. Em vez disso, usa um pointer
+para o próximo elemento
+
+f)
+O qualificador virtual significa que as classes derivadas têm uma função "igual" (overwritten), que será
+usada nos casos onde se use Shape* mas na verdade esteja guardado uma classe derivada. O "= 0" significa
+que se trata de uma função abstrata, que será apenas declarada nas classes derivadas. Isto implica
+que a classe base não pode ser iniciada, é uma classe abstrata

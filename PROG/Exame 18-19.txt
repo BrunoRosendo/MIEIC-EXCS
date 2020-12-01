@@ -1,0 +1,356 @@
+2)
+a)
+int count(const vector<int>& v, int value) {
+    int num = 0;
+    for (int i = 0; i < v.size(); ++i) {
+        if (v[i] == value) ++num;
+    }
+    return num;
+}
+
+b)
+O parâmetro v é passado desta forma por causa do aproveitamento de memória
+Se fosse passado sem &, era criado uma cópia, o que não é necessário, visto que ele nao vai ser mudado
+Daí usar-se também const
+
+c)
+void main() {
+    vector<int> v;
+    int num;
+    while (cin >> num) v.push_back(num);
+    cout << "Numeros de valores iguais a 0: " << count(v, 0) << endl;
+}
+
+d)
+template <class T>
+
+T count(const vector<T>& v, T value) {
+    T num = 0;
+    for (int i = 0; i < v.size(); ++i) {
+        if (v[i] == value) ++num;
+    }
+    return num;
+}
+
+e)
+Fazer overload do operador == na class Date
+Retirar const (apenas vector<T>& v) na funçao count (erro de compilaçao)
+
+f)
+int count(int a[], int n, int value) {
+    int num = 0;
+    for (int i = 0; i < n; ++i) {
+        if (a[i] == value) ++num;
+    }
+    return num;
+}
+
+void main() {
+    int a[100];
+    int num;
+    int i = 0;
+    while (cin >> num) {
+        a[i] = num;
+        ++i;
+    }
+    cout << "Numeros de valores iguais a 0: " << count(a, i, 0) << endl;
+}
+
+g)
+
+void main() {
+    vector<int> v;
+    int num;
+    while (cin >> num) v.push_back(num);
+    cout << "Numeros de valores iguais a 0: " << count(v.begin(), v.end(), 0) << endl;
+}
+
+3)
+a)
+class Time {
+public:
+    Time();
+    Time(int h, int m, int s);
+    Time(string date);
+    void setH(int h);
+    void setM(int m);
+    void setS(int s);
+    int getH() const;
+    int getM() const;
+    int getS() const;
+    string getStr() const;
+    Time operator+(const Time& t) const;
+    Time operator-(const Time& t) const;
+private:
+    int h, m, s;
+};
+
+b)
+Time::Time(string t) {
+    stringstream ts;
+    ts.str(t);
+    ts >> h;
+    ts.ignore();
+    ts >> m;
+    ts.ignore();
+    ts >> s;
+}
+
+c)
+string Time::getStr() const {
+    string hours = to_string(h);
+    string mins = to_string(m);
+    string secs = to_string(s);
+    if (hours.size() == 1) hours = "0" + hours;
+    if (mins.size() == 1) mins = "0" + mins;
+    if (secs.size() == 1) secs = "0" + secs;
+    string s = hours + ":" + mins + ":" + secs;
+    return s;
+}
+
+d)
+Time Time::operator+(const Time& t) const {
+    int newh, newm, news;
+    news = s + t.getS();
+    newm = m + t.getM();
+    newh = h + t.getH();
+    if (news >= 60) {
+        news = news % 60;
+        newm++;
+    }
+    if (newm >= 60) {
+        newm = newm % 60;
+        newh++;
+    }
+    Time t2(newh, newm, news);
+    return t2;
+}
+
+e)
+void main() {
+    string s;
+    cout << "Insert the string with a valid time: ";
+    cin >> s;
+    Time t1(s);
+    Time t2("08:00:00");
+    Time t3 = t1 + t2;
+    cout << t3.getStr();
+}
+
+f)
+Usar cin.fail(), em conjunto com condiçoes que verificam se mins>60 ou secs>60 e dar print do erro ao ecra
+OU
+Criar uma exceção e usar try catch.
+
+4)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <list>
+#include <algorithm>
+#include <fstream>
+using namespace std;
+
+class Time {
+public:
+    Time();
+    Time(int h, int m, int s);
+    Time(string t);
+    void setH(int h);
+    void setM(int m);
+    void setS(int s);
+    int getH() const;
+    int getM() const;
+    int getS() const;
+    string getStr() const;
+    Time operator+(const Time& t) const;
+    Time operator-(const Time& t) const;
+private:
+    int h, m, s;
+};
+
+void Time::setH(int h) {
+    this->h = h;
+}
+
+void Time::setM(int m) {
+    this->m = m;
+}
+
+void Time::setS(int s) {
+    this->s = s;
+}
+
+int Time::getH() const {
+    return h;
+}
+
+int Time::getM() const {
+    return m;
+}
+
+int Time::getS() const {
+    return s;
+}
+
+Time::Time(int h, int m, int s) {
+    this->h = h;
+    this->m = m;
+    this->s = s;
+}
+
+Time::Time(string t) {
+    stringstream ts;
+    ts.str(t);
+    ts >> h;
+    ts.ignore();
+    ts >> m;
+    ts.ignore();
+    ts >> s;
+}
+
+string Time::getStr() const {
+    string hours = to_string(h);
+    string mins = to_string(m);
+    string secs = to_string(s);
+    if (hours.size() == 1) hours = "0" + hours;
+    if (mins.size() == 1) mins = "0" + mins;
+    if (secs.size() == 1) secs = "0" + secs;
+    string s = hours + ":" + mins + ":" + secs;
+    return s;
+}
+
+Time Time::operator+(const Time& t) const {
+    int newh, newm, news;
+    news = s + t.getS();
+    newm = m + t.getM();
+    newh = h + t.getH();
+    if (news >= 60) {
+        news = news % 60;
+        newm++;
+    }
+    if (newm >= 60) {
+        newm = newm % 60;
+        newh++;
+    }
+    Time t2(newh, newm, news);
+    return t2;
+}
+
+Time Time::operator-(const Time& t) const {	// fazer com segundos totais
+    int newh, newm, news;
+    news = s - t.getS();
+    newm = m - t.getM();
+    newh = h - t.getH();
+    if (news < 0) {
+        news = 60 + news;
+        newm--;
+    }
+    if (newm < 0) {
+        newm = 60 + newm;
+        newh--;
+    }
+    Time t2(newh, newm, news);
+    return t2;
+}
+
+
+void main() {
+    ifstream fin;
+    fin.open("C:\\Documents\\temp.txt");
+    if (fin.fail()) {
+        cerr << "The file does not exist" << endl;
+        exit(1);
+    }
+    else {
+        int oldh, oldm;
+        double oldt;
+        fin >> oldh;
+        fin.ignore(100, ':');
+        fin >> oldm;
+        fin.ignore(100, '=');
+        fin >> oldt;
+        if (oldh >= 10) cout << oldh << ":";
+        else cout << "0" << oldh << ":";
+        if (oldm >= 10) cout << oldm << " = " << oldt << endl;
+        else cout << "0" << oldm << " = " << oldt << endl;
+        Time old(oldh, oldm, 0);
+        Time total(0, 0, 0);
+        while (!fin.eof()) {
+            int hours, mins;
+            double temp;
+            fin >> hours;
+            fin.ignore(100, ':');
+            fin >> mins;
+            fin.ignore(100, '=');
+            fin >> temp;
+            if (hours >= 10) cout << hours << ":";
+            else cout << "0" << hours << ":";
+            if (mins >= 10) cout << mins << " = " << fixed << setprecision(1) << temp << " - ";
+            else cout << "0" << mins << " = " << fixed << setprecision(1) << temp << " - ";
+            Time oldtime(oldh, oldm, 0);
+            Time newt(hours, mins, 0);
+            double tempdif = temp - oldt;
+            Time timedif = newt - oldtime;
+            if (tempdif < 0) {
+                if (timedif.getH() >= 10) cout << "Desceu durante " << timedif.getH() << ":";
+                else cout << "Desceu durante " << "0" << timedif.getH() << ":";
+                if (timedif.getM() >= 10) cout << timedif.getM() << endl;
+                else cout << "0" << timedif.getM() << endl;
+            }
+            else if (tempdif > 0) {
+                if (timedif.getH() >= 10) cout << "Subiu durante " << timedif.getH() << ":";
+                else cout << "Subiu durante " << "0" << timedif.getH() << ":";
+                if (timedif.getM() >= 10) cout << timedif.getM() << endl;
+                else cout << "0" << timedif.getM() << endl;
+                total = total + timedif;
+            }
+            else {
+                if (timedif.getH() >= 10) cout << "Estavel durante " << timedif.getH() << ":";
+                else cout << "Estavel durante " << "0" << timedif.getH() << ":";
+                if (timedif.getM() >= 10) cout << timedif.getM() << endl;
+                else cout << "0" << timedif.getM() << endl;
+            }
+            oldh = hours;
+            oldm = mins;
+            oldt = temp;
+        }
+        if (total.getH() >= 10) cout << "A TEMPERATURA SUBIU DURANTE " << total.getH() << ":";
+        else cout << "A TEMPERATURA SUBIU DURANTE " << "0" << total.getH() << ":";
+        if (total.getM() >= 10) cout << total.getM() << endl;
+        else cout << "0" << total.getM() << endl;
+    }
+    fin.close();
+}
+
+5)
+a)
+Poderia ser usado list em vez de vector. Isto não seria melhor pois, em princípio, não será necessário
+introduzir novas páginas/indexs a meio do container. Além disso, poderemos querer aceder a uma posição
+aleatória do container, pelo que o vector é a melhor escolha
+Poderia ser usado um multi_map em vez de um map. Isto não é uma boa escolha visto que não precisamos de
+palavras repetidas no índice remissivo
+Usar set<int> em vez de vector<int> poderia ser uma boa escolha, visto que não nos interessam páginas repetidas
+
+b)
+void Book::buildIndex(const set<string>& words) {
+    for (auto w : words) {
+        vector<int> pagenums;
+        for (auto p : pages) {
+            if (p.hasWord(w)) {
+                pagenums.push_back(p.getPageNumber());
+            }
+        }
+        index[w] = pagenums;
+    }
+}
+
+c)
+void main() {
+    Book book("C++ Book.txt");
+    set<string> words = { "computer", "algorithm", "program" };
+    book.buildIndex(words);
+    book.showIndex(cout);
+}

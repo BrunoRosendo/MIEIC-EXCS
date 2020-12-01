@@ -1,0 +1,593 @@
+1)
+a)
+#include <stdio.h>
+#include <stdlib.h>
+
+extern void somaV(float *P, float *Q, float *R, int n);
+
+int main(void)
+{
+	const int n = 8;
+	float v1[8] = {1.1, 2.0, 3.5, 4.2, 0, 2, 3, 4};
+	float v2[8] = {5.2, 4.5, 3.1, 2.3, 1, 2, 3, 4};
+	float v3[8];
+	somaV(v1, v2, v3, n);
+	for (int i = 0; i < n; ++i) printf("%f", v3[i]);
+}
+
+.text
+.global somaV
+.type somaV, "function"
+
+
+somaV: 	cbz x3, fim
+		ldr Q3, [X0]
+		ldr Q4, [X1]
+		fadd v4.4S, v4.4S, v3.4S
+		str Q4, [x2]
+		sub x3, x3, 4
+		add x0, x0, 16
+		add x1, x1, 16
+		add x2, x2, 16
+		b somaV
+fim:	ret
+
+b)
+#include <stdio.h>
+#include <stdlib.h>
+
+extern void altV(float *P, int n, float k);
+
+int main(void)
+{
+	const int n = 4;
+	float v1[4] = {1.1, 2.0, 3.5, 0};
+	float k = 2.2;
+	altV(v1, n, k);
+	for (int i = 0; i < n; ++i) printf("%f", v1[i]);
+}
+
+
+.text
+.global altV
+.type altV, "function"
+
+altV:	cbz x1, fim
+		ldr Q1, [x0]
+		fmov w3, s0
+		mov v2.S[0], w3
+		fmul V1.4S, V1.4S, v2.S[0]
+		str Q1, [X0]
+		sub x1, x1, 4
+		add x0, x0, 16
+		b altV
+fim:	ret
+
+c)
+#include <stdio.h>
+#include <stdlib.h>
+
+extern void msubV(float *P, float *Q, float *R, int n, float k);
+
+int main(void)
+{
+	const int n = 8;
+	float v1[8] = {1.1, 2.0, 3.5, 0, 1, 2, 3, 4};
+	float v2[8] = {1, 2, 4.3, 2.3, 2.3, 1, 0, 1};
+	float v3[8];
+	float k = 2.2;
+	msubV(v1, v2, v3, n, k);
+	for (int i = 0; i < n; ++i) printf("%f", v3[i]);
+}
+
+
+.text
+.type altV, "function"
+.type somaV, "function"
+.global msubV
+.type msubV, "function"
+
+altV:	cbz x1, fim
+		ldr Q1, [x0]
+		fmov w3, s0
+		mov v2.S[0], w3
+		fmul V1.4S, V1.4S, v2.S[0]
+		str Q1, [X0]
+		sub x1, x1, 4
+		add x0, x0, 16
+		b altV
+fim:	ret
+
+
+somaV: 	cbz x3, fim2
+		ldr Q3, [X0]
+		ldr Q4, [X1]
+		fadd v4.4S, v4.4S, v3.4S
+		str Q4, [x2]
+		sub x3, x3, 4
+		add x0, x0, 16
+		add x1, x1, 16
+		add x2, x2, 16
+		b somaV
+fim2:	ret
+
+
+msubV:	mov x7, x0	//P
+		mov x8, x1	//Q
+		mov x9, x2	//R
+		mov x10, x3	//n
+		stp x29, x30, [SP, -16]!
+		cbz x10, fim3
+		mov x0, x8
+		mov x1, x10
+		bl altV
+		mov x1, x10
+		mov x0, x8
+negc:	cbz x1, next
+		ldr Q1, [X0]
+		fneg v1.4s, v1.4s
+		str Q1, [X0]
+		sub x1, x1, 4
+		add x0, x0, 16
+		b negc
+next: 	mov x1, x7
+		mov x0, x8
+		mov x2, x9
+		mov x3, x10
+		bl somaV
+fim3:	ldp x29, x30, [sp], 16
+		ret
+
+
+2)
+#include <stdio.h>
+#include <stdlib.h>
+
+extern long int prodintV(int *R, int *S, int n);
+
+int main(void)
+{
+	int r[4] = {1, 2, 3, 4};
+	int s[4] = {1, 1, 1, 1};
+	int n = 4;
+	printf("%d", prodintV(r, s, n));
+}
+
+
+.text
+.global prodintV
+.type prodintV, "function"
+
+
+prodintV:	cbz x2, fim
+			mov x10, 0
+			ldr Q0, [x0]
+			ldr Q1, [x1]
+			mul v0.4S, v0.4S, v1.4S
+			smov x11, v0.S[0]
+			add x10, x10, x11
+			smov x11, v0.S[1]
+			add x10, x10, x11
+			smov x11, v0.S[2]
+			add x10, x10, x11
+			smov x11, v0.S[3]
+			add x10, x10, x11
+			sub x2, x2, 4
+			add x0, x0, 16
+			add x1, x1, 16
+			b prodintV
+fim:		mov x0, x10
+			ret
+
+
+//STOR
+
+.text
+.global prodintV
+.type prodintV,"function"
+
+prodintV:
+    MOV  X4, #0
+    LSR  W2, W2, #2
+CICLO:
+    CBZ  X2, FIM
+	LDR  Q0, [X0], #16
+	LDR  Q1, [X1], #16
+	MUL  V2.4S, V0.4S, V1.4S
+	ADDV S3,V2.4S
+	smov X3, V3.B[0]
+	ADD  X4, X4, X3
+	SUB  X2, X2, #1
+	B    CICLO
+FIM:
+    MOV X0, X4
+    RET
+
+
+3)
+#include <stdio.h>
+#include <stdlib.h>
+
+extern long int conta_ocorr(char *V, long int n, char val);
+
+int main(void)
+{
+	char v[16] = {'a', 'b', 'c', 'd', 'e', 'a', 'b', 'c', 'd', 'e', 'a', 'b', 'c', 'd', 'e', 'f'};
+	printf("%ld", conta_ocorr(v, 16, 'a'));
+}
+
+
+.text
+.global conta_ocorr
+.type conta_ocorr, "function"
+
+
+conta_ocorr:	mov x3, x0
+				mov x0, 0
+ciclo:			cbz x1, fim
+				ldr Q0, [x3], 16
+				dup v1.16b, w2
+				cmeq v1.16b, v0.16b, v1.16b
+				addv b1, v1.16b
+				smov w4, v1.b[0]
+				neg w4, w4
+				add w0, w0, w4
+				sub x1, x1, 16
+				b ciclo
+fim:			ret
+
+4)(
+#include <stdio.h>
+#include <stdlib.h>
+
+extern void incsatV(int *z, int n, int x);
+
+int main(void)
+{
+	int z[8] = {1, 2, 3, 4, 2, 3, 1, 0};
+	int n = 8;
+	int x = 2;
+	incsatV(z, n, x);
+	for (int i = 0; i < n; ++i) printf("%d", z[i]);
+}
+
+
+.text
+.global incsatV
+.type incsatV, "function"
+
+
+incsatV:	cbz w1, fim
+			ldr Q0, [x0]
+			dup v1.4s, w2
+			sqadd v0.4s, v0.4s, v1.4s
+			str Q0, [x0]
+			sub w1, w1, 4
+			add x0, x0, 16
+			b incsatV
+fim:		ret
+
+
+5)
+
+#include <stdio.h>
+#include <stdlib.h>
+
+extern void mirrorSeq(float *pt, int n);
+
+int main(void)
+{
+	float pt[8] = {0, 1, 2, 3, 4, 5, 2, 3};
+	int n = 8;
+	mirrorSeq(pt, n);
+	for (int i = 0; i < n; ++i) printf("%f", pt[i]);
+}
+
+
+.text
+.global mirrorSeq
+.type mirrorSeq, "function"
+
+
+mirrorSeq:	cbz x1, fim
+			ldr Q0, [x0]
+			ins v1.s[0], v0.s[0]
+			ins v1.s[1], v0.s[3]
+			ins v0.s[0], v0.s[1]
+			ins v0.s[1], v1.s[0]
+			ins v0.s[3], v0.s[2]
+			ins v0.s[2], v1.s[1]
+			str Q0, [x0]
+			sub x1, x1, 4
+			add x0, x0, 16
+			b mirrorSeq
+fim:		ret
+
+6)
+#include <stdio.h>
+#include <stdlib.h>
+
+extern double normV(double *ptV, long int n);
+
+int main(void)
+{
+	double v[4] = {0, 1, 1.5, -2.3};
+	printf("%lf", normV(v, 4));
+}
+
+
+
+.text
+.global normV
+.type normV, "function"
+
+
+normV:	fsub d3, d3, d3
+ciclo:	cbz x1, fim
+		ldr Q0, [x0], 16
+		fmul v0.2D, v0.2D, v0.2D
+		faddp d4, v0.2d
+		fadd d3, d3, d4
+		sub x1, x1, 2
+		b ciclo
+fim:	fsqrt d0, d3
+		ret
+
+
+7)
+#include <stdio.h>
+#include <stdlib.h>
+
+extern long int conta_inf(float *v, long int n, float lim);
+
+int main(void)
+{
+	float v[8] = {0, 1, 2, 3, 2.2, 1.9, 2.0, 7};
+	long int n = 8;
+	float lim = 2.1;
+	printf("%ld", conta_inf(v, n, lim));
+}
+
+
+
+.text
+.global conta_inf
+.type conta_inf, "function"
+
+
+conta_inf:	mov x2, x0
+			mov x0, 0
+ciclo:		cbz x1, fim
+			ldr Q1, [x2]
+			dup v0.4s, v0.s[0]
+			fcmge v1.4s, v0.4s, v1.4s
+			addv s2, v1.4s
+			smov x3, v2.s[0]
+			neg x3, x3
+			add x0, x0, x3
+			sub x1, x1, 4
+			add x2, x2, 16
+			b ciclo
+fim:		ret
+
+
+8)
+#include <stdio.h>
+#include <stdlib.h>
+
+extern void ajuste(float *x, float *y, int n, float da);
+
+int main(void)
+{
+	float x[8] = {1, 2, 3, 4, 1.1, 2.1, 0.5, 2.4};
+	float y[8] = {0, 3, 2, 1, 0.2, 1.1, 5.4, 2.6};
+	float da = 2;
+	int n = 8;
+	ajuste(x, y, n, da);
+	for (int i = 0; i < n; ++i) printf("%f ", y[i]);
+}
+
+
+.text
+.global ajuste
+.type ajuste, "function"
+
+
+ajuste:
+ciclo:	cbz x2, fim
+		ldr Q2, [X0]
+		ldr Q1, [X1]
+		fabs v2.4s, v2.4s
+		fmul v2.4s, v2.4s, v0.s[0]
+		fsub v1.4s, v1.4s, v2.4s
+		str Q1, [x1]
+		add x0, x0, 16
+		add x1, x1, 16
+		sub x2, x2, 4
+		b ciclo
+fim:	ret
+
+
+9)
+#include <stdio.h>
+#include <stdlib.h>
+
+extern void prod_complexosV(float *z1, float *z2, float *z, long int n);
+
+int main(void)
+{
+	float z1[8] = {1, 2, 2, 0, 1.2, 3.5, -2.4, -1};
+	float z2[8] = {0, 1, 2, 1, 0.2, -2.3, 5, 3};
+	float z[8];
+	prod_complexosV(z1, z2, z, 4);
+	for (int i = 0; i < 8; ++i) printf("%f", z[i]);
+}
+
+
+.text
+.global prod_complexosV
+.type prod_complexosV, "function"
+
+
+prod_complexosV:
+ciclo:	cbz x3, fim
+		ldr Q0, [x0], 16 // a1, b1, a2, b2
+		ldr Q1, [x1], 16 	// c1, d1, c2, d2
+		sub x3, x3, 2
+		fmul v2.4s, v0.4s, v1.4s // a*c, b*d
+		ins v3.s[0], v2.s[1]
+		fsub s4, s2, s3 //a1*c1-b1*d1
+		str s4, [x2], 4
+		ins v5.s[0], v1.s[1]
+		ins v5.s[1], v1.s[0]
+		ins v5.s[2], v1.s[3]
+		ins v5.s[3], v1.s[2]
+		fmul v3.4s, v0.4s, v5.4s // a*d, b*c
+		ins v6.s[0], v3.s[1]
+		fadd s4, s6, s3	//a1*d1 + b1*c1
+		str s4, [x2], 4
+		ins v5.s[0], v2.s[2]
+		ins v6.s[0], v2.s[3]
+		fsub s4, s5, s6 //a2*c2 - b2*d2
+		str s4, [x2], 4
+		ins v5.s[0], v3.s[2]
+		ins v6.s[0], v3.s[3]
+		fadd s4, s5, s6	//a2*d2 + b2*c2
+		str s4, [x2], 4
+		b ciclo
+fim:	ret
+
+//STOR
+
+.text
+.global prod_complexosVFSIMDFEX9
+.type prod_complexosVFSIMDFEX9,"function"
+
+prod_complexosVFSIMDFEX9:
+
+    CBZ X3, FIM
+    ldr  D0, [X0], #8
+    ldr  D1, [X1], #8
+    FMOV X4, D0
+    FMOV V0.2D[1], X4
+    FMOV X5, D1     // XXXXYYYY
+    MOV  X6, X5     // XXXXYYYY
+    LSR  X6, X6, #32   // 0000XXXX
+    LSL  X5, X5, #32   // YYYY0000
+    ORR  X5, X5, X6
+    FMOV V1.2D[1], X5
+    FMUL V2.4S, V0.4S, V1.4S
+    MOV W6, V2.4S[0]
+    MOV W7, V2.4S[1]
+    MOV W8, V2.4S[2]
+    MOV W9, V2.4S[3]
+    
+    FMOV S4, W6
+    FMOV S5, W7
+    FMOV S6, W8
+    FMOV S7, W9
+    FSUB S4, S4, S5
+    FADD S6, S6, S7
+    MOV W6, V6.4S[0]
+    MOV V4.4S[1], W6
+    STR D4, [X2], #8
+    SUB X3, X3, #1
+    B prod_complexosVFSIMDFEX9
+FIM:
+	RET
+
+OU
+
+.data
+Vsign: .float 1.0, -1.0, 1.0, -1.0
+
+.text
+.global prod_complexosV
+.type prod_complexosV, "function"
+
+// X0 = endereço de Z1 -> (ai, bi) = (Re, Im)
+// X1 = endereço de Z2 -> (ci, di) = (Re, Im)
+// X2 = endereço de Z (resultado)
+// X3 = tamanho dos vetores
+prod_complexosV:
+	LSR   X3, X3, #1   // Nº iterações (processa 2 complexos por iteração)
+	LDR   X4, =Vsign
+    LDR   Q4, [X4]             // V4 = 1.0, -1.0, 1.0, -1.0
+L1: CBZ   X3, L2
+    LDR   Q0, [X0], #16        // V0 = a1, b1, a2, b2
+	
+	LDR   Q1, [X1], #16        // V1 = c1, d1, c2, d2
+	FMUL  V2.4S, V0.4S, V1.4S  // V2 = a1.c1, b1.d1, a2.c2, b2.d2
+	REV64 V1.4S, V1.4S         // V1 = d1, c1, d2, c2
+	FMUL  V3.4S, V0.4S, V1.4S  // V3 = a1.d1, b1.c1, a2.d2, b2.c2
+	FMUL  V5.4S, V2.4S, V4.4S  // V5 = a1.c1, -b1.d1, a2.c2, -b2.d2
+    FADDP V5.4S, V5.4S, V3.4S  // V5 = a1.c1-b1.d1, a2.c2-b2.d2, a1.d1+b1.c1, a2.d2+b2.c2
+    MOV   W5, V5.S[2]
+    INS   V5.S[2], V5.S[1]
+    MOV   V5.S[1], W5          // V5 = a1.c1-b1.d1, a1.d1+b1.c1, a2.
+    STR   Q5, [X2], #16
+	SUB   X3, X3, #1
+	B     L1
+L2: RET
+
+
+SEMANAL
+.text
+.global freqchars
+.type freqchars, "function"
+
+
+/*
+w0: numero de letras do texto
+x1: E text
+w2: numero de letras a pesquisar
+x3: E letras a pesquisar
+x4: E frequencias
+*/
+freqchars:	mov w10, w0
+			mov w0, 0
+			mov x11, x1
+			mov w12, 97
+			mov w13, 32
+			mov w16, 100
+			scvtf s10, w16
+			scvtf s11, w0
+letracicle:	cbz w2, fim
+			ldrb w6, [x3]	// letra
+			add x3, x3, 1
+			sub w2, w2, 1
+			mov w7, 0 // vezes que aparece
+			mov w8, w10
+			mov x1, x11
+textcicle:	cbz w8, textend
+			ldr Q0, [x1]
+			ldr Q2, [x1]
+			add x1, x1, 16
+			sub w8, w8, 16
+			dup v3.16b, w12
+			cmgt v3.16b, v3.16b, v2.16b
+			neg v3.16b, v3.16b
+			dup v4.16b, w13
+			mul v3.16b, v3.16b, v4.16b
+			dup v1.16b, w6
+			add v0.16b, v0.16b, v3.16b		// V0 text minusculas, v1 letra
+			cmeq v0.16b, v0.16b, v1.16b
+			addv b5, v0.16b
+			smov w14, v5.b[0]
+			neg w14, w14
+			add w7, w7, w14
+			b textcicle
+textend:	scvtf s8, w7
+			cbz w10, empty
+			scvtf s9, w10
+			fdiv s8, s8, s9
+			fmul s8, s8, s10
+empty:		str s8, [x4]
+			add x4, x4, 4
+			fcmp s8, s11
+			b.le continue
+			mov w0, w6
+			fmov s11, s8
+continue:	b letracicle
+fim:		ret
+

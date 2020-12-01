@@ -1,0 +1,3862 @@
+1)
+a)
+
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+using namespace std;
+
+class Date
+{
+public:
+    Date(unsigned int year, unsigned int month, unsigned int day);
+    Date(string yearMonthDay); // yearMonthDay must be in format "yyyy/mm/dd"
+    void setYear(unsigned int year);
+    void setMonth(unsigned int month);
+    void setDay(unsigned int day);
+    void setDate(unsigned int year, unsigned int month, unsigned int day);
+    unsigned int getYear() const;
+    unsigned int getMonth() const;
+    unsigned int getDay() const;
+    string getDate() const; // returns the date in format "yyyy/mm/dd"
+    void show() const; // shows the date on the screen in format "yyyy/mm/dd"
+private:
+    unsigned int year;
+    unsigned int month;
+    unsigned int day;
+};
+
+Date::Date(unsigned int year, unsigned int month, unsigned int day) {
+    this->year = year;
+    this->month = month;
+    this->day = day;
+}
+
+Date::Date(string yearMonthDay) {
+    istringstream datestring;
+    datestring.str(yearMonthDay);
+    int year, month, day;
+    char c;
+    datestring >> year >> c >> month >> c >> day;
+    this->year = year;
+    this->month = month;
+    this->day = day;
+}
+
+void Date::setYear(unsigned int year) {
+    this->year = year;
+}
+
+void Date::setMonth(unsigned int month) {
+    this->month = month;
+}
+
+void Date::setDay(unsigned int day) {
+    this->day = day;
+}
+
+void Date::setDate(unsigned int year, unsigned int month, unsigned int day) {
+    this->year = year;
+    this->month = month;
+    this->day = day;
+}
+
+unsigned int Date::getYear() const {
+    return year;
+}
+
+unsigned int Date::getMonth() const {
+    return month;
+}
+
+unsigned int Date::getDay() const {
+    return day;
+}
+
+string Date::getDate() const {
+    string data = to_string(year) + "/" + to_string(month) + "/" + to_string(day);
+    return data;
+}
+
+void Date::show() const {
+    cout << year << '/' << month << '/' << day << endl;
+}
+
+
+b)
+void main() {
+    Date d1(2001, 07, 28);
+    Date d2("2001/04/27");
+    d1.show();
+    d2.show();
+    d1.setYear(2020);
+    d1.setMonth(4);
+    d1.setDay(17);
+    d2.setDate(2020, 4, 18);
+    d1.show();
+    d2.show();
+    cout << d1.getDate() << endl << d2.getDay() << '/' << d2.getMonth() << '/' << d2.getYear() << endl;
+}
+
+c)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+using namespace std;
+
+class Date
+{
+public:
+    Date(unsigned int year, unsigned int month, unsigned int day);
+    Date(string yearMonthDay); // yearMonthDay must be in format "yyyy/mm/dd"
+    void setYear(unsigned int year);
+    void setMonth(unsigned int month);
+    void setDay(unsigned int day);
+    void setDate(unsigned int year, unsigned int month, unsigned int day);
+    unsigned int getYear() const;
+    unsigned int getMonth() const;
+    unsigned int getDay() const;
+    string getDate() const; // returns the date in format "yyyy/mm/dd"
+    void show() const; // shows the date on the screen in format "yyyy/mm/dd"
+    bool isValid();
+    bool isEqualTo(const Date& date);
+    bool isNotEqualTo(const Date& date);
+    bool isAfter(const Date& date);
+    bool isBefore(const Date& date);
+
+private:
+    unsigned int year;
+    unsigned int month;
+    unsigned int day;
+    bool isleap();
+    int daysOfMonth();
+};
+
+Date::Date(unsigned int year, unsigned int month, unsigned int day) {
+    this->year = year;
+    this->month = month;
+    this->day = day;
+}
+
+Date::Date(string yearMonthDay) {
+    istringstream datestring;
+    datestring.str(yearMonthDay);
+    int year, month, day;
+    char c;
+    datestring >> year >> c >> month >> c >> day;
+    this->year = year;
+    this->month = month;
+    this->day = day;
+}
+
+void Date::setYear(unsigned int year) {
+    this->year = year;
+}
+
+void Date::setMonth(unsigned int month) {
+    this->month = month;
+}
+
+void Date::setDay(unsigned int day) {
+    this->day = day;
+}
+
+void Date::setDate(unsigned int year, unsigned int month, unsigned int day) {
+    this->year = year;
+    this->month = month;
+    this->day = day;
+}
+
+unsigned int Date::getYear() const {
+    return year;
+}
+
+unsigned int Date::getMonth() const {
+    return month;
+}
+
+unsigned int Date::getDay() const {
+    return day;
+}
+
+string Date::getDate() const {
+    string data = to_string(year) + "/" + to_string(month) + "/" + to_string(day);
+    return data;
+}
+
+void Date::show() const {
+    cout << year << '/' << month << '/' << day << endl;
+}
+
+bool Date::isleap() {
+    if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) return true;
+    return false;
+}
+
+int Date::daysOfMonth() {
+    if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) return 31;
+    else if (month == 4 || month == 6 || month == 9 || month == 11) return 30;
+    else {
+        if (isleap()) return 29;
+        else return 28;
+    }
+}
+
+bool Date::isValid() {
+    if (month > 12 || month < 1) return false;
+    if (day > daysOfMonth() || day < 1) return false;
+    if (year < 0) return false;
+    return true;
+}
+
+bool Date::isEqualTo(const Date& date) {
+    if (getDate() != date.getDate()) return false;
+    return true;
+}
+
+bool Date::isNotEqualTo(const Date& date) {
+    if (getDate() == date.getDate()) return false;
+    return true;
+}
+
+bool Date::isAfter(const Date & date) {
+    if (year > date.getYear()) return true;
+    else if (year == date.getYear()) {
+        if (month > date.getMonth()) return true;
+        else if (month == date.getMonth() && day > date.getDay()) return true;
+    }
+    return false;
+}
+
+bool Date::isBefore(const Date& date) {
+    if (year < date.getYear()) return true;
+    else if (year == date.getYear()) {
+        if (month < date.getMonth()) return true;
+        else if (month == date.getMonth() && day < date.getDay()) return true;
+    }
+    return false;
+}
+
+
+d)
+void main() {
+    Date d1(2001, 07, 28);
+    Date d2("2001/04/27");
+    Date d3(2001, 4, 27);
+    d1.show();
+    d2.show();
+    if (d1.isValid() && d2.isValid()) cout << "OK" << endl;
+    else cout << "Not OK" << endl;
+    if (d1.isAfter(d2)) cout << "d1 is after d2" << endl;
+    if (d1.isBefore(d2)) cout << "d1 is before d2" << endl;
+    if (d1.isNotEqualTo(d2) && d2.isEqualTo(d3)) cout << "OK" << endl;
+    else cout << "Not OK" << endl;
+    if (d3.isAfter(d1)) cout << "Not OK" << endl;
+}
+
+
+e)
+There isn't a constructor with no parameters (default constructor), like Date();
+
+f)
+Date::Date() {
+    time_t now = time(NULL);
+    struct tm times = *localtime(&now);
+    year = times.tm_year + 1900;
+    month = times.tm_mon + 1;
+    day = times.tm_mday;
+}
+
+g)
+
+#pragma warning(disable : 4996)
+
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <ctime>
+using namespace std;
+
+class Date
+{
+public:
+    Date();
+    Date(unsigned int year, unsigned int month, unsigned int day);
+    Date(string yearMonthDay); // yearMonthDay must be in format "yyyy/mm/dd"
+    void setYear(unsigned int year);
+    void setMonth(unsigned int month);
+    void setDay(unsigned int day);
+    void setDate(unsigned int year, unsigned int month, unsigned int day);
+    unsigned int getYear() const;
+    unsigned int getMonth() const;
+    unsigned int getDay() const;
+    string getDate() const; // returns the date in format "yyyy/mm/dd"
+    void show() const; // shows the date on the screen in format "yyyy/mm/dd"
+    bool isValid();
+    bool isEqualTo(const Date& date);
+    bool isNotEqualTo(const Date& date);
+    bool isAfter(const Date& date);
+    bool isBefore(const Date& date);
+
+private:
+    string datestring;
+    bool isleap();
+    int daysOfMonth();
+};
+
+void Date::setDate(unsigned int year, unsigned int month, unsigned int day) {
+    string years, months, days;
+    if (year < 10) years = "000" + to_string(year);
+    else if (year < 100) years = "00" + to_string(year);
+    else if (year < 1000) years = "0" + to_string(year);
+    else years = to_string(year);
+    if (month < 10) months = "0" + to_string(month);
+    else months = to_string(month);
+    if (day < 10) days = "0" + to_string(day);
+    else days = to_string(day);
+    datestring = years + months + days;
+}
+
+Date::Date() {
+    time_t now = time(NULL);
+    struct tm times = *localtime(&now);
+    int year = times.tm_year + 1900;
+    int month = times.tm_mon + 1;
+    int day = times.tm_mday;
+    setDate(year, month, day);
+}
+
+Date::Date(unsigned int year, unsigned int month, unsigned int day) {
+    int year1 = year;
+    int month1 = month;
+    int day1 = day;
+    setDate(year1, month1, day1);
+}
+
+Date::Date(string yearMonthDay) {
+    istringstream datestring;
+    datestring.str(yearMonthDay);
+    int year, month, day;
+    char c;
+    datestring >> year >> c >> month >> c >> day;
+    int year1 = year;
+    int month1 = month;
+    int day1 = day;
+    setDate(year1, month1, day1);
+}
+
+void Date::setYear(unsigned int year) {
+    string years;
+    if (year < 10) years = "000" + to_string(year);
+    else if (year < 100) years = "00" + to_string(year);
+    else if (year < 1000) years = "0" + to_string(year);
+    else years = to_string(year);
+    datestring.replace(0, 4, years);
+}
+
+void Date::setMonth(unsigned int month) {
+    string months;
+    if (month < 10) months = "0" + to_string(month);
+    else months = to_string(month);
+    datestring.replace(4, 2, months);
+}
+
+void Date::setDay(unsigned int day) {
+    string days;
+    if (day < 10) days = "0" + to_string(day);
+    else days = to_string(day);
+    datestring.replace(6, 2, days);
+}
+
+unsigned int Date::getYear() const {
+    return stoi(datestring.substr(0, 4));
+}
+
+unsigned int Date::getMonth() const {
+    return stoi(datestring.substr(4, 2));
+}
+
+unsigned int Date::getDay() const {
+    return stoi(datestring.substr(6, 2));
+}
+
+string Date::getDate() const {
+    string data = datestring.substr(0, 4) + "/" + datestring.substr(4, 2) + "/" + datestring.substr(6, 2);
+    return data;
+}
+
+void Date::show() const {
+    cout << datestring.substr(0, 4) << "/" + datestring.substr(4, 2) << "/" + datestring.substr(6, 2) << endl;
+}
+
+bool Date::isleap() {
+    int year = stoi(datestring.substr(0, 4));
+    if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) return true;
+    return false;
+}
+
+int Date::daysOfMonth() {
+    int month = stoi(datestring.substr(4, 2));
+    if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) return 31;
+    else if (month == 4 || month == 6 || month == 9 || month == 11) return 30;
+    else {
+        if (isleap()) return 29;
+        else return 28;
+    }
+}
+
+bool Date::isValid() {
+    int year = stoi(datestring.substr(0, 4));
+    int month = stoi(datestring.substr(4, 2));
+    int day = stoi(datestring.substr(6, 2));
+    if (month > 12 || month < 1) return false;
+    if (day > daysOfMonth() || day < 1) return false;
+    if (year < 0) return false;
+    return true;
+}
+
+bool Date::isEqualTo(const Date& date) {
+    if (getDate() != date.getDate()) return false;
+    return true;
+}
+
+bool Date::isNotEqualTo(const Date& date) {
+    if (getDate() == date.getDate()) return false;
+    return true;
+}
+
+bool Date::isAfter(const Date & date) {
+    int year = stoi(datestring.substr(0, 4));
+    int month = stoi(datestring.substr(4, 2));
+    int day = stoi(datestring.substr(6, 2));
+    if (year > date.getYear()) return true;
+    else if (year == date.getYear()) {
+        if (month > date.getMonth()) return true;
+        else if (month == date.getMonth() && day > date.getDay()) return true;
+    }
+    return false;
+}
+
+bool Date::isBefore(const Date& date) {
+    int year = stoi(datestring.substr(0, 4));
+    int month = stoi(datestring.substr(4, 2));
+    int day = stoi(datestring.substr(6, 2));
+    if (year < date.getYear()) return true;
+    else if (year == date.getYear()) {
+        if (month < date.getMonth()) return true;
+        else if (month == date.getMonth() && day < date.getDay()) return true;
+    }
+    return false;
+}
+
+void main() {
+    Date d1(2001, 07, 28);
+    Date d2("2001/04/27");
+    Date d3(2001, 4, 27);
+    d1.show();
+    d2.show();
+    if (d1.isValid() && d2.isValid()) cout << "OK" << endl;
+    else cout << "Not OK" << endl;
+    if (d1.isAfter(d2)) cout << "d1 is after d2" << endl;
+    if (d1.isBefore(d2)) cout << "d1 is before d2" << endl;
+    if (d1.isNotEqualTo(d2) && d2.isEqualTo(d3)) cout << "OK" << endl;
+    else cout << "Not OK" << endl;
+    if (d3.isAfter(d1)) cout << "Not OK" << endl;
+}
+
+
+2)
+a)
+int Student::weightShortExam = 20;
+int Student::weightProject = 30;
+int Student::weightExam = 50;
+
+void Student::setGrades(double shortExam, double project, double exam) {
+    this->shortExam = shortExam;
+    this->project = project;
+    this->exam = exam;
+    double final = weightShortExam * 0.01 * shortExam + weightProject * 0.01 * project + weightExam * 0.01 * exam;
+    finalGrade = (int)round(final);
+}
+
+
+b)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <ctime>
+using namespace std;
+
+class Student {
+public:
+    Student();
+    Student(const string& code, const string& name);
+    void setGrades(double shortExam, double project, double exam);
+    string getCode() const;
+    string getName() const;
+    int getFinalGrade() const;
+    // other get and set methods
+    bool isApproved() const; // is the student approved or not ?
+    static int weightShortExam, weightProject, weightExam; // weights in percentage (ex:20,30,50)
+private:
+    string code; // student code
+    string name; // student complete name
+    double shortExam, project, exam; // grades obtained by the student in the different components
+    int finalGrade;
+};
+
+int Student::weightShortExam = 20;
+int Student::weightProject = 30;
+int Student::weightExam = 50;
+
+Student::Student() {}
+
+Student::Student(const string& code, const string& name) {
+    this->code = code;
+    this->name = name;
+}
+
+string Student::getCode() const {
+    return code;
+}
+
+string Student::getName() const {
+    return name;
+}
+
+int Student::getFinalGrade() const {
+    return finalGrade;
+}
+
+bool Student::isApproved() const {
+    if (finalGrade >= 10) return true;
+    return false;
+}
+
+void Student::setGrades(double shortExam, double project, double exam) {
+    this->shortExam = shortExam;
+    this->project = project;
+    this->exam = exam;
+    double final = weightShortExam * 0.01 * shortExam + weightProject * 0.01 * project + weightExam * 0.01 * exam;
+    finalGrade = (int)round(final);
+}
+
+
+void main() {
+    Student s1;
+    Student s2("up201906334", "Bruno Rosendo");
+    s2.setGrades(19, 19, 18);
+    cout << s2.getCode() << " " << s2.getName() << " = " << s2.getFinalGrade() << endl;
+    if (s2.isApproved()) cout << "S2 is approved" << endl;
+    else cout << "S2 is not approved" << endl;
+}
+
+
+c)
+Student readStudentData() {
+    string code, name;
+    double shortexam, project, exam;
+    cout << "Student code? ";
+    getline(cin, code);
+    cout << "Student name? ";
+    getline(cin, name);
+    cout << "Short exame grade? ";
+    cin >> shortexam;
+    cout << "Project grade? ";
+    cin >> project;
+    cout << "Exame grade? ";
+    cin >> exam;
+    Student s(code, name);
+    s.setGrades(shortexam, project, exam);
+    return s;
+}
+
+d)
+void showAboveAverageStudents(ofstream &out, vector<Student> v) {
+    double average;
+    int sum = 0;
+    for (int i = 0; i < v.size(); ++i) {
+        sum += v[i].getFinalGrade();
+    }
+    average = (double)sum / v.size();
+    for (int i = 0; i < v.size(); ++i) {
+        if (v[i].getFinalGrade() > average){
+            out << v[i].getCode() << setw(15) << v[i].getName() << setw(5) << v[i].getFinalGrade() << endl;
+        }
+    }
+}
+
+void main() {
+    Student s1("up201906334", "Bruno Rosendo");
+    Student s2("up201907895", "Raquel Sousa");
+    Student s3("up201904566", "Manel Coivense");
+    s1.setGrades(18.2, 19.6, 16.5);
+    s2.setGrades(19.5, 18.6, 18.9);
+    s3.setGrades(2.3, 0, 1.2);
+    vector<Student> v = { s1, s2 , s3 };
+    ofstream out;
+    out.open("students.txt");
+    showAboveAverageStudents(out, v);
+    out.close();
+}
+
+
+e)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <ctime>
+#include <fstream>
+using namespace std;
+
+class Student {
+public:
+    Student();
+    Student(const string& code, const string& name);
+    void setGrades(double shortExam, double project, double exam);
+    string getCode() const;
+    string getName() const;
+    int getFinalGrade() const;
+    // other get and set methods
+    bool isApproved() const; // is the student approved or not ?
+    static int weightShortExam, weightProject, weightExam; // weights in percentage (ex:20,30,50)
+private:
+    string code; // student code
+    string name; // student complete name
+    double shortExam, project, exam; // grades obtained by the student in the different components
+    int finalGrade;
+};
+
+int Student::weightShortExam = 20;
+int Student::weightProject = 30;
+int Student::weightExam = 50;
+
+Student::Student() {}
+
+Student::Student(const string& code, const string& name) {
+    this->code = code;
+    this->name = name;
+}
+
+string Student::getCode() const {
+    return code;
+}
+
+string Student::getName() const {
+    return name;
+}
+
+int Student::getFinalGrade() const {
+    return finalGrade;
+}
+
+bool Student::isApproved() const {
+    if (finalGrade >= 10) return true;
+    return false;
+}
+
+void Student::setGrades(double shortExam, double project, double exam) {
+    this->shortExam = shortExam;
+    this->project = project;
+    this->exam = exam;
+    double final = weightShortExam * 0.01 * shortExam + weightProject * 0.01 * project + weightExam * 0.01 * exam;
+    finalGrade = (int)round(final);
+}
+
+Student readStudentData() {
+    string code, name;
+    double shortexam, project, exam;
+    cout << "Student code? ";
+    getline(cin, code);
+    cout << "Student name? ";
+    getline(cin, name);
+    cout << "Short exame grade? ";
+    cin >> shortexam;
+    cout << "Project grade? ";
+    cin >> project;
+    cout << "Exame grade? ";
+    cin >> exam;
+    Student s(code, name);
+    s.setGrades(shortexam, project, exam);
+    cin.ignore(1000, '\n');
+    return s;
+}
+
+double getAverage(vector<Student> v) {
+    int sum = 0;
+    for (int i = 0; i < v.size(); ++i) {
+        sum += v[i].getFinalGrade();
+    }
+    return (double)sum / v.size();
+}
+
+void showAboveAverageStudents(ofstream &out, vector<Student> v) {
+    double average = getAverage(v);
+    for (int i = 0; i < v.size(); ++i) {
+        if (v[i].getFinalGrade() > average){
+            out << v[i].getCode() << setw(15) << v[i].getName() << setw(5) << v[i].getFinalGrade() << endl;
+        }
+    }
+}
+
+void main() {
+    vector<Student> v;
+    for (int i = 0; i < 4; ++i) {
+        v.push_back(readStudentData());
+    }
+    double average = getAverage(v);
+    for (int i = 0; i < v.size(); ++i) {
+        if (v[i].getFinalGrade() > average) cout << v[i].getName() << endl;
+    }
+}
+
+f)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <ctime>
+#include <fstream>
+using namespace std;
+
+class Student {
+public:
+    Student();
+    Student(const string& code, const string& name);
+    void setGrades(double shortExam, double project, double exam);
+    string getCode() const;
+    string getName() const;
+    int getFinalGrade() const;
+    // other get and set methods
+    bool isApproved() const; // is the student approved or not ?
+    static int weightShortExam, weightProject, weightExam; // weights in percentage (ex:20,30,50)
+private:
+    string code; // student code
+    string name; // student complete name
+    double shortExam, project, exam; // grades obtained by the student in the different components
+    int finalGrade;
+};
+
+int Student::weightShortExam = 20;
+int Student::weightProject = 30;
+int Student::weightExam = 50;
+
+Student::Student() {}
+
+Student::Student(const string& code, const string& name) {
+    this->code = code;
+    this->name = name;
+}
+
+string Student::getCode() const {
+    return code;
+}
+
+string Student::getName() const {
+    return name;
+}
+
+int Student::getFinalGrade() const {
+    return finalGrade;
+}
+
+bool Student::isApproved() const {
+    if (finalGrade >= 10) return true;
+    return false;
+}
+
+void Student::setGrades(double shortExam, double project, double exam) {
+    this->shortExam = shortExam;
+    this->project = project;
+    this->exam = exam;
+    double final = weightShortExam * 0.01 * shortExam + weightProject * 0.01 * project + weightExam * 0.01 * exam;
+    finalGrade = (int)round(final);
+}
+
+Student readStudentData(ifstream &in) {
+    string code, name;
+    double shortexam, project, exam;
+    getline(in, code, ';');
+    getline(in, name, ';');
+    in >> shortexam;
+    in.ignore(100, ';');
+    in >> project;
+    in.ignore(100, ';');
+    in >> exam;
+    Student s(code, name);
+    s.setGrades(shortexam, project, exam);
+    in.ignore(1000, '\n');
+    return s;
+}
+
+double getAverage(vector<Student> v) {
+    int sum = 0;
+    for (int i = 0; i < v.size(); ++i) {
+        sum += v[i].getFinalGrade();
+    }
+    return (double)sum / v.size();
+}
+
+void showAboveAverageStudents(ofstream &out, vector<Student> v) {
+    double average = getAverage(v);
+    for (int i = 0; i < v.size(); ++i) {
+        if (v[i].getFinalGrade() > average){
+            out << v[i].getCode() << setw(15) << v[i].getName() << setw(5) << v[i].getFinalGrade() << endl;
+        }
+    }
+}
+
+void main() {
+    vector<Student> v;
+    ofstream out;
+    ifstream in;
+    in.open("students.txt");
+    out.open("new.txt");
+    for (int i = 0; i < 2; ++i) {
+        v.push_back(readStudentData(in));
+    }
+    double average = getAverage(v);
+    for (int i = 0; i < v.size(); ++i) {
+        if (v[i].getFinalGrade() > average) out << v[i].getCode() << ';' << v[i].getName() << ';' << v[i].getFinalGrade() << endl;
+    }
+    in.close();
+    out.close();
+}
+
+3)
+#include "Header.h"
+#include "Person.h"
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <ctime>
+#include <fstream>
+using namespace std;
+
+void main(){
+	Date d(2001, 7, 28);
+	Person p("Bruno", 'M', d);
+	Person p2;
+	p2.setName("Pinto");
+	p2.setGender('F');
+	p.getBirthdate().show();
+	cout << p.getGender() << " " << p.getName() << endl;
+}
+
+#ifndef PERSON_H
+#define PERSON_H
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <ctime>
+#include <fstream>
+#include "Header.h"
+
+class Person {
+public:
+	Person();
+	Person(string name, char gender, Date birthdate);
+	void setName(string name);
+	void setGender(char gender);
+	void setBirthdate(Date birthdate);
+	string getName();
+	char getGender();
+	Date getBirthdate();
+private:
+	string name;
+	char gender;
+	Date birthdate;
+};
+
+Person::Person() {}
+
+Person::Person(string name, char gender, Date birthdate) {
+	this->name = name;
+	this->gender = gender;
+	this->birthdate = birthdate;
+}
+
+void Person::setName(string name) {
+	this->name = name;
+}
+
+void Person::setGender(char gender) {
+	this->gender = gender;
+}
+
+void Person::setBirthdate(Date birthdate) {
+	this->birthdate = birthdate;
+}
+
+string Person::getName() {
+	return name;
+}
+
+char Person::getGender() {
+	return gender;
+}
+
+Date Person::getBirthdate() {
+	return birthdate;
+}
+
+#endif 
+
+
+#ifndef DATE_H
+#define DATE_H
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <ctime>
+#include <fstream>
+using namespace std;
+
+class Date
+{
+public:
+    Date();
+    Date(unsigned int year, unsigned int month, unsigned int day);
+    Date(string yearMonthDay); // yearMonthDay must be in format "yyyy/mm/dd"
+    void setYear(unsigned int year);
+    void setMonth(unsigned int month);
+    void setDay(unsigned int day);
+    void setDate(unsigned int year, unsigned int month, unsigned int day);
+    unsigned int getYear() const;
+    unsigned int getMonth() const;
+    unsigned int getDay() const;
+    string getDate() const; // returns the date in format "yyyy/mm/dd"
+    void show() const; // shows the date on the screen in format "yyyy/mm/dd"
+private:
+    unsigned int year;
+    unsigned int month;
+    unsigned int day;
+};
+
+Date::Date() {}
+
+Date::Date(unsigned int year, unsigned int month, unsigned int day) {
+    this->year = year;
+    this->month = month;
+    this->day = day;
+}
+
+Date::Date(string yearMonthDay) {
+    istringstream datestring;
+    datestring.str(yearMonthDay);
+    int year, month, day;
+    char c;
+    datestring >> year >> c >> month >> c >> day;
+    this->year = year;
+    this->month = month;
+    this->day = day;
+}
+
+void Date::setYear(unsigned int year) {
+    this->year = year;
+}
+
+void Date::setMonth(unsigned int month) {
+    this->month = month;
+}
+
+void Date::setDay(unsigned int day) {
+    this->day = day;
+}
+
+void Date::setDate(unsigned int year, unsigned int month, unsigned int day) {
+    this->year = year;
+    this->month = month;
+    this->day = day;
+}
+
+unsigned int Date::getYear() const {
+    return year;
+}
+
+unsigned int Date::getMonth() const {
+    return month;
+}
+
+unsigned int Date::getDay() const {
+    return day;
+}
+
+string Date::getDate() const {
+    string data = to_string(year) + "/" + to_string(month) + "/" + to_string(day);
+    return data;
+}
+
+void Date::show() const {
+    cout << year << '/' << month << '/' << day << endl;
+}
+
+#endif
+
+
+4)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <ctime>
+#include <fstream>
+using namespace std;
+
+class Client {
+public:
+	Client();
+	Client(string name, string address);
+	string getName();
+	string getAddress();
+	void setName(string name);
+	void setAddress(string address);
+private:
+	string name;
+	string address;
+};
+
+Client::Client(){}
+
+Client::Client(string name, string address) {
+	this->name = name;
+	this->address = address;
+}
+
+void Client::setName(string name) {
+	this->name = name;
+}
+
+void Client::setAddress(string address) {
+	this->address = address;
+}
+
+string Client::getName() {
+	return name;
+}
+
+string Client::getAddress() {
+	return address;
+}
+
+class Product {
+public:
+	Product();
+	Product(string description, double price);
+	string getDescription();
+	double getPrice();
+	void setDescription(string description);
+	void setPrice(double price);
+private:
+	string description;
+	double price;
+};
+
+Product::Product() {}
+
+Product::Product(string description, double price) {
+	this -> description = description;
+	this->price = price;
+}
+
+void Product::setDescription(string description) {
+	this->description = description;
+}
+
+void Product::setPrice(double price) {
+	this->price = price;
+}
+
+string Product::getDescription() {
+	return description;
+}
+
+double Product::getPrice() {
+	return price;
+}
+
+
+class Item {
+public:
+	Product p;
+	int qty;
+	Item(Product p, int qty);
+	string getDescription();
+	double getPrice();
+	double getTotal();
+private:
+	string description;
+	double price, total;
+};
+
+Item::Item(Product p, int qty) {
+	this->p = p;
+	this->description = p.getDescription();
+	this->price = p.getPrice();
+	this->qty = qty;
+	this->total = qty * price;
+}
+
+string Item::getDescription() {
+	return description;
+}
+
+double Item::getPrice() {
+	return price;
+}
+
+double Item::getTotal() {
+	return total;
+}
+
+class Invoice {
+public:
+	Client c;
+	vector<Item> v;
+	Invoice(Client c, vector<Item> v);
+	void show();
+private:
+	string name;
+	string address;
+	double amountDue = 0;
+};
+
+Invoice::Invoice(Client c, vector<Item> v) {
+	this->c = c;
+	this->v = v;
+	name = c.getName();
+	address = c.getAddress();
+	for (int i = 0; i < v.size(); ++i) {
+		Item it = v[i];
+		amountDue += it.getTotal();
+	}
+}
+
+void Invoice::show() {
+	cout << name << endl;
+	cout << address << endl << endl;
+	cout << setw(12) << left << "Description" << setw(10) << right << "Price" << setw(10) << "Qty" << setw(10) << "Total" << endl;
+	cout << "------------------------------------------" << endl;
+	for (int i = 0; i < v.size(); ++i) {
+		Item it = v[i];
+		cout << setw(12) << left << it.getDescription() << setw(10) << right << it.getPrice() << setw(10) << it.qty << setw(10) << it.getTotal() << endl;
+	}
+	cout << endl << "Amount due: " << amountDue << " euro" << endl;
+}
+
+void main(){
+	Client c("Rui Costa", "Rua do Salmao");
+	Product p1("Computador", 999.9);
+	Product p2("Printer", 149.9);
+	Item i1(p1, 10);
+	Item i2(p2, 1);
+	vector<Item> v = { i1, i2 };
+	Invoice inv(c, v);
+	inv.show();
+}
+
+
+5)
+#ifndef USER_H
+#define USER_H
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <ctime>
+#include <fstream>
+#include "Book.h"
+using namespace std;
+
+class User {
+public:
+	User();
+	User(string name);
+	User(string name, bool notActive);
+	string getName() const;
+	bool isNotActive() const;
+	void setName(string name);
+	void setNotActive(bool notActive);
+private:
+	string name;
+	bool notActive;
+};
+
+User::User() {
+	notActive = 0;
+}
+
+User::User(string name) {
+	this->name = name;
+	notActive = 0;
+}
+
+User::User(string name, bool notActive) {
+	this->name = name;
+	this->notActive = notActive;
+}
+
+string User::getName() const {
+	return name;
+}
+
+bool User::isNotActive() const {
+	return notActive;
+}
+
+void User::setName(string name) {
+	this->name = name;
+}
+
+void User::setNotActive(bool notActive) {
+	this->notActive = notActive;
+}
+
+
+#endif
+
+
+#ifndef BOOK_H
+#define BOOK_H
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <ctime>
+#include <fstream>
+#include "User.h"
+using namespace std;
+
+class Book {
+public:
+	Book(string name);
+	Book(string name, bool lost);
+	Book(string name, User user);
+	void setName(string name);
+	void setLost(bool lost);
+	void setUser(User user);
+	string getName() const;
+	bool isLost() const;
+	bool isBorrowed() const;
+	User getUser();
+private:
+	string name;
+	bool lost;
+	User user;
+	bool borrowed;
+};
+
+Book::Book(string name) {
+	this->name = name;
+	lost = 0;
+	borrowed = 0;
+}
+
+Book::Book(string name, bool lost) {
+	this->name = name;
+	this->lost = lost;
+	borrowed = 0;
+}
+
+Book::Book(string name, User user) {
+	this->name = name;
+	this->user = user;
+	borrowed = 1;
+}
+
+void Book::setName(string name) {
+	this->name = name;
+}
+
+void Book::setLost(bool lost) {
+	this->lost = lost;
+}
+
+void Book::setUser(User user) {
+	this->user = user;
+	lost = 0;
+	borrowed = 1;
+}
+
+string Book::getName() const {
+	return name;
+}
+
+bool Book::isLost() const {
+	return lost;
+}
+
+bool Book::isBorrowed() const {
+	return borrowed;
+}
+
+User Book::getUser() {
+	return user;
+}
+
+#endif
+
+
+
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <ctime>
+#include <fstream>
+#include "Book.h"
+#include "User.h"
+using namespace std;
+
+void write(ofstream &out, vector<Book> books, vector<User> users) {
+	out.open("library.txt", ofstream::out | ofstream::trunc);
+	out << "BOOKS:" << endl;
+	for (int i = 0; i < books.size(); ++i) {
+		Book book = books[i];
+		if (book.isLost()) out << book.getName() << ": LOST" << endl;
+		else if (!book.isBorrowed()) out << book.getName() << ": Available" << endl;
+		else out << book.getName() << ": " << book.getUser().getName() << endl;
+	}
+	out << endl << "INACTIVE USERS:" << endl;
+	for (int i = 0; i < users.size(); ++i) {
+		User user = users[i];
+		if (user.isNotActive()) out << user.getName() << endl;
+	}
+	out.close();
+}
+
+void main() {
+	ofstream out;
+	Book b1("Livro da Selva");
+	Book b2("Sherlock Holmes");
+	Book b3("50 Sombras de Gray", 1);
+	User u1("Bruno Rosendo");
+	User u2("Rui Costa", 1);
+	b1.setUser(u1);
+	vector<Book> books = { b1, b2, b3 };
+	vector<User> users = { u1, u2 };
+	write(out, books, users);
+	b1.setUser(u2);
+	u1.setNotActive(1);
+	u2.setNotActive(0);
+	b3.setLost(0);
+	b2.setName("Lost Holmes");
+	b2.setLost(1);
+	books = { b1, b2, b3 };
+	users = { u1, u2 };
+	write(out, books, users);
+}
+
+
+6)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <ctime>
+#include <fstream>
+#include "Product.h"
+#include "Inventory.h"
+using namespace std;
+
+int idNum = 1;
+
+void main() {
+	Product computer("Computer", 5);
+	Product monitor;
+	monitor.setDescription("Monitor");
+	vector<Product> v = { computer, monitor };
+	Inventory i(v);
+	i.simpleOrder(v[0]);
+	cout << v[0].getQuant() << " " << v[0].getDescription() << "s remaining" << endl;
+	i.simpleOrder(v[1]);
+	i.simpleOrder(v[1]);
+	i.shipment(2);
+}
+
+#ifndef PRODUCT_H
+#define PRODUCT_H
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <ctime>
+#include <fstream>
+using namespace std;
+
+extern int idNum;
+
+class Product {
+public:
+	Product();
+	Product(string description);
+	Product(string description, int quant);
+	void setDescription(string description);
+	void setQuant(int quant);
+	string getDescription() const;
+	int getQuant() const;
+	int getID() const;
+private:
+	int id, quant;
+	string description;
+};
+
+Product::Product() {
+	quant = 0;
+	id = idNum;
+	++idNum;
+}
+
+Product::Product(string description) {
+	this->description = description;
+	quant = 0;
+	id = idNum;
+	++idNum;
+}
+
+Product::Product(string description, int quant) {
+	this->description = description;
+	this->quant = quant;
+	id = idNum;
+	++idNum;
+}
+
+void Product::setDescription(string description) {
+	this->description = description;
+}
+
+void Product::setQuant(int quant) {
+	this->quant = quant;
+}
+
+string Product::getDescription() const {
+	return description;
+}
+
+int Product::getQuant() const {
+	return quant;
+}
+
+int Product::getID() const {
+	return id;
+}
+
+#endif
+
+
+
+
+#ifndef INVENTORY_H
+#define INVENTORY_H
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <ctime>
+#include <fstream>
+#include "Product.h"
+
+class Inventory {
+public:
+	Inventory(vector<Product> products);
+	void simpleOrder(Product &product);
+	void shipment(int id);
+private:
+	vector<Product> backList;
+	vector<Product> products;
+};
+
+Inventory::Inventory(vector<Product> products){
+	this->products = products;
+}
+
+void Inventory::simpleOrder(Product &product) {
+	if (product.getQuant() > 0) {
+		cout << product.getDescription() << " Sold" << endl;
+		product.setQuant(product.getQuant() - 1);
+	}
+	else {
+		backList.push_back(product);
+	}
+}
+
+void Inventory::shipment(int id) {
+	int sold = 0;
+	int i = 0;
+	while (true) {
+		if (i >= backList.size()) break;
+		Product prod = backList[i];
+		if (id == prod.getID()) {
+			backList.erase(backList.begin() + i);
+			++sold;
+		}
+		else {
+			++i;
+		}
+	}
+	int index;
+	for (int i = 0; i < products.size(); ++i) {
+		if (products[i].getID() == id) {
+			index = i;
+			break;
+		}
+	}
+	cout << "Sold " << sold << " " << products[index].getDescription() << "s" << endl;
+}
+
+#endif
+
+
+
+7)
+
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <ctime>
+#include <fstream>
+using namespace std;
+
+template <class T>
+void MinMax(vector<T> v, T& min, T& max) {
+	max = 0;
+	min = v[0];
+	for (int i = 0; i < v.size(); ++i) {
+		T num = v[i];
+		if (num > max) max = num;
+		if (num < min) min = num;
+	}
+}
+
+void main() {
+	int min, max;
+	vector<int> v = { 1, 2, 3, -2, 5 };
+	MinMax(v, min, max);
+	cout << "Minimo: " << min << endl << "Maximo: " << max << endl;
+}
+
+8)
+a)
+
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <vector>  
+#include <string>
+using namespace std;
+
+template <class T>
+class Vector
+{
+public:
+    Vector();
+    Vector(unsigned int size);
+    Vector(unsigned int size, const T& initial);
+    Vector(Vector<T> &v);
+    ~Vector();
+    size_t size() const;
+    bool empty() const;
+    T& front();
+    T& back();
+    T& at(size_t index);
+    void push_back(const T& value);
+    void pop_back();
+    void clear();
+private:
+    T* buffer;
+    size_t bufferSize;
+};
+
+template <class T>
+Vector<T>::Vector() {
+    buffer = (T*)malloc(0);
+    bufferSize = 0;
+}
+
+template <class T>
+Vector<T>::Vector(unsigned int size) {
+    bufferSize = 0;
+    buffer = (T*)malloc(size*sizeof(T));
+}
+
+template <class T>
+Vector<T>::Vector(unsigned int size, const T& initial) {
+    bufferSize = 1;
+    buffer = (T*)malloc(size * sizeof(T));
+    *buffer = initial;
+}
+
+template <class T>
+Vector<T>::Vector(Vector<T> &v) {
+    bufferSize = v.size();
+    buffer = (T*)malloc(bufferSize * sizeof(T));
+    for (size_t i = 0; i < v.size(); ++i) {
+        *(buffer + i) = v.at(i);
+    }
+}
+
+template <class T>
+Vector<T>::~Vector() {
+    free(buffer);
+}
+
+template <class T>
+size_t Vector<T>::size() const {
+    return bufferSize;
+}
+
+template <class T>
+bool Vector<T>::empty() const {
+    if (bufferSize == 0) return true;
+    return false;
+}
+
+template <class T>
+T& Vector<T>::front() {
+    return *buffer;
+}
+
+template <class T>
+T& Vector<T>::back() {
+    return *(buffer + bufferSize - 1);
+}
+
+template <class T>
+T& Vector<T>::at(size_t index) {
+    return *(buffer + index);
+}
+
+template <class T>
+void Vector<T>::push_back(const T& value) {
+    bufferSize++;
+    buffer = (T*)realloc(buffer, bufferSize * sizeof(T));
+    *(buffer + bufferSize - 1) = value;
+}
+
+template <class T>
+void Vector<T>::pop_back() {
+    bufferSize--;
+    buffer = (T*)realloc(buffer, bufferSize * sizeof(T));
+}
+
+template <class T>
+void Vector<T>::clear() {
+    bufferSize = 0;
+    buffer = (T*)realloc(buffer, 0);
+}
+
+int main()
+{
+    Vector<int> v(2, 2);
+    v.push_back(3);
+    v.pop_back();
+    v.push_back(4);
+    cout << v.at(1) << v.size() << v.empty() << endl;
+    cout << v.front() << v.back() << endl << endl;
+    Vector<int> v2(v);
+    cout << v2.at(0) << endl;
+    v2.clear();
+    v2.push_back(6);
+    cout << v2.front();
+}
+
+
+//OUTRA VERSAO
+#include <iostream>
+#include <cstddef>
+#include <cassert>
+using namespace std;
+
+template <class T>
+class Vector {
+private:
+	struct node { // node is a TYPE !!! could also have defined a Node class
+		T data; // the elements of the list are integers (only) ...
+		node* next;
+	} *p;
+	size_t vectorSize;
+	T* buffer;
+	size_t bufferSize;
+public:
+	Vector();
+	size_t size() const;
+	void insertEnd(T value);
+	void insertBegin(T value);
+	bool insertAfter(size_t index, T value);
+	bool remove(T value);
+	void clear();
+	void display() const;
+	~Vector();
+	T& front();
+	T& back();
+	T& at(size_t index);
+};
+
+template <class T> //instead
+Vector<T>::Vector()
+{
+	p = NULL;
+	vectorSize = 0;
+}
+
+template <class T> //instead
+size_t Vector<T>::size() const
+{
+	return vectorSize;
+}
+
+template <class T> //instead
+void Vector<T>::insertBegin(T value)
+{
+	node* q;
+	q = new node;
+	q->data = value; //note: access to a struct field through a struct pointer
+	q->next = p;
+	p = q;
+	vectorSize++;
+}
+
+template <class T> //instead
+T& Vector<T>::front()
+{
+	return p->data;
+}
+
+template <class T> //instead
+T& Vector<T>::back()
+{
+	node* q = p;
+	for (int i = 1; i < vectorSize; ++i) {
+		q = q->next;
+	}
+	return q->data;
+}
+
+template <class T> //instead
+T& Vector<T>::at(size_t index)
+{
+	node* q = p;
+	for (int i = 0; i <index; ++i) {
+		q = q->next;
+	}
+	return q->data;
+}
+
+template <class T> //instead
+void Vector<T>::insertEnd(T value)
+{
+	node* q, * t;
+	//if the list is empty
+	if (p == NULL) //alternative: if (listSize==0)
+	{
+		p = new node;
+		p->data = value;
+		p->next = NULL;
+		// listSize++;
+	}
+	else
+	{
+		q = p;
+		while (q->next != NULL)
+			q = q->next;
+		t = new node;
+		t->data = value;
+		t->next = NULL;
+		q->next = t;
+		// listSize++;
+	}
+	vectorSize++;
+}
+
+template <class T> //instead
+bool Vector<T>::insertAfter(size_t index, T value)
+{
+	node* q, * t;
+	size_t i;
+	if (index > vectorSize - 1) //if (index > size()-1)
+		return false;
+	else
+	{
+		q = p;
+		for (i = 0; i < index; i++)
+			q = q->next;
+		t = new node;
+		t->data = value;
+		t->next = q->next;
+		q->next = t;
+		vectorSize++;
+		return true;
+	}
+}
+
+template <class T> //instead
+bool Vector<T>::remove(T value)
+{
+	node* q, * r;
+	q = p;
+	//if node to be deleted is the first node
+	if (q->data == value)
+	{
+		p = p->next;
+		delete q;
+		vectorSize--;
+		return true;
+	}
+	r = q;
+	while (q != NULL)
+	{
+		if (q->data == value)
+		{
+			r->next = q->next;
+			delete q;
+			vectorSize--;
+			return true;
+		}
+		r = q;
+		q = q->next;
+	}
+	return false;
+}
+
+template <class T> //instead
+void Vector<T>::clear()
+{
+	node* q;
+	if (p == NULL)
+		return;
+	while (p != NULL)
+	{
+		q = p->next;
+		delete p;
+		vectorSize--;
+		p = q;
+	}
+}
+
+template <class T> //instead
+void Vector<T>::display() const
+{
+	node* q;
+	cout << "(" << vectorSize << "): ";
+	for (q = p; q != NULL; q = q->next)
+		cout << " " << q->data;
+	cout << endl << endl;
+}
+
+template <class T> //instead
+Vector<T>:: ~Vector()
+{
+	clear(); //see LinkedList::clear()
+}
+//----------------------------------------------------------------------
+void main()
+{
+	Vector<int> v;
+	int index;
+	int value;
+	cout << "insertBegin() 1, 2, 3, 4, 5\n";
+	for (value = 1; value <= 5; value++)
+	{
+		v.insertBegin(value);
+		v.display();
+	}
+	//list.clear();
+	//list.display();
+	value = 6;
+	cout << "insertEnd() " << value << "\n";
+	v.insertEnd(value);
+	v.display();
+	index = 0; value = 7;
+	cout << "insertAfter(" << index << "," << value << ")\n";
+	if (!v.insertAfter(index, 7))
+		cout << "there is no such node index: " << index << endl;
+	v.display();
+	index = 10; value = 8;
+	cout << "insertAfter(" << index << "," << value << ")\n";
+	if (!v.insertAfter(index, value))
+		cout << "there is no such node index: " << index << endl;
+	v.display();
+	value = 2;
+	cout << "remove(" << value << ")\n";
+	if (!v.remove(value))
+		cout << "there is no such node value: " << value << endl;
+	v.display();
+	value = 9;
+	cout << "remove(" << value << ")\n";
+	if (!v.remove(value))
+		cout << "there is no such node value: " << value << endl;
+	v.display();
+	cout << endl;
+	cout << v.at(2) << endl;
+	cout << v.back() << endl;
+	cout << v.front() << endl;
+}
+b)
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <vector>  
+#include <string>
+using namespace std;
+
+template <class T>
+class Vector
+{
+public:
+    Vector();
+    Vector(unsigned int size);
+    Vector(unsigned int size, const T& initial);
+    Vector(Vector<T> &v);
+    ~Vector();
+    size_t size() const;
+    bool empty() const;
+    T& front();
+    T& back();
+    T& at(size_t index);
+    void push_back(const T& value);
+    void pop_back();
+    void clear();
+    size_t capacity() const;
+    void reserve(unsigned int n);
+private:
+    T* buffer;
+    size_t bufferSize, bufferCapacity;
+};
+
+template <class T>
+Vector<T>::Vector() {
+    buffer = (T*)malloc(0);
+    bufferSize = 0;
+    bufferCapacity = 0;
+}
+
+template <class T>
+Vector<T>::Vector(unsigned int size) {
+    bufferSize = 0;
+    bufferCapacity = size;
+    buffer = (T*)malloc(size*sizeof(T));
+}
+
+template <class T>
+Vector<T>::Vector(unsigned int size, const T& initial) {
+    bufferSize = 1;
+    bufferCapacity = size;
+    buffer = (T*)malloc(size * sizeof(T));
+    *buffer = initial;
+}
+
+template <class T>
+Vector<T>::Vector(Vector<T> &v) {
+    bufferSize = v.size();
+    bufferCapacity = v.capacity();
+    buffer = (T*)malloc(bufferCapacity * sizeof(T));
+    for (size_t i = 0; i < v.size(); ++i) {
+        *(buffer + i) = v.at(i);
+    }
+}
+
+template <class T>
+Vector<T>::~Vector() {
+    free(buffer);
+}
+
+template <class T>
+size_t Vector<T>::size() const {
+    return bufferSize;
+}
+
+template <class T>
+size_t Vector<T>::capacity() const {
+    return bufferCapacity;
+}
+
+template <class T>
+bool Vector<T>::empty() const {
+    if (bufferSize == 0) return true;
+    return false;
+}
+
+template <class T>
+T& Vector<T>::front() {
+    return *buffer;
+}
+
+template <class T>
+T& Vector<T>::back() {
+    return *(buffer + bufferSize - 1);
+}
+
+template <class T>
+T& Vector<T>::at(size_t index) {
+    return *(buffer + index);
+}
+
+template <class T>
+void Vector<T>::push_back(const T& value) {
+    bufferSize++;
+    if (bufferCapacity < bufferSize) {
+        buffer = (T*)realloc(buffer, bufferSize * sizeof(T));
+        bufferCapacity = bufferSize;
+    }
+    *(buffer + bufferSize - 1) = value;
+}
+
+template <class T>
+void Vector<T>::pop_back() {
+    bufferSize--;
+    bufferCapacity = bufferSize;
+    buffer = (T*)realloc(buffer, bufferSize * sizeof(T));
+}
+
+template <class T>
+void Vector<T>::clear() {
+    bufferSize = 0;
+    bufferCapacity = 0;
+    buffer = (T*)realloc(buffer, 0);
+}
+
+template <class T>
+void Vector<T>::reserve(unsigned int n) {
+    if (bufferCapacity < n) {
+        bufferCapacity = n;
+        buffer = (T*)realloc(buffer, bufferCapacity * sizeof(T));
+    }
+}
+
+
+9)
+a)
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <vector>  
+#include <string>
+#include <fstream>
+#include <algorithm>
+using namespace std;
+
+void read(string file, vector<string> &v) {
+    ifstream fin;
+    fin.open(file);
+    while (!fin.eof()) {
+        string word;
+        fin >> word;
+        v.push_back(word);
+    }
+    fin.close();
+}
+
+void removeDup(vector<string>& v) {
+    for (int i = 0; i < v.size() - 1; ++i) {
+        while (v.at(i) == v.at(i + 1)) {
+            v.erase(v.begin() + i);
+        }
+    }
+}
+
+void write(string file, const vector<string> v) {
+    ofstream fout;
+    fout.open(file);
+    for (int i = 0; i < v.size(); ++i) {
+        fout << v.at(i) << endl;
+    }
+}
+
+int main()
+{
+    vector<string> v;
+    read("words.txt", v);
+    sort(v.begin(), v.end());
+    removeDup(v);
+    write("words.txt", v);
+}
+
+b)
+
+int main()
+{
+    vector<string> v;
+    read("words.txt", v);
+    sort(v.begin(), v.end());
+    unique(v.begin(), v.end());
+    write("words.txt", v);
+}
+
+10)
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <vector>  
+#include <string>
+#include <fstream>
+#include <algorithm>
+#include <list>
+using namespace std;
+
+void read(string file, list<string> &v) {
+    ifstream fin;
+    fin.open(file);
+    while (!fin.eof()) {
+        string word;
+        fin >> word;
+        v.push_back(word);
+    }
+    fin.close();
+}
+
+void write(string file, list<string> v) {
+    ofstream fout;
+    fout.open(file);
+    for (list<string>::iterator it = v.begin(); it != v.end(); ++it) {
+        fout << *it << endl;
+    }
+}
+
+int main()
+{
+    list<string> v;
+    read("words.txt", v);
+    v.sort();
+    unique(v.begin(), v.end());
+    write("words.txt", v);
+}
+
+11)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <ctime>
+#include <fstream>
+#include <algorithm>
+using namespace std;
+
+class Student {
+public:
+    Student();
+    Student(const string& code, const string& name);
+    void setGrades(double shortExam, double project, double exam);
+    string getCode() const;
+    string getName() const;
+    int getFinalGrade() const;
+    // other get and set methods
+    bool isApproved() const; // is the student approved or not ?
+    static int weightShortExam, weightProject, weightExam; // weights in percentage (ex:20,30,50)
+private:
+    string code; // student code
+    string name; // student complete name
+    double shortExam, project, exam; // grades obtained by the student in the different components
+    int finalGrade;
+};
+
+int Student::weightShortExam = 20;
+int Student::weightProject = 30;
+int Student::weightExam = 50;
+
+Student::Student() {}
+
+Student::Student(const string& code, const string& name) {
+    this->code = code;
+    this->name = name;
+}
+
+string Student::getCode() const {
+    return code;
+}
+
+string Student::getName() const {
+    return name;
+}
+
+int Student::getFinalGrade() const {
+    return finalGrade;
+}
+
+bool Student::isApproved() const {
+    if (finalGrade >= 10) return true;
+    return false;
+}
+
+void Student::setGrades(double shortExam, double project, double exam) {
+    this->shortExam = shortExam;
+    this->project = project;
+    this->exam = exam;
+    double final = weightShortExam * 0.01 * shortExam + weightProject * 0.01 * project + weightExam * 0.01 * exam;
+    finalGrade = (int)round(final);
+}
+
+bool compareName(const Student &s1, const Student &s2) {
+    return s1.getName() < s2.getName();
+}
+
+bool compareGrade(const Student& s1, const Student& s2) {
+    return s2.getFinalGrade() < s1.getFinalGrade();
+}
+
+void order(ofstream &out, vector<Student>& v, string tipo) {
+    if (tipo == "name") {
+        sort(v.begin(), v.end(), compareName);
+    }
+    else {
+        sort(v.begin(), v.end(), compareGrade);
+    }
+    for (int i = 0; i < v.size(); ++i) {
+        out << v.at(i).getName() << endl;
+    }
+}
+
+
+void main() {
+    Student s1("up201906334", "Bruno Rosendo");
+    Student s2("up201907895", "Ana Sousa");
+    Student s3("up201904566", "Manel Coivense");
+    s1.setGrades(18.2, 19.6, 16.5);
+    s2.setGrades(20, 20, 20);
+    s3.setGrades(2.3, 0, 1.2);
+    vector<Student> v = { s1, s2 , s3 };
+    ofstream out;
+    out.open("students.txt");
+    order(out, v, "grade");
+    out.close();
+}
+
+12)
+a)
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <ctime>
+using namespace std;
+
+
+
+void main()
+{
+	srand(time(NULL));
+	vector<int> main;
+	vector<int> star;
+	for (int i = 1; i <= 50; ++i) {
+		main.push_back(i);
+		if (i <= 12) star.push_back(i);
+	}
+	random_shuffle(main.begin(), main.end());
+	random_shuffle(star.begin(), star.end());
+	cout << "Main numbers: ";
+	for (int i = 0; i < 5; ++i) cout << main[i] << " ";
+	cout << endl << "Start numbers: ";
+	for (int i = 0; i < 2; ++i) cout << star[i] << " ";
+	cout << endl;
+}
+
+b)
+#include <iostream>
+#include <set>
+#include <algorithm>
+#include <ctime>
+using namespace std;
+
+int generate(int a, int b) {
+	return rand() % b + a;
+}
+
+void main()
+{
+	srand(time(NULL));
+	set<int> main;
+	set<int> stars;
+	for (int i = 1; i <= 5; ++i) {
+		main.insert(generate(1, 50));
+		if (i <= 2) stars.insert(generate(1, 12));
+	}
+	cout << "Main numbers: ";
+	for (set<int>::iterator it = main.begin(); it != main.end(); it++) cout << *it << " ";
+	cout << endl << "Start numbers: ";
+	for (auto x : stars) cout << x << " ";
+	cout << endl;
+}
+
+13)
+a)
+#include <iostream>
+#include <set>
+#include <algorithm>
+#include <ctime>
+#include <vector>
+using namespace std;
+
+int generate(int a, int b) {
+	return rand() % b + a;
+}
+
+vector<int> key() {
+	set<int> main;
+	set<int> stars;
+	vector<int> key;
+	while (main.size() < 5) {
+		main.insert(generate(1, 50));
+	}
+	while (stars.size() < 2) {
+		stars.insert(generate(1, 12));
+	}
+	for (auto x : main) key.push_back(x);
+	for (auto x : stars) key.push_back(x);
+	return key;
+}
+
+void main()
+{
+	srand(time(NULL));
+	vector<vector<int>> bets;
+	int n;
+	cout << "How many bets?" << endl;
+	cin >> n;
+	for (int i = 1; i <= n; ++i) {
+		bets.push_back(key());
+	}
+	vector<int> solution = key();
+	sort(solution.begin(), solution.end());
+	for (int i = 0; i < bets.size(); ++i) {
+		vector<int> result(7);
+		vector<int> bet = bets[i];
+		sort(bet.begin(), bet.end());
+		vector<int>::iterator it;
+		it = set_intersection(bet.begin(), bet.end(), solution.begin(), solution.end(), result.begin());
+		result.resize(it - result.begin());
+		cout << endl;
+		for (auto x : result) cout << x << " ";
+	}
+}
+
+b)
+#include <iostream>
+#include <set>
+#include <algorithm>
+#include <ctime>
+#include <vector>
+using namespace std;
+
+int generate(int a, int b) {
+	return rand() % b + a;
+}
+
+set<int> key() {
+	set<int> key;
+	while (key.size() < 5) {
+		key.insert(generate(1, 50));
+	}
+	while (key.size() < 7) {
+		key.insert(generate(1, 12));
+	}
+	return key;
+}
+
+void main()
+{
+	srand(time(NULL));
+	vector<set<int>> bets;
+	int n;
+	cout << "How many bets?" << endl;
+	cin >> n;
+	for (int i = 1; i <= n; ++i) {
+		bets.push_back(key());
+	}
+	set<int> solution = key();
+	vector<int> solutionv;
+	for (auto x : solution) solutionv.push_back(x);
+	sort(solutionv.begin(), solutionv.end());
+	for (int i = 0; i < bets.size(); ++i) {
+		vector<int> result(7);
+		set<int> bet = bets[i];
+		vector<int> betv;
+		for (auto x : bet) betv.push_back(x);
+		sort(betv.begin(), betv.end());
+		vector<int>::iterator it;
+		it = set_intersection(betv.begin(), betv.end(), solutionv.begin(), solutionv.end(),  result.begin());
+		result.resize(it - result.begin());
+		cout << endl;
+		for (auto x : result) cout << x << " ";
+	}
+}
+
+14)
+a)
+vectors because they allow me to have the lines indexed in order
+b)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <algorithm>
+#include <fstream>
+using namespace std;
+
+void readWords(istream &fin, vector<string> &words) {
+    while (!fin.eof()) {
+        string s;
+        fin >> s;
+        if (s == "") continue;
+        words.push_back(s);
+    }
+}
+
+void readLines(ifstream &fin, vector<vector<string>>& lines) {
+    while (!fin.eof()) {
+        string temp;
+        vector<string> line;
+        getline(fin, temp);
+        if (temp == "") continue;
+        for (int i = 0; i < line.size(); ++i) {
+            if (temp[i] == '.' || temp[i] == ',' || temp[i] == ':' || temp[i] == ';') {
+                temp.replace(i, 1, " ");
+            }
+        }
+        stringstream sline;
+        sline.str(temp);
+        while (!sline.eof()) {
+            string word;
+            sline >> word;
+            if (word == "") continue;
+            line.push_back(word);
+        }
+        lines.push_back(line);
+    }
+}
+
+bool isWord(string word, vector<string> words) {
+    for (auto x : words) if (word == x) return true;
+    return false;
+}
+
+void main() {
+    vector<vector<string>> lines;
+    vector<string> words;
+    string wordf, textf;
+    ifstream win, tin;
+    cout << "File with words" << endl;
+    cin >> wordf;
+    cout << "File with text" << endl;
+    cin >> textf;
+    win.open(wordf);
+    tin.open(textf);
+    readWords(win, words);
+    readLines(tin, lines);
+    while (true) {
+        string word;
+        cout << "Word: ";
+        cin >> word;
+        if (cin.eof()) break;
+        if (isWord(word, words)) {
+            for (int l = 0; l < lines.size(); ++l) {
+                for (int w = 0; w < lines[l].size(); ++w) {
+                    if (word == lines[l][w]) {
+                        cout << word << " occurs in line " << l + 1<< endl;
+                        break;
+                    }
+                }
+            }
+        }
+        else cout << "Not a word" << endl;
+    }
+}
+
+c)
+read each line at a time instead of storing them all
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <algorithm>
+#include <fstream>
+using namespace std;
+
+void readWords(istream &fin, vector<string> &words) {
+    while (!fin.eof()) {
+        string s;
+        fin >> s;
+        if (s == "") continue;
+        words.push_back(s);
+    }
+}
+
+bool isWord(string word, vector<string> words) {
+    for (auto x : words) if (word == x) return true;
+    return false;
+}
+
+void main() {
+    vector<string> words;
+    string wordf, textf;
+    ifstream win, tin;
+    cout << "File with words" << endl;
+    cin >> wordf;
+    cout << "File with text" << endl;
+    cin >> textf;
+    win.open(wordf);
+    tin.open(textf);
+    readWords(win, words);
+    while (true) {
+        int l = 0;
+        string word;
+        cout << "Word: ";
+        cin >> word;
+        if (cin.eof()) break;
+        if (isWord(word, words)) {
+            while (!tin.eof()) {
+                ++l;
+                string temp;
+                vector<string> line;
+                getline(tin, temp);
+                for (int i = 0; i < temp.size(); ++i) {
+                    if (temp[i] == '.' || temp[i] == ',' || temp[i] == ':' || temp[i] == ';') {
+                        temp.replace(i, 1, " ");
+                    }
+                }
+                stringstream sline;
+                sline.str(temp);
+                while (!sline.eof()) {
+                    string word;
+                    sline >> word;
+                    if (word == "") continue;
+                    line.push_back(word);
+                }
+                for (auto x : line) {
+                    if (word == x) {
+                        cout << word << " located at line " << l << endl;
+                        break;
+                    }
+                }
+            }
+        }
+        else cout << "Not a word" << endl;
+        tin.close();
+        tin.open(textf);
+    }
+}
+
+
+15)
+a)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+using namespace std;
+
+class Date
+{
+public:
+    Date();
+    Date(unsigned int year, unsigned int month, unsigned int day);
+    Date(string yearMonthDay); // yearMonthDay must be in format "yyyy/mm/dd"
+    void setYear(unsigned int year);
+    void setMonth(unsigned int month);
+    void setDay(unsigned int day);
+    void setDate(unsigned int year, unsigned int month, unsigned int day);
+    unsigned int getYear() const;
+    unsigned int getMonth() const;
+    unsigned int getDay() const;
+    string getDate() const; // returns the date in format "yyyy/mm/dd"
+    void show() const; // shows the date on the screen in format "yyyy/mm/dd"
+    bool isValid();
+    bool operator==(const Date& date);
+    bool operator!=(const Date& date);
+    bool operator>(const Date& date);
+    bool operator>=(const Date& date);
+    bool operator<(const Date& date); 
+    bool operator<=(const Date& date);
+
+private:
+    unsigned int year;
+    unsigned int month;
+    unsigned int day;
+    bool isleap();
+    int daysOfMonth();
+};
+
+Date::Date() {
+    this->year = 1970;
+    this->month = 1;
+    this->day = 1;
+}
+
+Date::Date(unsigned int year, unsigned int month, unsigned int day) {
+    this->year = year;
+    this->month = month;
+    this->day = day;
+}
+
+Date::Date(string yearMonthDay) {
+    istringstream datestring;
+    datestring.str(yearMonthDay);
+    int year, month, day;
+    char c;
+    datestring >> year >> c >> month >> c >> day;
+    this->year = year;
+    this->month = month;
+    this->day = day;
+}
+
+void Date::setYear(unsigned int year) {
+    this->year = year;
+}
+
+void Date::setMonth(unsigned int month) {
+    this->month = month;
+}
+
+void Date::setDay(unsigned int day) {
+    this->day = day;
+}
+
+void Date::setDate(unsigned int year, unsigned int month, unsigned int day) {
+    this->year = year;
+    this->month = month;
+    this->day = day;
+}
+
+unsigned int Date::getYear() const {
+    return year;
+}
+
+unsigned int Date::getMonth() const {
+    return month;
+}
+
+unsigned int Date::getDay() const {
+    return day;
+}
+
+string Date::getDate() const {
+    string data = to_string(year) + "/" + to_string(month) + "/" + to_string(day);
+    return data;
+}
+
+void Date::show() const {
+    cout << year << '/' << month << '/' << day << endl;
+}
+
+bool Date::isleap() {
+    if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) return true;
+    return false;
+}
+
+int Date::daysOfMonth() {
+    if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) return 31;
+    else if (month == 4 || month == 6 || month == 9 || month == 11) return 30;
+    else {
+        if (isleap()) return 29;
+        else return 28;
+    }
+}
+
+bool Date::isValid() {
+    if (month > 12 || month < 1) return false;
+    if (day > daysOfMonth() || day < 1) return false;
+    if (year < 0) return false;
+    return true;
+}
+
+bool Date::operator==(const Date& date) {
+    if (getDate() != date.getDate()) return false;
+    return true;
+}
+
+bool Date::operator!=(const Date& date) {
+    if (getDate() == date.getDate()) return false;
+    return true;
+}
+
+bool Date::operator>(const Date& date) {
+    if (year > date.getYear()) return true;
+    else if (year == date.getYear()) {
+        if (month > date.getMonth()) return true;
+        else if (month == date.getMonth() && day > date.getDay()) return true;
+    }
+    return false;
+}
+
+bool Date::operator>=(const Date& date) {
+    if (year > date.getYear()) return true;
+    else if (year == date.getYear()) {
+        if (month > date.getMonth()) return true;
+        else if (month == date.getMonth() && day >= date.getDay()) return true;
+    }
+    return false;
+}
+
+bool Date::operator<(const Date& date) {
+    if (year < date.getYear()) return true;
+    else if (year == date.getYear()) {
+        if (month < date.getMonth()) return true;
+        else if (month == date.getMonth() && day < date.getDay()) return true;
+    }
+    return false;
+}
+
+bool Date::operator<=(const Date& date) {
+    if (year < date.getYear()) return true;
+    else if (year == date.getYear()) {
+        if (month < date.getMonth()) return true;
+        else if (month == date.getMonth() && day <= date.getDay()) return true;
+    }
+    return false;
+}
+
+ostream& operator<<(ostream& out, const Date& date) {
+    out << date.getYear() << "/" << date.getMonth() << "/" << date.getDay();
+    return out;
+}
+
+istream& operator>>(istream& in, Date& date) {
+    int year, month, day;
+    in >> year;
+    in.ignore(100, '/');
+    in >> month;
+    in.ignore(100, '/');
+    in >> day;
+    date = Date(year, month, day);
+    return in;
+}
+
+void main() {
+    Date d1;
+    cin >> d1;
+    cout << d1;
+}
+
+b)
+This lets us use an object with the same date
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+using namespace std;
+
+class Date
+{
+public:
+    Date();
+    Date(unsigned int year, unsigned int month, unsigned int day);
+    Date(string yearMonthDay); // yearMonthDay must be in format "yyyy/mm/dd"
+    Date& setYear(unsigned int year);
+    Date& setMonth(unsigned int month);
+    Date& setDay(unsigned int day);
+    Date& setDate(unsigned int year, unsigned int month, unsigned int day);
+    unsigned int getYear() const;
+    unsigned int getMonth() const;
+    unsigned int getDay() const;
+    string getDate() const; // returns the date in format "yyyy/mm/dd"
+    void show() const; // shows the date on the screen in format "yyyy/mm/dd"
+    bool isValid();
+    bool operator==(const Date& date);
+    bool operator!=(const Date& date);
+    bool operator>(const Date& date);
+    bool operator>=(const Date& date);
+    bool operator<(const Date& date); 
+    bool operator<=(const Date& date);
+
+private:
+    unsigned int year;
+    unsigned int month;
+    unsigned int day;
+    bool isleap();
+    int daysOfMonth();
+};
+
+Date::Date() {
+    this->year = 1970;
+    this->month = 1;
+    this->day = 1;
+}
+
+Date::Date(unsigned int year, unsigned int month, unsigned int day) {
+    this->year = year;
+    this->month = month;
+    this->day = day;
+}
+
+Date::Date(string yearMonthDay) {
+    istringstream datestring;
+    datestring.str(yearMonthDay);
+    int year, month, day;
+    char c;
+    datestring >> year >> c >> month >> c >> day;
+    this->year = year;
+    this->month = month;
+    this->day = day;
+}
+
+Date& Date::setYear(unsigned int year) {
+    this->year = year;
+    Date d(year, month, day);
+    return d;
+}
+
+Date& Date::setMonth(unsigned int month) {
+    this->month = month;
+    Date d(year, month, day);
+    return d;
+}
+
+Date& Date::setDay(unsigned int day) {
+    this->day = day;
+    Date d(year, month, day);
+    return d;
+}
+
+Date& Date::setDate(unsigned int year, unsigned int month, unsigned int day) {
+    this->year = year;
+    this->month = month;
+    this->day = day;
+    Date d(year, month, day);
+    return d;
+}
+
+unsigned int Date::getYear() const {
+    return year;
+}
+
+unsigned int Date::getMonth() const {
+    return month;
+}
+
+unsigned int Date::getDay() const {
+    return day;
+}
+
+string Date::getDate() const {
+    string data = to_string(year) + "/" + to_string(month) + "/" + to_string(day);
+    return data;
+}
+
+void Date::show() const {
+    cout << year << '/' << month << '/' << day << endl;
+}
+
+bool Date::isleap() {
+    if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) return true;
+    return false;
+}
+
+int Date::daysOfMonth() {
+    if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) return 31;
+    else if (month == 4 || month == 6 || month == 9 || month == 11) return 30;
+    else {
+        if (isleap()) return 29;
+        else return 28;
+    }
+}
+
+bool Date::isValid() {
+    if (month > 12 || month < 1) return false;
+    if (day > daysOfMonth() || day < 1) return false;
+    if (year < 0) return false;
+    return true;
+}
+
+bool Date::operator==(const Date& date) {
+    if (getDate() != date.getDate()) return false;
+    return true;
+}
+
+bool Date::operator!=(const Date& date) {
+    if (getDate() == date.getDate()) return false;
+    return true;
+}
+
+bool Date::operator>(const Date& date) {
+    if (year > date.getYear()) return true;
+    else if (year == date.getYear()) {
+        if (month > date.getMonth()) return true;
+        else if (month == date.getMonth() && day > date.getDay()) return true;
+    }
+    return false;
+}
+
+bool Date::operator>=(const Date& date) {
+    if (year > date.getYear()) return true;
+    else if (year == date.getYear()) {
+        if (month > date.getMonth()) return true;
+        else if (month == date.getMonth() && day >= date.getDay()) return true;
+    }
+    return false;
+}
+
+bool Date::operator<(const Date& date) {
+    if (year < date.getYear()) return true;
+    else if (year == date.getYear()) {
+        if (month < date.getMonth()) return true;
+        else if (month == date.getMonth() && day < date.getDay()) return true;
+    }
+    return false;
+}
+
+bool Date::operator<=(const Date& date) {
+    if (year < date.getYear()) return true;
+    else if (year == date.getYear()) {
+        if (month < date.getMonth()) return true;
+        else if (month == date.getMonth() && day <= date.getDay()) return true;
+    }
+    return false;
+}
+
+ostream& operator<<(ostream& out, const Date& date) {
+    out << date.getYear() << "/" << date.getMonth() << "/" << date.getDay();
+    return out;
+}
+
+istream& operator>>(istream& in, Date& date) {
+    int year, month, day;
+    in >> year;
+    in.ignore(100, '/');
+    in >> month;
+    in.ignore(100, '/');
+    in >> day;
+    date = Date(year, month, day);
+    return in;
+}
+
+void main() {
+    
+}
+
+c)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+using namespace std;
+
+class Date
+{
+public:
+    Date();
+    Date(unsigned int year, unsigned int month, unsigned int day);
+    Date(string yearMonthDay); // yearMonthDay must be in format "yyyy/mm/dd"
+    Date& setYear(unsigned int year);
+    Date& setMonth(unsigned int month);
+    Date& setDay(unsigned int day);
+    Date& setDate(unsigned int year, unsigned int month, unsigned int day);
+    unsigned int getYear() const;
+    unsigned int getMonth() const;
+    unsigned int getDay() const;
+    string getDate() const; // returns the date in format "yyyy/mm/dd"
+    void show() const; // shows the date on the screen in format "yyyy/mm/dd"
+    bool isValid();
+    bool operator==(const Date& date);
+    bool operator!=(const Date& date);
+    bool operator>(const Date& date);
+    bool operator>=(const Date& date);
+    bool operator<(const Date& date);
+    bool operator<=(const Date& date);
+    Date& operator++();
+    Date& operator--();
+    Date operator++(int u);
+    Date operator--(int u);
+
+private:
+    unsigned int year;
+    unsigned int month;
+    unsigned int day;
+    bool isleap();
+    int daysOfMonth();
+};
+
+Date::Date() {
+    this->year = 1970;
+    this->month = 1;
+    this->day = 1;
+}
+
+Date::Date(unsigned int year, unsigned int month, unsigned int day) {
+    this->year = year;
+    this->month = month;
+    this->day = day;
+}
+
+Date::Date(string yearMonthDay) {
+    istringstream datestring;
+    datestring.str(yearMonthDay);
+    int year, month, day;
+    char c;
+    datestring >> year >> c >> month >> c >> day;
+    this->year = year;
+    this->month = month;
+    this->day = day;
+}
+
+Date& Date::setYear(unsigned int year) {
+    this->year = year;
+    Date d(year, month, day);
+    return d;
+}
+
+Date& Date::setMonth(unsigned int month) {
+    this->month = month;
+    Date d(year, month, day);
+    return d;
+}
+
+Date& Date::setDay(unsigned int day) {
+    this->day = day;
+    Date d(year, month, day);
+    return d;
+}
+
+Date& Date::setDate(unsigned int year, unsigned int month, unsigned int day) {
+    this->year = year;
+    this->month = month;
+    this->day = day;
+    Date d(year, month, day);
+    return d;
+}
+
+unsigned int Date::getYear() const {
+    return year;
+}
+
+unsigned int Date::getMonth() const {
+    return month;
+}
+
+unsigned int Date::getDay() const {
+    return day;
+}
+
+string Date::getDate() const {
+    string data = to_string(year) + "/" + to_string(month) + "/" + to_string(day);
+    return data;
+}
+
+void Date::show() const {
+    cout << year << '/' << month << '/' << day << endl;
+}
+
+bool Date::isleap() {
+    if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) return true;
+    return false;
+}
+
+int Date::daysOfMonth() {
+    if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) return 31;
+    else if (month == 4 || month == 6 || month == 9 || month == 11) return 30;
+    else {
+        if (isleap()) return 29;
+        else return 28;
+    }
+}
+
+bool Date::isValid() {
+    if (month > 12 || month < 1) return false;
+    if (day > daysOfMonth() || day < 1) return false;
+    if (year < 0) return false;
+    return true;
+}
+
+bool Date::operator==(const Date& date) {
+    if (getDate() != date.getDate()) return false;
+    return true;
+}
+
+bool Date::operator!=(const Date& date) {
+    if (getDate() == date.getDate()) return false;
+    return true;
+}
+
+bool Date::operator>(const Date& date) {
+    if (year > date.getYear()) return true;
+    else if (year == date.getYear()) {
+        if (month > date.getMonth()) return true;
+        else if (month == date.getMonth() && day > date.getDay()) return true;
+    }
+    return false;
+}
+
+bool Date::operator>=(const Date& date) {
+    if (year > date.getYear()) return true;
+    else if (year == date.getYear()) {
+        if (month > date.getMonth()) return true;
+        else if (month == date.getMonth() && day >= date.getDay()) return true;
+    }
+    return false;
+}
+
+bool Date::operator<(const Date& date) {
+    if (year < date.getYear()) return true;
+    else if (year == date.getYear()) {
+        if (month < date.getMonth()) return true;
+        else if (month == date.getMonth() && day < date.getDay()) return true;
+    }
+    return false;
+}
+
+bool Date::operator<=(const Date& date) {
+    if (year < date.getYear()) return true;
+    else if (year == date.getYear()) {
+        if (month < date.getMonth()) return true;
+        else if (month == date.getMonth() && day <= date.getDay()) return true;
+    }
+    return false;
+}
+
+ostream& operator<<(ostream& out, const Date& date) {
+    out << date.getYear() << "/" << date.getMonth() << "/" << date.getDay();
+    return out;
+}
+
+istream& operator>>(istream& in, Date& date) {
+    int year, month, day;
+    in >> year;
+    in.ignore(100, '/');
+    in >> month;
+    in.ignore(100, '/');
+    in >> day;
+    date = Date(year, month, day);
+    return in;
+}
+
+Date& Date::operator++() {
+    if (day < 30) day++;
+    else {
+        day = 1;
+        if (month < 12) month++;
+        else {
+            month = 1;
+            year++;
+        }
+    }
+    return *this;
+}
+
+Date Date::operator++(int u) {
+    Date d(year, month, day);
+    if (day < 30) day++;
+    else {
+        day = 1;
+        if (month < 12) month++;
+        else {
+            month = 1;
+            year++;
+        }
+    }
+    return d;
+}
+
+Date& Date::operator--() {
+    if (day > 1) day--;
+    else {
+        day = 30;
+        if (month > 1) month--;
+        else {
+            month = 12;
+            year--;
+        }
+    }
+    return *this;
+}
+
+Date Date::operator--(int u) {
+    Date d(year, month, day);
+    if (day > 1) day--;
+    else {
+        day = 30;
+        if (month > 1) month--;
+        else {
+            month = 12;
+            year--;
+        }
+    }
+    return d;
+}
+
+void main() {
+Date d1(2001, 7, 28);
+    ++d1;
+    cout << d1;
+}
+
+16)
+a)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <algorithm>
+using namespace std;
+
+bool negative(int num) {
+    if (num < 0) return true;
+    return false;
+}
+
+void main() {
+    vector<int> v = { 1, 4, -2, 0, 3 };
+    vector<int>::iterator it;
+    it = remove_if(v.begin(), v.end(), negative);
+    v.erase(it, v.end());
+    for (auto x : v) cout << x << " ";
+}
+
+b)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <algorithm>
+using namespace std;
+
+
+void main() {
+    int a, b;
+    cout << "What's the range?" << endl;
+    cin >> a >> b;
+    vector<int> v = { 1, 4, -2, 0, 3 };
+    vector<int>::iterator it;
+    it = remove_if(v.begin(), v.end(), [a, b](int x) {return x < a || x > b; });
+    v.erase(it, v.end());
+    for (auto x : v) cout << x << " ";
+}
+
+17)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <algorithm>
+#include <fstream>
+using namespace std;
+
+namespace myfuncs {
+    void cout(const string& s) {
+        for (auto x : s) {
+            if ((int(x) > 64 && int(x) < 91) || (int(x) > 96 && int(x) < 123)) 
+                std::cout << x;
+        }
+    }
+
+    bool endl(const string& s) {
+        char last = s.back();
+        if (int(last) > 96 && int(last) < 123) return true;
+        return false;
+    }
+}
+
+void main() {
+    string s = "lol123 A";
+    myfuncs::cout(s);
+    cout << endl << myfuncs::endl(s);
+}
+
+18)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+using namespace std;
+
+class Class { // What a class name!!!
+public:
+    Class(string name);
+    string getName();
+private:
+    string name;
+};
+
+Class::Class(string name)
+{
+    this->name = name;
+}
+
+string Class::getName()
+{
+    return name;
+}
+
+
+
+
+class FeupPerson {
+public:
+    FeupPerson();
+    FeupPerson(int id, string name, string address);
+    void showRecord();
+    void changeAddress(string newAddress);
+protected:
+    int id;
+    string name;
+    string address;
+};
+
+FeupPerson::FeupPerson()
+{
+    this->id = 0;
+    this->name = "";
+    this->address = "";
+}
+FeupPerson::FeupPerson(int id, std::string name, std::string address)
+{
+    this->id = id;
+    this->name = name;
+    this->address = address;
+}
+void FeupPerson::showRecord() {
+    std::cout << "-----------------------------\n";
+    std::cout << "Name : " << name << std::endl
+        << "ID : " << id << std::endl
+        << "Address : " << address << std::endl;
+    std::cout << "-----------------------------\n";
+}
+void FeupPerson::changeAddress(std::string newAddress)
+{
+    this->address = newAddress;
+}
+
+
+
+
+class Student : public FeupPerson {
+public:
+    Student(int id, string name, string address, string
+        course, int year);
+    void showRecord();
+    void addClassTaken(Class* newClass);
+    void changeCourse(string newCourse);
+private:
+    string course;
+    int year; // 1 = freshman, 2 = sophomore, etc.
+    vector<Class*> classesTaken;
+};
+
+Student::Student(int id, string name, string address,
+    string course, int year) : FeupPerson(id, name, address)
+{
+    this->course = course;
+    this->year = year;
+}
+void Student::addClassTaken(Class* newClass)
+{
+    classesTaken.push_back(newClass);
+}
+void Student::showRecord()
+{
+    cout << "-----------------------------\n";
+    cout << "Name : " << name << endl
+        << "ID : " << id << endl
+        << "Address : " << address << endl;
+    cout << "Course : " << course <<endl;
+    vector<Class*>::iterator it;
+    cout << "Classes taken:\n";
+    for (it = classesTaken.begin(); it != classesTaken.end(); it++) {
+        Class* c = *it;
+        cout << c->getName() << endl;
+    }
+    cout << "-----------------------------\n";
+}
+
+void Student::changeCourse(string newCourse) {
+    course = newCourse;
+}
+
+
+
+
+class Teacher : public FeupPerson {
+public:
+    Teacher() {};
+    Teacher(int id, std::string name, std::string address, std::string rank,
+        std::string course);
+    void showRecord();
+    void addClassTaught(Class* newClass);
+    void changeCourse(std::string newCourse);
+    void showCourse() { std::cout << course << std::endl; };
+private:
+    std::string rank;
+    std::string course;
+    std::vector<Class*> classesTaught;
+};
+
+Teacher::Teacher(int id, std::string name, std::string address,
+    std::string rank, std::string course) : FeupPerson(id,
+        name, address) {
+    this->rank = rank;
+    this->course = course;
+}
+void Teacher::addClassTaught(Class* newClass) {
+    classesTaught.push_back(newClass);
+}
+
+void Teacher::changeCourse(std::string newCourse) {
+    course = newCourse;
+}
+
+void Teacher::showRecord() {
+    std::cout << "-----------------------------\n";
+    std::cout << "Name : " << name << std::endl
+        << "ID : " << id << std::endl
+        << "Address : " << address << std::endl
+        << "Rank : " << rank << std::endl
+        << "Course : " << course << std::endl;
+    std::vector<Class*>::iterator it;
+    std::cout << "Classes taught:\n";
+    for (it = classesTaught.begin(); it != classesTaught.end(); it++) {
+        Class* c = *it;
+        std::cout << c->getName() << std::endl;
+    }
+    std::cout << "-----------------------------\n";
+}
+
+
+
+void main() {
+    Class calculus("Calculus");
+    Class programming("Programming");
+    Class physics("Physics");
+    Class anatomy("Anatomy");
+    Student s1(201906334, "Bruno Rosendo", "Av Paredes", "MIEIC", 2);
+    Student s2(201907634, "Doctor House", "Av Porto", "Medicina", 5);
+    Teacher To(199003754, "Antonio Ferreira", "Av dos Campeoes", "Legend", "MIEIC");
+    Teacher Alex(199208445, "Alexandre Afonso", "Av da Fofura", "The King", "MIEIC");
+    Teacher Phil(19803545, "Doctor Phil", "Flamed Street", "Above All", "Medicine");
+    s1.addClassTaken(&calculus);
+    s1.addClassTaken(&programming);
+    s1.addClassTaken(&physics);
+    s2.addClassTaken(&anatomy);
+    s2.changeAddress("Rua dos Curadores");
+    s2.changeCourse("Medicine");
+    To.addClassTaught(&programming);
+    To.addClassTaught(&physics);
+    Alex.addClassTaught(&calculus);
+    Phil.addClassTaught(&anatomy);
+    Phil.changeCourse("Medicina");
+    s1.showRecord();
+    s2.showRecord();
+    To.showRecord();
+    Alex.showRecord();
+    Phil.showRecord();
+}
+
+19)
+a)
+class SpreadsheetCell // an "abstract class"
+{
+public:
+    SpreadsheetCell() { };
+    virtual ~SpreadsheetCell() { };
+    virtual void set(const string& inString) = 0;
+    virtual string getString() const = 0;
+};
+
+class SpreadsheetCellString : public SpreadsheetCell {
+public:
+    SpreadsheetCellString() {
+        sheetstring = "";
+    };
+    ~SpreadsheetCellString() {};
+    virtual void set(const string& inString) {
+        sheetstring = inString;
+    }
+    virtual string getString() const {
+        return sheetstring;
+    }
+private:
+    string sheetstring;
+};
+
+class SpreadsheetCellDouble : public SpreadsheetCell {
+public:
+    SpreadsheetCellDouble() {
+        sheetdouble = 0;
+    }
+    ~SpreadsheetCellDouble() {};
+    virtual void set(const string& inString) {
+        sheetdouble = stod(inString);
+    }
+    virtual string getString() const {
+        return to_string(sheetdouble);
+        }
+private:
+    double sheetdouble;
+};
+
+
+b)
+
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+using namespace std;
+
+class SpreadsheetCell // an "abstract class"
+{
+public:
+    SpreadsheetCell() { };
+    virtual ~SpreadsheetCell() { };
+    virtual void set(const string& inString) = 0;
+    virtual string getString() const = 0;
+};
+
+class SpreadsheetCellString : public SpreadsheetCell {
+public:
+    SpreadsheetCellString() {
+        sheetstring = "";
+    };
+    ~SpreadsheetCellString() {};
+    virtual void set(const string& inString) {
+        sheetstring = inString;
+    }
+    virtual string getString() const {
+        return sheetstring;
+    }
+private:
+    string sheetstring;
+};
+
+class SpreadsheetCellDouble : public SpreadsheetCell {
+public:
+    SpreadsheetCellDouble() {
+        sheetdouble = 0;
+    }
+    ~SpreadsheetCellDouble() {};
+    virtual void set(const string& inString) {
+        sheetdouble = stod(inString);
+    }
+    virtual string getString() const {
+        return to_string(sheetdouble);
+        }
+private:
+    double sheetdouble;
+};
+
+void main() {
+    SpreadsheetCellString s1, s3;
+    SpreadsheetCellDouble s2, s4;
+    s1.set("The value of pi is ");
+    s2.set("3.14159");
+    vector<SpreadsheetCell*> cells = { &s1, &s2 };
+    for (int i = 0; i < cells.size(); ++i) {
+        cout << "|" << setw(20) << left << cells[i]->getString() << "|";
+    }
+    cout << endl;
+    s3.set("The value of e is");
+    s4.set("2.71828");
+    vector<SpreadsheetCell*> cells2 = { &s3, &s4 };
+    for (int i = 0; i < cells2.size(); ++i) {
+        cout << "|" << setw(20) << left << cells2[i]->getString() << "|";
+    }
+}
+
+c)/d)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+using namespace std;
+
+class SpreadsheetCell // an "abstract class"
+{
+public:
+    SpreadsheetCell() { };
+    virtual ~SpreadsheetCell() { };
+};
+
+class SpreadsheetCellString : public SpreadsheetCell {
+public:
+    SpreadsheetCellString() {
+        sheetstring = "";
+    };
+    ~SpreadsheetCellString() {};
+    void set(const string& inString) {
+        sheetstring = inString;
+    }
+    string getString() const {
+        return sheetstring;
+    }
+private:
+    string sheetstring;
+};
+
+class SpreadsheetCellDouble : public SpreadsheetCell {
+public:
+    SpreadsheetCellDouble() {
+        sheetdouble = 0;
+    }
+    ~SpreadsheetCellDouble() {};
+    void set(double inString) {
+        sheetdouble = inString;
+    }
+    double getString() const {
+        return sheetdouble;
+        }
+private:
+    double sheetdouble;
+};
+
+void main() {
+    SpreadsheetCellString s1, s3;
+    SpreadsheetCellDouble s2, s4;
+    s1.set("The value of pi is ");
+    s2.set(3.14159);
+    s3.set("The value of e is");
+    s4.set(2.7182);
+    vector<SpreadsheetCellString> cells = { s1, s3 };
+    vector<SpreadsheetCellDouble> cells2 = { s2, s4 };
+    for (int i = 0; i < cells.size(); ++i) {
+        cout << "|" << setw(20) << left << cells[i].getString() << "|";
+    }
+    cout << endl;
+    for (int i = 0; i < cells2.size(); ++i) {
+        cout << "|" << setw(20) << left << cells2[i].getString() << "|";
+    }
+}
+
+
+20)
+
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+using namespace std;
+
+class InvalidDate {
+public:
+    InvalidDate(const string& reason);
+    string what() const;
+private:
+    string reason;
+};
+
+class Date
+{
+public:
+    Date(int year, int month, int day);
+    Date(string yearMonthDay); // yearMonthDay must be in format "yyyy/mm/dd"
+    void setYear(int year);
+    void setMonth(int month);
+    void setDay(int day);
+    void setDate(int year, int month, int day);
+    int getYear() const;
+    int getMonth() const;
+    int getDay() const;
+    string getDate() const; // returns the date in format "yyyy/mm/dd"
+    void show() const; // shows the date on the screen in format "yyyy/mm/dd"
+    bool isValid();
+    bool isEqualTo(const Date& date);
+    bool isNotEqualTo(const Date& date);
+    bool isAfter(const Date& date);
+    bool isBefore(const Date& date);
+
+private:
+    int year;
+    int month;
+    int day;
+    bool isleap();
+    int daysOfMonth();
+};
+
+InvalidDate::InvalidDate(const string& reason) {
+    this->reason = reason;
+}
+
+string InvalidDate::what() const {
+    return reason;
+}
+
+Date::Date(int year, int month, int day) {
+    this->year = year;
+    this->month = month;
+    this->day = day;
+}
+
+Date::Date(string yearMonthDay) {
+    istringstream datestring;
+    datestring.str(yearMonthDay);
+    int year, month, day;
+    char c;
+    datestring >> year >> c >> month >> c >> day;
+    this->year = year;
+    this->month = month;
+    this->day = day;
+}
+
+void Date::setYear(int year) {
+    int last = this->year;
+    this->year = year;
+    try {
+        isValid();
+    }
+    catch (InvalidDate & e) {
+        cerr << e.what() << endl;
+        this->year = last;
+    }
+}
+
+void Date::setMonth(int month) {
+    int last = this->month;
+    this->month = month;
+    try {
+        isValid();
+    }
+    catch (InvalidDate & e) {
+        cerr << e.what() << endl;
+        this->month = last;
+    }
+}
+
+void Date::setDay(int day) {
+    int last = this->day;
+    this->day = day;
+    try {
+        isValid();
+    }
+    catch (InvalidDate & e) {
+        cerr << e.what() << endl;
+        this->day = last;
+    }
+}
+
+void Date::setDate(int year, int month, int day) {
+    int lasty = this->year;
+    int lastm = this->month;
+    int lastd = this->day;
+    this->year = year;
+    this->month = month;
+    this->day = day;
+    try {
+        isValid();
+    }
+    catch (InvalidDate & e) {
+        cerr << e.what() << endl;
+        this->year = lasty;
+        this->month = lastm;
+        this->day = lastd;
+    }
+}
+
+int Date::getYear() const {
+    return year;
+}
+
+int Date::getMonth() const {
+    return month;
+}
+
+int Date::getDay() const {
+    return day;
+}
+
+string Date::getDate() const {
+    string data = to_string(year) + "/" + to_string(month) + "/" + to_string(day);
+    return data;
+}
+
+void Date::show() const {
+    cout << year << '/' << month << '/' << day << endl;
+}
+
+bool Date::isleap() {
+    if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) return true;
+    return false;
+}
+
+int Date::daysOfMonth() {
+    if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) return 31;
+    else if (month == 4 || month == 6 || month == 9 || month == 11) return 30;
+    else {
+        if (isleap()) return 29;
+        else return 28;
+    }
+}
+
+bool Date::isValid() {
+    if (month > 12 || month < 1) {
+        throw InvalidDate("Invalid month");
+        return false;
+    }
+    if (day > daysOfMonth() || day < 1) {
+        throw InvalidDate("Invalid day");
+        return false;
+    }
+    if (year < 0) {
+        throw InvalidDate("Invalid year");
+        return false;
+    }
+    return true;
+}
+
+bool Date::isEqualTo(const Date& date) {
+    if (getDate() != date.getDate()) return false;
+    return true;
+}
+
+bool Date::isNotEqualTo(const Date& date) {
+    if (getDate() == date.getDate()) return false;
+    return true;
+}
+
+bool Date::isAfter(const Date& date) {
+    if (year > date.getYear()) return true;
+    else if (year == date.getYear()) {
+        if (month > date.getMonth()) return true;
+        else if (month == date.getMonth() && day > date.getDay()) return true;
+    }
+    return false;
+}
+
+bool Date::isBefore(const Date& date) {
+    if (year < date.getYear()) return true;
+    else if (year == date.getYear()) {
+        if (month < date.getMonth()) return true;
+        else if (month == date.getMonth() && day < date.getDay()) return true;
+    }
+    return false;
+}
+
+void main() {
+    Date d(2001, 07, 28);
+    d.setMonth(13);
+    d.setDay(45);
+    d.setYear(200);
+    d.setYear(-20);
+    d.show();
+}

@@ -1,0 +1,306 @@
+1)
+a)
+void toUpperStr(string& s){
+    for (int i = 0; i < s.size(); ++i) s[i] = toupper(s[i]);
+}
+
+b)
+string transformLine(string s){ // isalpha()
+    for (int i = 0; i < s.size(); ++i) {
+        if (!isalpha(s[i])) s[i] = ' ';
+    }
+    toUpperStr(s);
+    return s;
+}
+
+c)
+void decomposeLine(const string& line, vector<string>& v) {
+    string line2 = transformLine(line);
+    stringstream sline;
+    sline.str(line2);
+    while (!sline.eof()) {
+        string s;
+        sline >> s;
+        if (s == "") continue;
+        v.push_back(s);
+    }
+}
+
+d)
+void main() {
+    ifstream fin;
+    ofstream fout;
+    fin.open("C:\\docs\\text.txt");
+    fout.open("C:\\docs\\words.txt");
+    vector<string> v;
+    while (!fin.eof()) {
+        string line;
+        getline(fin, line);
+        decomposeLine(line, v);
+    }
+    sort(v.begin(), v.end());
+    for (auto x : v) {
+        fout << x << endl;
+    }
+    fin.close();
+    fout.close();
+}
+
+e)
+Em ver de vector<string>, usar set<string> para guardar as palavras.
+
+2)
+a)
+A classe ship não tem um default constructor, enquanto que a classe board tem
+
+b)
+Board::Board(size_t numLines, size_t numColumns) {  // DO NOT PUT = 10 IN HERE!!!
+    this->numLines = numLines;
+    this->numColumns = numColumns;
+    vector<vector<int>> v(numLines, vector<int>(numColumns, -1));
+    board = v;
+}
+
+c)
+bool Board::canPutShip(Position pos, char dir, size_t size) {
+    switch (dir) // TO DO
+    {
+      case 'H': // TO DO: test if ship with length 'size' can be put at 'pos', in horizontal direction         
+          for (int x = pos.lin; x <= pos.col + size; ++x) {
+              if (x > numLines - 1) return false;
+              if (board.at(pos.lin).at(x) != -1) return false;
+          }
+          break;
+
+      case 'V': // TO DO, just this line: test if ship ... can be put in vertical direction
+          for (int y = pos.lin; y <= pos.lin + size; ++y) {
+              if (y > numLines - 1) return false;
+              if (board.at(y).at(pos.col) != -1) return false;
+          }
+          break;
+    }
+    return true;
+}
+
+d)
+bool Board::putShip(const Ship& s) {
+    if (canPutShip(s.pos(), s.dir(), s.size())) {
+        ships.push_back(s);
+        if (s.dir() == 'V') {
+            for (int y = s.pos().lin; y <= s.pos().lin + s.size(); ++y) {
+                board.at(y).at(s.pos().col) = s.id();
+            }
+        }
+        else {
+            for (int x = s.pos().col; x <= s.pos().col + s.size(); ++x) {
+                board.at(s.pos().lin).at(x) = s.id();
+            }
+        }
+    }
+    return false;
+}
+
+e)
+int main() {
+    Board b(10, 20);
+    Position p;
+    unsigned int id;
+    char symbol, dir;
+    size_t tam;
+    cout << "Insira os identificador, símbolo, posição, direção e tamanho" << endl;
+    cin >> id >> symbol >> p.lin >> p.col >> dir >> tam;
+    Ship s(id, symbol, p, dir, tam);
+    if (!b.putShip(s)) throw logic_error("Can't put that ship!");
+}
+
+// PARA TESTAR, VERSAO COMPLETA
+
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <list>
+#include <algorithm>
+#include <fstream>
+#include <map>
+#include <set>
+using namespace std;
+
+struct Position {
+    int lin, col;
+};
+
+class Ship {
+public:
+    Ship(unsigned int identifier, char symbol,
+        Position position, char direction,
+        size_t size);
+    unsigned int id() const; //returns identifier
+    Position pos() const; //returns position   
+    char dir() const;  //returns direction  
+    size_t size() const; //returns size
+    // ... OTHER METHODS
+private:
+    unsigned int identifier; // ship id number
+    Position position;
+    char direction;
+    size_t sizep;
+};
+
+Ship::Ship(unsigned int identifier, char symbol,
+    Position position, char direction,
+    size_t size) {
+
+    this->identifier = identifier;
+    this->position = position;
+    this->direction = direction;
+    this->sizep = size;
+}
+
+unsigned int Ship::id() const {
+    return identifier;
+}
+
+Position Ship::pos() const {
+    return position;
+}
+
+char Ship::dir() const {
+    return direction;
+}
+
+size_t Ship::size() const {
+    return sizep;
+}
+
+class Board {
+public:
+    Board(size_t numLines = 10, size_t numColumns = 10);
+    bool putShip(const Ship& s); //add ship to board, if possible
+    // ... OTHER METHODS
+private:
+    bool canPutShip(Position pos, char dir, size_t size);
+    size_t numLines, numColumns;
+    vector<vector<int>> board; // each element = ship id or ‐1   
+    vector<Ship> ships;
+    // ... OTHER ATTRIBUTES AND/OR METHODS
+};
+
+Board::Board(size_t numLines, size_t numColumns) {  // DO NOT PUT = 10 IN HERE!!!
+    this->numLines = numLines;
+    this->numColumns = numColumns;
+    for (int l = 0; l < numLines; ++l) {
+        vector<int> v;
+        for (int c = 0; c < numColumns; ++c) {
+            v.push_back(-1);
+        }
+        board.push_back(v);
+    }
+}
+
+bool Board::canPutShip(Position pos, char dir, size_t size) {
+    switch (dir) // TO DO
+    {
+      case 'H': // TO DO: test if ship with length 'size' can be put at 'pos', in horizontal direction         
+          for (int x = pos.lin; x <= pos.col + size; ++x) {
+              if (x > numLines - 1) return false;
+              if (board.at(pos.lin).at(x) != -1) return false;
+          }
+          break;
+
+      case 'V': // TO DO, just this line: test if ship ... can be put in vertical direction
+          for (int y = pos.lin; y <= pos.lin + size; ++y) {
+              if (y > numLines - 1) return false;
+              if (board.at(y).at(pos.col) != -1) return false;
+          }
+          break;
+    }
+    return true;
+}
+
+bool Board::putShip(const Ship& s) {
+    if (canPutShip(s.pos(), s.dir(), s.size())) {
+        ships.push_back(s);
+        if (s.dir() == 'V') {
+            for (int y = s.pos().lin; y <= s.pos().lin + s.size(); ++y) {
+                board.at(y).at(s.pos().col) = s.id();
+            }
+        }
+        else {
+            for (int x = s.pos().col; x <= s.pos().col + s.size(); ++x) {
+                board.at(s.pos().lin).at(x) = s.id();
+            }
+        }
+    }
+    else return false;
+}
+
+int main() {
+    Board b(10, 20);
+    Position p;
+    unsigned int id;
+    char symbol, dir;
+    size_t tam;
+    cout << "Insira os identificador, simbolo, posicao, direcao e tamanho" << endl;
+    cin >> id >> symbol >> p.lin >> p.col >> dir >> tam;
+    Ship s(id, symbol, p, dir, tam);
+    if (!b.putShip(s)) throw logic_error("Can't put that ship!");
+}
+
+3)
+a1)
+
+float average(const int grades[], int numStudents) {
+    int sum = 0;
+    for (int i = 0; i < numStudents; ++i) {
+        sum += grades[i];
+    }
+    return (float)sum / numStudents;
+}
+
+a2)
+void readGrades(int grades[], int numStudents) {
+    for (int i = 0; i < numStudents; ++i) {
+        int g;
+        cout << "Insert a grade: ";
+        cin >> g;
+        grades[i] = g;
+    }
+}
+
+int main() {
+    int numS;
+    cout << "How many students are there?" << endl;
+    cin >> numS;
+    int* grades = new int[numS];
+    readGrades(grades, numS);
+    cout << "The average grade is: " << average(grades, numS);
+    delete[] grades;
+    return 0;
+}
+
+b)
+int main() {
+    vector<string> v = { "31", "ola", "adeus"};
+    vector<string>::iterator it = find(v.begin(), v.end(), "31");
+    if (it >= v.begin() && it < v.end()) cout << "The string was found" << endl;
+    else cout << "The string was not found";
+    return 0;
+}
+
+c)
+
+Provavelmente a classe Position não continha uma função overload do operator <, que é necessária
+para ser usado um set dessa classe. Isto acontece porque o set é um container ordenado
+
+d)
+2 3
+2
+2 3
+
+2 3
+2
+2
+
+Erro, nao seria possivel criar Derived

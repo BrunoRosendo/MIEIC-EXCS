@@ -1,0 +1,530 @@
+1)
+a)
+#include <stdio.h>
+#include <stdlib.h>
+extern double floata(double a, double b, double c);
+int main(void) {
+	printf("Media dos elementos = %lf", floata(7.8, 3.6, 7.1));
+	return 0;
+}
+
+
+.text
+.global floata
+.type  floata, "function"
+
+
+floata:	fadd d0, d0, d2
+		fnmul d0, d0, d1
+		ret
+
+
+b)
+#include <stdio.h>
+#include <stdlib.h>
+extern double floata(int a, double b);
+int main(void) {
+	printf("Media dos elementos = %lf", floata(7, 7.1));
+	return 0;
+}
+
+
+.text
+.global floata
+.type  floata, "function"
+
+
+floata:	scvtf d1, x0
+		fsqrt d0, d0
+		fadd d0, d1, d0
+		ret
+
+
+2)
+a)
+#include <stdio.h>
+#include <stdlib.h>
+extern float floata(float a, float b, float c, float d);
+int main(void) {
+	printf("Media dos elementos = %lf", floata(1.2, 2.3, 3.1, 0.6));
+	return 0;
+}
+
+
+.text
+.global floata
+.type  floata, "function"
+
+
+floata:	fmov s5, s0
+		fsub s0, s0, s1
+		fmul s0, s0, s2
+		mov w4, 3
+		scvtf s4, w4
+		fsub s5, s5, s4
+		fadd s1, s3, s5
+		fdiv s0, s0, s1
+		ret
+
+b)
+#include <stdio.h>
+#include <stdlib.h>
+extern float floata(float r, float pi);
+int main(void) {
+	printf("Area = %f", floata(2.3, 3.141592653));
+	return 0;
+}
+
+
+.text
+.global floata
+.type  floata, "function"
+
+
+floata:	fmul s0, s0, s0
+		fmul s0, s0, s1
+		ret
+
+4)
+#include <stdio.h>
+#include <stdlib.h>
+
+double HORNER(double x, double* coefs, int n);
+
+int main(void)
+{
+	double coefs[3] = {3, 1, 2};
+	printf("%lf", HORNER(2, coefs, 3));
+}
+
+
+.text
+.global HORNER
+.type HORNER, "function"
+
+HORNER:	mov x4, 8
+		sub x3, x1, 1
+		mul x2, x3, x4
+		add x0, x0, x2
+		scvtf d2, xzr
+ciclo:	cmp x1, 1
+		b.eq fim
+		ldr d1, [x0], -8
+		sub x1, x1, 1
+		fadd d2, d2, d1
+		fmul d2, d2, d0
+		b ciclo
+fim:	ldr d1, [x0]
+		fadd d2, d2, d1
+		fmov d0, d2
+		ret
+
+
+5)
+#include <stdio.h>
+#include <stdlib.h>
+extern double prodint(float *X, float *Y, int n);
+int main(void) {
+	float x[5] = {1.2, 2.4, 3.0, 2.6, 0};
+	float y[5] = {0, 1.2, 6.5, 10.0, 2.3};
+	printf("Produto = %lf", prodint(x, y, 5));
+	return 0;
+}
+
+
+.text
+.global prodint
+.type  prodint, "function"
+
+
+prodint:	scvtf d0, xzr
+ciclo:		cbz x2, fim
+			ldr s2, [x0]
+			ldr s1, [x1]
+			fmul s1, s2, s1
+			fadd s0, s0, s1
+			add x0, x0, 4
+			add x1, x1, 4
+			sub x2, x2, 1
+			b ciclo
+fim:		fcvt d0, s0
+			ret
+
+
+//fmov s4, 3.0 resulta
+
+6)
+#include <stdio.h>
+#include <stdlib.h>
+
+extern long int conta_intervalo (float *V, long int n, float a, float b);
+
+int main(void)
+{
+	float v[5] = {1.2, -2.5, 5.3, 0.2, 1.5};
+	float a = 0;
+	float b = 4.5;
+	printf("%ld", conta_intervalo(v, 5, a, b));
+}
+
+
+.text
+.global conta_intervalo
+.type conta_intervalo, "function"
+
+conta_intervalo:	mov x2, x0
+					mov x0, 0
+ciclo:				cbz x1, fim
+					ldr s6, [x2]
+					fcmp s6, s0
+					b.lt salto
+					fcmp s6, s1
+					b.gt salto
+					add x0, x0, 1
+salto:				add x2, x2, 4
+					sub x1, x1, 1
+					b ciclo
+fim:				ret
+
+
+7)
+#include <stdio.h>
+#include <stdlib.h>
+
+extern double rotF(double x);
+
+int main(void)
+{
+	printf("%lf %lf", rotF(2), rotF(-1));
+}
+
+
+
+.data
+pi: .double 3.14159265359
+
+.text
+.global rotF
+.type rotF, "function"
+
+rotF:	fcmp d0, 0.0
+		b.ge maior
+		mov w0, 4
+		scvtf d1, w0
+		fsub d0, d1, d0
+		fsqrt d0, d0
+		fmov d2, 1.0
+		fdiv d0, d2, d0
+fim:	ret
+
+maior:	ldr d1, pi
+		fadd d0, d0, d1
+		fmul d2, d0, d0
+		fmul d0, d2, d0
+		fsqrt d0, d0
+		b fim
+
+
+8)
+a)
+#include <stdio.h>
+#include <stdlib.h>
+
+extern double erfpos(double x);
+
+int main(void)
+{
+
+	printf("%lf", erfpos(1));
+}
+
+
+.data
+a1: .double 0.278393
+a2: .double 0.230389
+a3: .double 0.000972
+a4: .double 0.078108
+
+.text
+.global erfpos
+.type erfpos, "function"
+
+erfpos:	ldr d1, a1
+		ldr d2, a2
+		ldr d3, a3
+		ldr d4, a4
+		fmov d5, 1.0
+		fmul d1, d1, d0
+		fmul d2, d2, d0
+		fmul d2, d2, d0
+		fmul d3, d3, d0
+		fmul d3, d3, d0
+		fmul d3, d3, d0
+		fmul d4, d4, d0
+		fmul d4, d4, d0
+		fmul d4, d4, d0
+		fmul d4, d4, d0
+		scvtf d0, xzr
+		fadd d0, d0, d5
+		fadd d0, d0, d1
+		fadd d0, d0, d2
+		fadd d0, d0, d3
+		fadd d0, d0, d4
+		fmul d0, d0, d0
+		fmul d0, d0, d0
+		fdiv d0, d5, d0
+		fsub d0, d5, d0
+		ret
+
+b)
+
+#include <stdio.h>
+#include <stdlib.h>
+
+extern double erf(double x);
+
+int main(void)
+{
+
+	printf("%lf", erf(-1));
+}
+
+
+.data
+a1: .double 0.278393
+a2: .double 0.230389
+a3: .double 0.000972
+a4: .double 0.078108
+
+.text
+.type erfpos, "function"
+.global erf
+.type erf, "function"
+
+erfpos:	ldr d1, a1
+		ldr d2, a2
+		ldr d3, a3
+		ldr d4, a4
+		fmov d5, 1.0
+		fmul d1, d1, d0
+		fmul d2, d2, d0
+		fmul d2, d2, d0
+		fmul d3, d3, d0
+		fmul d3, d3, d0
+		fmul d3, d3, d0
+		fmul d4, d4, d0
+		fmul d4, d4, d0
+		fmul d4, d4, d0
+		fmul d4, d4, d0
+		scvtf d0, xzr
+		fadd d0, d0, d5
+		fadd d0, d0, d1
+		fadd d0, d0, d2
+		fadd d0, d0, d3
+		fadd d0, d0, d4
+		fmul d0, d0, d0
+		fmul d0, d0, d0
+		fdiv d0, d5, d0
+		fsub d0, d5, d0
+		ret
+
+
+
+erf:	stp x29, x30, [SP, -16]!
+		mov x29, sp
+		fcmp d0, 0.0
+		b.lt salto
+		bl erfpos
+		b fim
+salto:	fneg d0, d0
+		bl erfpos
+		fneg d0, d0
+fim:	ldp x29, x30, [SP], 16
+		ret
+
+
+9)
+a)
+#include <stdio.h>
+#include <stdlib.h>
+
+extern double cosseno (double x, long int *v);
+
+int main(void)
+{
+	long int v[5] = {10*9*8*7*6*5*4*3*2, 8*7*6*5*4*3*2, 6*5*4*3*2, 4*3*2, 2};
+	printf("%lf", cosseno(0, v));
+}
+
+
+.data
+.global myVar1
+myVar1: .long 3628800
+		.long 40320
+		.long 720
+		.long 24
+		.long 2
+
+.text
+.global cosseno
+.type cosseno, "function"
+
+cosseno:	ldr x1, [x0]
+			scvtf d1, x1
+			mov w2, 1
+			scvtf d2, w2
+			fdiv d3, d2, d1
+			mov x3, 4
+			add x0, x0, 8
+ciclo:		cbz x3, fim
+			ldr x1, [x0]
+			scvtf d1, x1
+			fdiv d1, d2, d1
+			fmul d4, d0, d0
+			fmul d4, d3, d4
+			fsub d3, d1, d4
+			add x0, x0, 8
+			sub x3, x3, 1
+			b ciclo
+fim:		fmul d5, d0, d0
+			fmul d4, d5, d3
+			fsub d0, d2, d4
+			ret
+
+//experimentar .data com 32 bits!!!
+b)
+#include <stdio.h>
+#include <stdlib.h>
+
+extern double func (double graus, long int *v);
+
+int main(void)
+{
+	long int v[5] = {10*9*8*7*6*5*4*3*2, 8*7*6*5*4*3*2, 6*5*4*3*2, 4*3*2, 2};
+	printf("%lf", func(60, v));
+}
+
+.data
+pi: .double 3.141516
+
+.text
+.type cosseno, "function"
+.global func
+.type func, "function"
+
+cosseno:	ldr x1, [x0]
+			scvtf d1, x1
+			mov w2, 1
+			scvtf d2, w2
+			fdiv d3, d2, d1
+			mov x3, 4
+			add x0, x0, 8
+ciclo:		cbz x3, fim
+			ldr x1, [x0]
+			scvtf d1, x1
+			fdiv d1, d2, d1
+			fmul d4, d0, d0
+			fmul d4, d3, d4
+			fsub d3, d1, d4
+			add x0, x0, 8
+			sub x3, x3, 1
+			b ciclo
+fim:		fmul d5, d0, d0
+			fmul d4, d5, d3
+			fsub d0, d2, d4
+			ret
+
+
+
+func:	mov x10, 180
+		scvtf d10, x10
+		ldr d9, pi
+		fdiv d10, d9, d10
+		fmul d0, d0, d10
+		stp x29, x30, [sp, -16]!
+		bl cosseno
+		mov x10, 50
+		scvtf d10, x10
+		fmul d0, d0, d10
+		mov x9, 100
+		scvtf d9, x9
+		fadd d0, d0, d9
+		ldp x29, x30, [sp], 16
+		ret
+RAQUEL
+
+#include <stdio.h>
+#include <stdlib.h>
+
+extern double func(double graus);
+int main()
+{
+    double x;
+    x=0;
+    double res;
+    for(int i=0; i<=90; i++)
+    {
+    	res= func(i);
+    	printf ("Y(%d graus) =%lf\n",i,res);
+    }
+}
+
+.data
+pi: .double 3.141516
+vi0: .double 180.0
+vi6: .double 50.0
+vi7: .double 100.0
+vi1: .double 0.5
+vi2: .double 0.0416666667
+vi3: .double 0.0013888889
+vi4: .double 0.0000248158
+vi5: .double 0.0000002756
+v1: .double 1.0
+.text
+.global cosseno
+.type  cosseno, "function"
+.global func
+.type  func, "function"
+
+cosseno: stp x29,x30,[sp,#-16]!
+         fmul d0,d0,d0
+         fneg d0,d0
+
+         ldr d1,vi5
+         fmul d1,d1,d0
+
+         ldr d2,vi4
+         fadd d1,d1,d2
+         fmul d1,d1,d0
+
+         ldr d2,vi3
+         fadd d1,d1,d2
+         fmul d1,d1,d0
+
+         ldr d2,vi2
+         fadd d1,d1,d2
+         fmul d1,d1,d0
+
+         ldr d2,vi1
+         fadd d1,d1,d2
+         fmul d1,d1,d0
+
+         ldr d2,v1
+         fadd d1,d1,d2
+         fmov d0,d1
+         ldp x29, x30,[sp],16
+         ret
+
+func:    stp x29,x30,[SP,#-16]!
+         ucvtf d0,x0
+         ldr d1,pi
+         ldr d2, vi0
+         fmul d0,d1,d0
+         fdiv d0,d0,d2
+         bl cosseno
+         ldr d14, vi6
+         fmul d0,d0,d14
+         ldr d15, vi7
+         fadd d0,d15,d0
+         ldp x29, x30,[sp],16
+         ret

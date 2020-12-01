@@ -1,0 +1,1311 @@
+1)
+a)
+void bubbleSort(vector<string>& v, char order) {
+	for (int a = 1; a <= v.size(); ++a) {
+		bool end = true;
+		for (int i = 0; i < v.size() - 1; ++i) {
+			if (order == 'a') {
+				if (v[i] > v[i + 1]) {
+					string temp = v[i + 1];
+					v[i + 1] = v[i];
+					v[i] = temp;
+					end = false;
+				}
+			}
+			else {
+				if (v[i] < v[i + 1]) {
+					string temp = v[i + 1];
+					v[i + 1] = v[i];
+					v[i] = temp;
+					end = false;
+				}
+			}
+		}
+		if (end) break;
+	}
+}
+
+b)
+
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+using namespace std;
+
+void read(vector<string>& v, int dim) {
+	cin.ignore(1000, '\n');
+	cout << "Insert the names" << endl;
+	for (int i = 0; i < dim; ++i) {
+		string name;
+		getline(cin, name);
+		v.push_back(name);
+	}
+}
+
+void bubbleSort(vector<string>& v, char order) {
+	for (int a = 1; a <= v.size(); ++a) {
+		bool end = true;
+		for (int i = 0; i < v.size() - 1; ++i) {
+			if (order == 'a') {
+				if (v[i] > v[i + 1]) {
+					string temp = v[i + 1];
+					v[i + 1] = v[i];
+					v[i] = temp;
+					end = false;
+				}
+			}
+			else {
+				if (v[i] < v[i + 1]) {
+					string temp = v[i + 1];
+					v[i + 1] = v[i];
+					v[i] = temp;
+					end = false;
+				}
+			}
+		}
+		if (end) break;
+	}
+}
+
+void main()
+{
+	int num;
+	cout << "How many people are there?" << endl;
+	cin >> num;
+	vector<string> v;
+	read(v, num);
+	bubbleSort(v, 'a');
+	for (int i = 0; i < v.size(); ++i) cout << v[i] << " ";
+}
+
+
+2)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <cstring>
+#include<stdio.h>
+#include<stdlib.h>
+using namespace std;
+
+void read(char* names[], int dim) {
+	cin.ignore(1000, '\n');
+	cout << "Insert the names" << endl;
+	for (int i = 0; i < dim; ++i) {
+		cin.getline(names[i], 100);
+	}
+}
+
+int comparator(const void* x, const void* y) {
+	const char *n1 = *(char**)x;
+	const char *n2 = *(char**)y;
+	return strcmp(n1, n2);
+}
+
+void main()
+{
+	int n;
+	cout << "How many people are there?" << endl;
+	cin >> n;
+	char** names = new char*[n];
+	for (int i = 0; i < n; ++i) {
+		names[i] = new char[100];
+	}
+	read(names, n);
+	qsort(names,(size_t) n, sizeof(char*), comparator);
+	for (int i = 0; i < n; ++i) {
+		for (int a = 0; a < 100; ++a) {
+			if (names[i][a] == '\0') break;
+			cout << names[i][a];
+		}
+		cout << endl;
+	}
+}
+
+
+3)
+a)
+char encryptChar(char c, int key) {
+	int ascii = int(c);
+	int newcode;
+	if (ascii >= 97) {
+		newcode = ((ascii - 97 + key) % 26 + 26) % 26 + 97;
+	}
+	else {
+		newcode = ((ascii - 65 + key) % 26 + 26) % 26 + 65;
+	}
+	return (char)newcode;
+}
+
+b)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <cstring>
+#include<stdio.h>
+#include<stdlib.h>
+using namespace std;
+
+char encryptChar(char c, int key) {
+	int ascii = int(c);
+	int newcode;
+	if (ascii >= 97) {
+		newcode = ((ascii - 97 + key) % 26 + 26) % 26 + 97;
+	}
+	else {
+		newcode = ((ascii - 65 + key) % 26 + 26) % 26 + 65;
+	}
+	return (char)newcode;
+}
+
+string encryptString(string s, int key) {
+	string newstring = "";
+	for (int i = 0; i < s.length(); ++i) {
+		newstring += encryptChar(s[i], key);
+	}
+	return newstring;
+}
+
+void main()
+{
+	cout << encryptString("ola", 1);
+}
+
+c)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <cstring>
+#include<stdio.h>
+#include<stdlib.h>
+using namespace std;
+
+char encryptChar(char c, int key) {
+	int ascii = int(c);
+	int newcode;
+	if (ascii >= 97) {
+		newcode = ((ascii - 97 + key) % 26 + 26) % 26 + 97;
+	}
+	else {
+		newcode = ((ascii - 65 + key) % 26 + 26) % 26 + 65;
+	}
+	return (char)newcode;
+}
+
+string encryptString(string s, int key) {
+	string newstring = "";
+	for (int i = 0; i < s.length(); ++i) {
+		newstring += encryptChar(s[i], key);
+	}
+	return newstring;
+}
+
+void main()
+{
+	string s;
+	int key;
+	cout << "Insert the string you wish to encrypt" << endl;
+	cin >> s;
+	cout << "Insert a key" << endl;
+	cin >> key;
+	cout << "Your encrypted string is " << encryptString(s, key);
+}
+
+d)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <cstring>
+#include<stdio.h>
+#include<stdlib.h>
+using namespace std;
+
+char encryptChar(char c, int key) {
+	int ascii = int(c);
+	int newcode;
+	if (ascii >= 97) {
+		newcode = ((ascii - 97 + key) % 26 + 26) % 26 + 97;
+	}
+	else {
+		newcode = ((ascii - 65 + key) % 26 + 26) % 26 + 65;
+	}
+	return (char)newcode;
+}
+
+char* encryptString(char s[], int key, int len) {
+	char* newstring = new char[len];
+	for (int i = 0; i < len; ++i) {
+		newstring[i] = encryptChar(s[i], key);
+	}
+	return newstring;
+}
+
+void main()
+{
+	char* s = new char[100];
+	int key;
+	int len = 0;
+	cout << "Insert the string you wish to encrypt" << endl;
+	cin.getline(s, 100);
+	cout << "Insert a key" << endl;
+	cin >> key;
+	for (int i = 0; i < 100; ++i) {
+		if (s[i] != '\0') ++len;
+		else break;
+	}
+	char* newstring = encryptString(s, key, len);
+	cout << "Your encrypted string is ";
+	for (int i = 0; i < len; ++i) cout << newstring[i];
+}
+
+4)
+a)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+using namespace std;
+
+bool sequenceSearch(const string& s, int nc, char c) {
+	int ocur = 0;
+	for (int i = 0; i < s.length(); ++i) {
+		if (s[i] == c) ++ocur;
+		else ocur = 0;
+		if (ocur == nc) return true;
+	}
+	return false;
+}
+
+void main()
+{
+	cout << sequenceSearch("thiss is a tessst", 3, 's');
+}
+
+
+b)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+using namespace std;
+
+bool sequenceSearch(const string& s, int nc, char c) {
+	string seek = "";
+	for (int i = 0; i < nc; ++i) seek += c;
+	if (s.find(seek) != string::npos) return true;
+	return false;
+}
+
+void main()
+{
+	cout << sequenceSearch("thiss is a tessst", 3, 's');
+}
+
+
+5)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+using namespace std;
+
+void remove(vector<string>& result) {
+	for (int i = 0; i < result.size(); ++i) {
+		if (result[i] == "DE" || result[i] == "DOS" || result[i] == "DO" || result[i] == "DA" || result[i] == "E" || result[i] == "DAS") {
+			result.erase(result.begin() + i);
+			result.erase(result.begin() + i);
+		}
+
+	}
+}
+
+string normalizeName(const string& name) {
+	vector<string> v;
+	string name1(name);
+	string part(1, name1[0]);
+	for (int i = 1; i < name1.length(); ++i) {
+		if (name1[i] == ' ') {
+			if (part[0] == ' ') part += " ";
+			else {
+				v.push_back(part);
+				part = " ";
+			}
+		}
+		else {
+			if (part[0] != ' ') part += name1[i];
+			else {
+				v.push_back(part);
+				part = name1[i];
+			}
+		}
+	}
+	if (v[0][0] == ' ') v.erase(v.begin());
+	if (v[v.size() - 1][0] == ' ') v.erase(v.end());
+	for (int i = 0; i < v.size(); ++i) {
+		if (v[i][0] == ' ') v[i] = " ";
+		else {
+			string newstring = " ";
+			for (int a = 0; a < v[i].size(); ++a) {
+				if (a == 0) newstring[0] = toupper(v[i][0]);
+				else newstring += toupper(v[i][a]);
+			}
+			v[i] = newstring;
+		}
+	}
+	remove(v);
+	string result;
+	for (int i = 0; i < v.size(); ++i) {
+		if (i == 0) result = v[0];
+		else result += v[i];
+	}
+	return result;
+}
+
+void main()
+{
+	string a = " Maria de Adelaide  ";
+	cout << normalizeName(a);
+}
+
+
+6)
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+struct Fraction {
+	int numerator;
+	int denominator;
+};
+
+int gcd(int a, int b) {
+	if (a == b) return a;
+	else if (a == 0) return b;
+	else if (b == 0) return a;
+	else {
+		while (a != b) {
+			if (a > b) a = a - b;
+			else b = b - a;
+		}
+		return a;
+	}
+}
+
+bool readFraction(Fraction &fraction) {
+	cin >> fraction.numerator;
+	if (cin.fail()) {
+		fraction.numerator = 0;
+		fraction.denominator = 0;
+		return false;
+	}
+	if (cin.get() != '/') {
+		fraction.numerator = 0;
+		fraction.denominator = 0;
+		return false;
+	}
+	cin >> fraction.denominator;
+	if (cin.fail()) {
+		fraction.numerator = 0;
+		fraction.denominator = 0;
+		return false;
+	}
+	if (cin.peek() != '\n') {
+		fraction.numerator = 0;
+		fraction.denominator = 0;
+		return false;
+	}
+	return true;
+}
+
+void reduceFraction(Fraction &fraction) {
+	int divisor = gcd(abs(fraction.numerator), abs(fraction.denominator));
+	fraction.numerator /= divisor;
+	fraction.denominator /= divisor;
+}
+
+void addition(Fraction &fraction1, Fraction &fraction2) {
+	fraction1.numerator *= fraction2.denominator;
+	fraction2.numerator *= fraction1.denominator;
+	fraction1.denominator *= fraction2.denominator;
+	fraction2.denominator = fraction1.denominator;
+	fraction1.numerator += fraction2.numerator;
+}
+
+void subtraction(Fraction& fraction1, Fraction& fraction2) {
+	fraction1.numerator *= fraction2.denominator;
+	fraction2.numerator *= fraction1.denominator;
+	fraction1.denominator *= fraction2.denominator;
+	fraction2.denominator = fraction1.denominator;
+	fraction1.numerator -= fraction2.numerator;
+}
+
+void multiplication(Fraction& fraction1, Fraction& fraction2) {
+	fraction1.numerator *= fraction2.numerator;
+	fraction1.denominator *= fraction2.denominator;
+}
+
+void division(Fraction& fraction1, Fraction& fraction2) {
+	fraction1.numerator *= fraction2.denominator;
+	fraction1.denominator *= fraction2.numerator;
+}
+
+int main()
+{
+	Fraction fraction1, fraction2;
+	bool test, test2, valid;
+	do {
+		cout << "Insert a fraction in the format numerator/denominator" << endl;
+		test = readFraction(fraction1);
+		cin.clear();
+		cin.ignore(1000, '\n');
+	} while (test == 0);
+	do {
+		cout << "Insert another one" << endl;
+		test2 = readFraction(fraction2);
+		cin.clear();
+		cin.ignore(1000, '\n');
+	} while (test2 == 0);
+	char operation;
+	do {
+		valid = true;
+		cout << "Choose the operation" << endl;
+		cin >> operation;
+		switch (operation) {
+		case '+':
+			addition(fraction1, fraction2);
+			break;
+		case '-':
+			subtraction(fraction1, fraction2);
+			break;
+		case '*':
+			multiplication(fraction1, fraction2);
+			break;
+		case '/':
+			division(fraction1, fraction2);
+			break;
+		default:
+			valid = false;
+			cin.ignore(10000, '\n');
+		}
+	} while (!valid);
+	reduceFraction(fraction1);
+	cout << "The result is " << fraction1.numerator << "/" << fraction1.denominator << endl;
+}
+
+
+7)
+a)
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+typedef struct {
+	unsigned int year, month, day;
+} Date;
+
+void readDate(Date* d) {
+	cout << "Insert a date in the format year/month/day" << endl;
+	cin >> d->year;
+	cin.ignore();
+	cin >> d->month;
+	cin.ignore();
+	cin >> d->day;
+}
+
+int main()
+{
+	Date d;
+	readDate(&d);
+	cout << d.year << '/' << d.month << '/' << d.day;
+}
+
+b)
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+typedef struct {
+	unsigned int year, month, day;
+} Date;
+
+void readDate(Date* d) {
+	cout << "Insert a date in the format year/month/day" << endl;
+	cin >> d->year;
+	cin.ignore();
+	cin >> d->month;
+	cin.ignore();
+	cin >> d->day;
+}
+
+void writeDate(const Date* d) {
+	const Date da = *d;
+	cout << da.year << '/' << da.month << '/' << da.day;
+}
+
+int main()
+{
+	Date d;
+	readDate(&d);
+	writeDate(&d);
+}
+
+c/d)
+void sortDates(Date* d1, Date* d2) {
+	if (d1->year > d2->year) {
+		swap(d1->year, d2->year);
+		swap(d1->month, d2->month);
+		swap(d1->day, d2->day);
+	}
+	else if (d1->year == d2->year) {
+		if (d1->month > d2->month) {
+			swap(d1->year, d2->year);
+			swap(d1->month, d2->month);
+			swap(d1->day, d2->day);
+		}
+		else if (d1->month == d2->month) {
+			if (d1->day > d2->day) {
+				swap(d1->year, d2->year);
+				swap(d1->month, d2->month);
+				swap(d1->day, d2->day);
+			}
+		}
+	}
+}
+
+e)
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+typedef struct {
+	unsigned int year, month, day;
+} Date;
+
+void readDate(Date* d) {
+	cout << "Insert a date in the format year/month/day" << endl;
+	cin >> d->year;
+	cin.ignore();
+	cin >> d->month;
+	cin.ignore();
+	cin >> d->day;
+}
+
+void writeDate(const Date* d) {
+	const Date da = *d;
+	cout << da.year << '/' << da.month << '/' << da.day;
+}
+
+void sortDates(Date* d1, Date* d2) {
+	if (d1->year > d2->year) {
+		swap(d1->year, d2->year);
+		swap(d1->month, d2->month);
+		swap(d1->day, d2->day);
+	}
+	else if (d1->year == d2->year) {
+		if (d1->month > d2->month) {
+			swap(d1->year, d2->year);
+			swap(d1->month, d2->month);
+			swap(d1->day, d2->day);
+		}
+		else if (d1->month == d2->month) {
+			if (d1->day > d2->day) {
+				swap(d1->year, d2->year);
+				swap(d1->month, d2->month);
+				swap(d1->day, d2->day);
+			}
+		}
+	}
+}
+
+int main()
+{
+	Date d1, d2;
+	readDate(&d1);
+	readDate(&d2);
+	sortDates(&d1, &d2);
+	cout << "Date 1 is ";
+	writeDate(&d1);
+	cout << " and date 2 is ";
+	writeDate(&d2);
+}
+
+
+8)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+using namespace std;
+
+struct EuroMillionsBet {
+    vector<unsigned> mainNumbers;
+    vector<unsigned> luckyStars;
+};
+
+void readBet(EuroMillionsBet* bet) {
+    cout << "Insert 5 main numbers from 1 to 50" << endl;
+    for (int i = 0; i < 5; ++i) {
+        int num;
+        cin >> num;
+        bet->mainNumbers.push_back(num);
+    }
+    cout << "Insert 2 lucky starts from 1 to 12" << endl;
+    for (int i = 0; i < 2; ++i) {
+        int num;
+        cin >> num;
+        bet->luckyStars.push_back(num);
+    }
+}
+
+void generateKey( EuroMillionsBet * key ){
+    for (int i = 0; i < 5; ++i) {
+        key->mainNumbers.push_back(rand() % 50 + 1);
+    }
+    for (int i = 0; i < 2; ++i) {
+        key->luckyStars.push_back(rand() % 12 + 1);
+    }
+}
+
+void bubbleSort(vector<unsigned>& v) {
+    for (int a = 1; a <= v.size(); ++a) {
+        bool end = true;
+        for (int i = 0; i < v.size() - 1; ++i) {
+            if (v[i] > v[i + 1]) {
+                int temp = v[i + 1];
+                v[i + 1] = v[i];
+                v[i] = temp;
+                end = false;
+            }
+        }
+        if (end) break;
+    }
+}
+
+bool binarySearch(const vector<unsigned>& v, int value) {
+    int first = 0;
+    int last = v.size() - 1;
+    bool found = false;
+    do {
+        int middle = (last + first) / 2;
+        if (v[middle] == value) {
+            found = true;
+            return true;
+        }
+        else if (v[middle] > value) last = middle - 1;
+        else first = middle + 1;
+    } while (found || first <= last);
+    return false;
+}
+
+void compare(EuroMillionsBet* bet, EuroMillionsBet* key, int result[]) {
+    bubbleSort(key->mainNumbers);
+    bubbleSort(key->luckyStars);
+    for (int i = 0; i < 5; ++i) {
+        unsigned num = bet->mainNumbers[i];
+        if (binarySearch(key->mainNumbers, num)) result[0] += 1;
+    }
+    for (int i = 0; i < 2; ++i) {
+        unsigned num = bet->luckyStars[i];
+        if (binarySearch(key->luckyStars, num)) result[1] += 1;
+    }
+}
+
+int main()
+{
+    srand(time(NULL));
+    EuroMillionsBet bet, key;
+    readBet(&bet);
+    generateKey(&key);
+    int result[2] = { 0, 0 };
+    compare(&bet, &key, result);
+    cout << "Result:" << endl << result[0] << " main numbers" << endl << result[1] << " lucky stars" << endl;
+}
+
+
+9)
+a)
+typedef struct {
+    string street;
+    int doornum;
+    string city;
+}Street;
+
+b)
+typedef struct {
+    string name;
+    int age;
+    char gender;
+    Street address;
+}Person;
+
+c)
+
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+using namespace std;
+
+typedef struct {
+    string street;
+    int doornum;
+    string city;
+}Street;
+
+typedef struct {
+    string name;
+    int age;
+    char gender;
+    Street address;
+}Person;
+
+void readStreet(Street& street){
+    cout << "Insert the name of the street" << endl;
+    getline(cin, street.street);
+    cout << "Insert the door number" << endl;
+    cin >> street.doornum;
+    cin.ignore(1000, '\n');
+    cout << "Insert the name of the city" << endl;
+    getline(cin, street.city);
+}
+
+void readPerson(Person& person) {
+    cout << "Insert the name of the person" << endl;
+    getline(cin, person.name);
+    cout << "Insert the age of the person" << endl;
+    cin >> person.age;
+    cout << "Insert the gender of the person (M/F)" << endl;
+    cin >> person.gender;
+    cin.ignore(1000, '\n');
+    readStreet(person.address);
+}
+
+void sameStreet(vector<Person> v, string city, string street) {
+    for (int i = 0; i < v.size(); ++i) {
+        Person person = v[i];
+        if (person.address.city == city && person.address.street == street) {
+            cout << person.name << endl;
+        }
+    }
+}
+
+int main()
+{
+    Person p1, p2;
+    readPerson(p1);
+    readPerson(p2);
+    vector<Person> v = { p1, p2 };
+    string city, street;
+    cout << "What's the city?" << endl;
+    getline(cin, city);
+    cout << "What's the name of the street?" << endl;
+    getline(cin, street);
+    sameStreet(v, city, street);
+}
+
+10)
+a)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <cmath>
+using namespace std;
+
+typedef struct {
+    int x, y;
+}Point;
+
+typedef struct {
+    int pointnum;
+    vector<Point> points;
+}Polygon;
+
+void readPolygon(Polygon& pol) {
+    cout << "How many vertices does the polygon have?" << endl;
+    cin >> pol.pointnum;
+    for (int i = 0; i < pol.pointnum; ++i) {
+        cout << "Insert a coordinate" << endl;
+        Point p;
+        cin >> p.x;
+        cin >> p.y;
+        pol.points.push_back(p);
+    }
+}
+
+int main()
+{
+    Polygon pol;
+    readPolygon(pol);
+    int sum = 0;
+    for (int i = 1; i <= pol.pointnum; ++i) {
+        Point p1 = pol.points[i - 1];
+        Point p2;
+        if (i == pol.pointnum) p2 = pol.points[0];
+        else p2 = pol.points[i];
+        sum += p1.x * p2.y - p1.y * p2.x;
+    }
+    double result = abs( (double) sum / 2);
+    cout << "Area = " << result << endl;
+}
+
+b)
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+using namespace std;
+
+typedef struct {
+    int x, y;
+}Point;
+
+typedef struct {
+    int pointnum;
+    Point points[100];
+}Polygon;
+
+void readPolygon(Polygon& pol) {
+    printf("How many vertices does the polygon have?\n");
+    scanf_s("%d", &pol.pointnum);
+    for (int i = 0; i < pol.pointnum; ++i) {
+        printf("Insert a coordinate\n");
+        Point p;
+        scanf_s("%d", &p.x);
+        scanf_s("%d", &p.y);
+        pol.points[i] = p;
+    }
+}
+
+int main()
+{
+    Polygon pol;
+    readPolygon(pol);
+    int sum = 0;
+    for (int i = 1; i <= pol.pointnum; ++i) {
+        Point p1 = pol.points[i - 1];
+        Point p2;
+        if (i == pol.pointnum) p2 = pol.points[0];
+        else p2 = pol.points[i];
+        sum += p1.x * p2.y - p1.y * p2.x;
+    }
+    double result = fabs((double)sum / 2);
+    printf("Area = %f", result);
+}
+
+int main()
+{
+    Polygon pol;
+    readPolygon(pol);
+    int sum = 0;
+    for (int i = 1; i <= pol.pointnum; ++i) {
+        Point p1 = pol.points[i - 1];
+        Point p2;
+        if (i == pol.pointnum) p2 = pol.points[0];
+        else p2 = pol.points[i];
+        sum += p1.x * p2.y - p1.y * p2.x;
+    }
+    double result = fabs( (double) sum / 2);
+    printf("Area = %f", result);
+}
+
+11)
+a)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <cmath>
+#include <fstream>
+using namespace std;
+
+
+int comparator(const void* x, const void* y) {
+	string n1 = *(string*)x;
+	string n2 = *(string*)y;
+	if (n1 > n2) return 1;
+	else if (n1 < n2) return -1;
+	return 0;
+}
+
+void main()
+{
+	string name;
+	int n = 0;
+	cout << "What's the name of the file?" << endl;
+	cin >> name;
+	ifstream in;
+	string temp;
+	in.open(name);
+	while (!in.eof()) {		// without newl at the end
+		getline(in, temp);
+		++n;
+	}
+	in.close();
+	string* names = new string[n];
+	in.open(name);
+	for (int i = 0; i < n; ++i) {
+		getline(in, temp);
+		names[i] = temp;
+	}
+	in.close();
+	qsort(names, n, sizeof(string), comparator);
+	for (int i = 0; i < n; ++i) cout << names[i] << endl;
+}
+
+b)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <cmath>
+#include <fstream>
+using namespace std;
+
+
+int comparator(const void* x, const void* y) {
+	string n1 = *(string*)x;
+	string n2 = *(string*)y;
+	if (n1 > n2) return 1;
+	else if (n1 < n2) return -1;
+	return 0;
+}
+
+void main()
+{
+	string name;
+	int n = 0;
+	cout << "What's the name of the file?" << endl;
+	cin >> name;
+	string shortname = name.substr(0, name.size() - 4);
+	ifstream in;
+	string temp;
+	in.open(name);
+	while (!in.eof()) {		// without newl at the end
+		getline(in, temp);
+		++n;
+	}
+	in.close();
+	string* names = new string[n];
+	in.open(name);
+	for (int i = 0; i < n; ++i) {
+		getline(in, temp);
+		names[i] = temp;
+	}
+	in.close();
+	qsort(names, n, sizeof(string), comparator);
+	string outname = shortname + "_sorted.txt";
+	ofstream out;
+	out.open(outname);
+	for (int i = 0; i < n; ++i) {
+		out << names[i] << endl;
+	}
+}
+
+
+12)
+a)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <cmath>
+#include <fstream>
+using namespace std;
+
+
+void main(string file, string filec)
+{
+	ifstream in;
+	ofstream out;
+	in.open(file);
+	if (!in.is_open()) exit(0);
+	int lines, cols;
+	string text;
+	string text2 = "";
+	in >> lines >> cols >> text;
+	if (lines * cols != text.size()) exit(0);
+	int count = 0;
+	char c = text[0];
+	for (int i = 0; i <= lines * cols; ++i) {
+		if (text[i] == c) ++count;
+		else {
+			string s(1, c);
+			text2 += to_string(count) + s;
+			count = 1;
+			c = text[i];
+		}
+	}
+	text2 = to_string(lines) + " " + to_string(cols) + " " + text2;
+	in.close();
+	out.open(filec);
+	out << text2;
+	out.close();
+}
+
+b)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <cmath>
+#include <fstream>
+#include <sstream>
+using namespace std;
+
+
+void main(string file, string fileu)
+{
+	ifstream in;
+	ofstream out;
+	in.open(file);
+	int lines, cols;
+	string text;
+	in >> lines >> cols >> text;
+	string text2 = to_string(lines) + " " + to_string(cols) + " ";
+	istringstream istring;
+	istring.str(text);
+	while (istring.rdbuf()->in_avail() != 0) {
+		int num;
+		char c;
+		istring >> num >> c;
+		string temp(num, c);
+		text2 += temp;
+	}
+	out.open(fileu);
+	out << text2;
+}
+
+13)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <cmath>
+#include <fstream>
+#include <sstream>
+using namespace std;
+
+
+void main()
+{
+	ifstream in;
+	ofstream out;
+	string name;
+	int key_main[5];
+	int key_stars[2];
+	in.open("file.txt");
+	out.open("new.txt");
+	out << "KEY = ";
+	for (int i = 0; i < 5; ++i) {
+		int num;
+		cout << "Insert a number between 1 and 50" << endl;
+		cin >> num;
+		key_main[i] = num;
+		string nums = to_string(num);
+		if (num < 10) nums = " " + nums;
+		out << nums << " ";
+	}
+	out << "- ";
+	for (int i = 0; i < 2; ++i) {
+		int num;
+		cout << "Insert a number between 1 and 12" << endl;
+		cin >> num;
+		key_stars[i] = num;
+		string nums = to_string(num);
+		if (num < 10) nums = " " + nums;
+		out << nums << " ";
+	}
+	out << endl;
+	while (!in.eof()) {
+		string line;
+		istringstream iss;
+		int num;
+		int total_main = 0;
+		int total_stars = 0;
+		int right_main = 0;
+		int right_stars = 0;
+		getline(in, line);
+		iss.str(line);
+		iss >> num;
+		if (iss.fail()) {
+			out << line << endl;
+			iss.clear();
+			continue;
+		}
+		while (true) {		// main nums
+			++total_main;
+			for (int i = 0; i < 5; ++i) {
+				if (num == key_main[i]) {
+					++right_main;
+					break;
+				}
+			}
+			string nums = to_string(num);
+			if (num < 10) nums = " " + nums;
+			out << nums + " ";
+			iss >> num;
+			if (iss.fail()) {
+				iss.clear();
+				break;
+			}
+		}
+		out << "- ";
+		while (iss.rdbuf()->in_avail() != 0) {	//star nums
+			iss >> num;
+			++total_stars;
+			for (int i = 0; i < 2; ++i) {
+				if (num == key_stars[i]) {
+					++right_stars;
+					break;
+				}
+			}
+			string nums = to_string(num);
+			if (num < 10) nums = " " + nums;
+			out << nums + " ";
+		}
+		out << "=> ";
+		string maint, start, mainr, starr;
+		maint = to_string(total_main);
+		if (total_main < 10) maint = " " + maint;
+		start = to_string(total_stars);
+		if (total_stars < 10) start = " " + start;
+		mainr = to_string(right_main);
+		if (right_main < 10) mainr = " " + mainr;
+		starr = to_string(right_stars);
+		if (right_stars < 10) starr = " " + starr;
+		out << maint << "-" << start << " | " << mainr << "-" << starr << endl;
+	}
+	in.close();
+	out.close();
+}
+
+
+14)
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <cstring>
+#include <cmath>
+#include <fstream>
+#include <sstream>
+using namespace std;
+
+struct Person
+{
+	char name[10];
+	unsigned int phone;
+};
+
+void showAllFileContents(iostream& f)
+{
+	Person p;
+	cout << "All contents:\n";
+	f.clear();
+	f.seekg(0);
+	int count = 0;
+	while (f.read((char*)&p, sizeof(Person)))
+		cout << count++ << " - " << setw(10) << p.name << " / " << setw(2) << p.phone << endl;
+
+}
+
+void add(iostream& f) {
+	f.clear();
+	int pos = 0;
+	Person p;
+	bool equal = true;
+	f.seekg(0, ios::beg);
+	while (f.read((char*)&p, sizeof(Person))) {
+		equal = true;
+		for (int i = 0; i < 10; ++i) {
+			if (p.name[i] != '\0') {
+				equal = false;
+				break;
+			}
+		}
+		if (equal) break;
+		++pos;
+	}
+	Person p2;
+	cout << "Insert the name and phone number" << endl;
+	cin >> p2.name >> p2.phone;
+	if (equal) {
+		f.seekp(pos * sizeof(Person));
+		f.write((char*)&p2, sizeof(Person));
+	}
+	else {
+		f.clear();
+		f.seekp(0, ios::end);
+		f.write((char*)&p2, sizeof(Person));
+	}
+}
+
+void remove_person(iostream& f, int n) {
+	f.clear();
+	f.seekp(n * sizeof(Person));
+	Person p;
+	for (int i = 0; i < 10; ++i) p.name[i] = '\0';
+	p.phone = 000000000;
+	f.write((char*)&p, sizeof(Person));
+}
+
+void modify(iostream& f, int n) {
+	Person p;
+	cin >> p.name >> p.phone;
+	f.clear();
+	f.seekp(n * sizeof(Person));
+	f.write((char*)&p, sizeof(Person));
+}
+
+void search(iostream& f, char name[]) {
+	Person p;
+	bool equal = true;
+	f.clear();
+	f.seekg(0, ios::beg);
+	while (f.read((char*)&p, sizeof(Person))) {
+		equal = true;
+		for (int i = 0; i < 10; ++i) {
+			if (name[i] != p.name[i]) {
+				equal = false;
+				break;
+			}
+		}
+		if (equal) break;
+	}
+	if (equal) {
+		cout << "The number is " << p.phone << endl;
+	}
+}
+
+void main()
+{
+	int choice, n;
+	fstream f("persons.dat", ios::binary | ios::in | ios::out);
+	while (!cin.eof()) {
+		showAllFileContents(f);
+		cout << "(1) Add a new person" << endl << "(2) Remove the record of an existing person" << endl << "(3) Modify the phone number of an existing person" << endl;
+		cout << "(4) Search for the phone number of a person" << endl << endl << "Type a number from 1 to 4 to choose the operation you want" << endl;
+		cin >> choice;
+		switch (choice) {
+		case 1:
+			add(f);
+			break;
+		case 2:
+			cout << "What's the record you want to delete?" << endl;
+			cin >> n;
+			remove_person(f, n);
+			break;
+		case 3:
+			cout << "What's the record you want to change?" << endl;
+			cin >> n;
+			modify(f, n);
+			break;
+		case 4:
+			char name[10];
+			int i = 0;
+			cout << "Insert the name of the person" << endl;
+			cin >> name;
+			search(f, name);
+			break;
+		}
+	}
+}
