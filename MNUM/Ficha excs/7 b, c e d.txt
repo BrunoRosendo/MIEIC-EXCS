@@ -1,0 +1,52 @@
+import math
+
+def f1(y, z):
+    return (20+y-2*z)/4
+
+def f2(x, z):
+    return (25-x-2*z)/8
+
+def f3(x, y):
+    return (-10-3*x+y)/5
+
+def GaussJacobi(f1, f2, f3, x1, x2, x3, k):
+    for _ in range(k):
+        xa1 = x1
+        xa2 = x2
+        x1 = f1(x2, x3)
+        x2 = f2(xa1, x3)
+        x3 = f3(xa1, xa2)
+    return (x1, x2, x3)
+
+def GaussSeidel(f1, f2, f3, x1, x2, x3, k):
+    for _ in range(k):
+        x1 = f1(x2, x3)
+        x2 = f2(x1, x3)
+        x3 = f3(x1, x2)
+    return (x1, x2, x3)
+
+SolJacobi = GaussJacobi(f1, f2, f3, 0, 0, 0, 5)
+SolSeidel = GaussSeidel(f1, f2, f3, 0, 0, 0, 5)
+SolExata = (9.359, 3.675, -6.880)
+
+print("ALIENEA B")
+print(SolJacobi)
+
+print("\nALINEA C")
+print(SolSeidel)
+
+print("\nALINEA D")
+
+Ejx = abs(SolJacobi[0]-SolExata[0])/SolExata[0]
+Ejy = abs(SolJacobi[1]-SolExata[1])/SolExata[1]
+Ejz = abs(SolJacobi[2]-SolExata[2])/SolExata[2]
+ErroJacobi = (Ejx, Ejy, Ejz)
+
+Esx = abs(SolSeidel[0]-SolExata[0])/SolExata[0]
+Esy = abs(SolSeidel[1]-SolExata[1])/SolExata[1]
+Esz = abs(SolSeidel[2]-SolExata[2])/SolExata[2]
+ErroSeidel = (Esx, Esy, Esz)
+
+
+print("Erro de Jacobi: ", ErroJacobi)
+print("Erro de Seidel: ", ErroSeidel)

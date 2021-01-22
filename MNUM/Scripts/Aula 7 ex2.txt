@@ -1,0 +1,28 @@
+import math
+
+def dfdx(x, y):
+    return 0.5*math.cos(x/2) + 2*x
+
+def dfdy(x, y):
+    return math.sin(y)
+
+def H(x, y):
+    return [[-0.25*math.sin(x/2) + 2, 0], [0, math.cos(y)]]
+
+def HInv(x, y):
+    return [[1/(-0.25*math.sin(x/2) + 2), 0], [0, 1/math.cos(y)]]
+
+tol = 0.001
+
+def quadrica(dfdx, dfdy, H, x, y):
+    while True:
+        xa = x
+        ya = y
+        grad = [dfdx(x, y), dfdy(x, y)]
+        HInv = H(x, y)
+        x = x - (HInv[0][0]*grad[0] + HInv[0][1]*grad[1])
+        y = y - (HInv[1][0]*grad[0] + HInv[1][1]*grad[1])
+        if abs(x-xa) <= tol and abs(y-ya) <= tol:
+            return (x, y)
+
+print("Solucao= ", quadrica(dfdx, dfdy, HInv, -3, -1))

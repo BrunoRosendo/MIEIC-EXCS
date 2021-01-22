@@ -1,0 +1,29 @@
+import math
+
+def RK2(yp, zp, x0, xf, y0, z0, h):
+    y = y0
+    z = z0
+    while (round(x0, 20) < xf):
+        ya = y
+        y = y + h*yp(x0 + h/2, y + (h/2)*yp(x0, y, z), z + (h/2)*zp(x0, y, z))
+        z = z + h*zp(x0 + h/2, ya + (h/2)*yp(x0, ya, z), z + (h/2)*zp(x0, ya, z))
+        x0 += h
+    return (y, z)
+
+
+def yp(x, y, z):
+    return z
+
+def zp(x, y, z):
+    return 0.5*z - y
+
+
+s = RK2(yp, zp, 0, 4, 2, 0, 0.01)
+sp = RK2(yp, zp, 0, 4, 2, 0, 0.01/2)
+spp = RK2(yp, zp, 0, 4, 2, 0, 0.01/4)
+qc = ((sp[0]-s[0])/(spp[0]-sp[0]), (sp[1]-s[1])/(spp[1]-sp[1]))
+e = ((spp[0]-sp[0])/ (2-1), (spp[1]-sp[1])/ (2-1))
+
+print("S= ", s)
+print("Qc = ", qc)
+print("E= ", e)

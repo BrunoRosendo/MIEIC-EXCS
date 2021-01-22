@@ -1,0 +1,38 @@
+import math
+
+def f(x, y):
+    return math.sin(x/2) + x**2 - math.cos(y)
+
+def dfdx(x, y):
+    return 0.5*math.cos(x/2) + 2*x
+
+def dfdy(x, y):
+    return math.sin(y)
+
+def H(x, y):
+    return [[-0.25*math.sin(x/2) + 2, 0], [0, math.cos(y)]]
+
+def HInv(x, y):
+    return [[1/(-0.25*math.sin(x/2) + 2), 0], [0, 1/math.cos(y)]]
+
+tol = 0.001
+
+def LM(f, dfdx, dfdy, H, x, y, lamb):
+    while True:
+        xa = x
+        ya = y
+        fa = f(x, y)
+        grad = [dfdx(x, y), dfdy(x, y)]
+        Hinv = H(x, y)
+        x = x - lamb*grad[0] - (Hinv[0][0]*grad[0] + Hinv[0][1]*grad[1])
+        y = y - lamb*grad[1] - (Hinv[1][0]*grad[0] + Hinv[1][1]*grad[1])
+        if (f(x, y) > fa):
+            lamb /= 2
+            x = xa
+            y = ya
+        else:
+            lamb *= 2
+        if abs(x-xa) <= tol and abs(y-ya) <= tol:
+            return (x, y)
+
+print("Sol= ", LM(f, dfdx, dfdy, HInv, -10, -1, 0.01))

@@ -1,0 +1,103 @@
+import math
+
+def yp(x, y):
+    return x**2 + y**2
+
+def EulerStep(f, x0, xf, y0, h):
+    y = y0
+    x = x0
+    while round(x, 2) < xf:
+        y += f(x, y)*h
+        x += h
+    return y
+
+def Euler(f, x0, xf, y0, h):
+    while True:
+        s = EulerStep(f, x0, xf, y0, h)
+        sp = EulerStep(f, x0, xf, y0, h/2)
+        spp = EulerStep(f, x0, xf, y0, h/4)
+        qc = (sp-s)/(spp-sp)
+        #print(qc)
+        #input()
+        if abs(qc-2) < 1.4:
+            break
+        h = h/2
+    print("Euler\nS= ", s, "\nQc= ", qc)
+
+
+def RK4Step(f, x0, xf, y0, h):
+    x = x0
+    y = y0
+    while round(x, 2) < xf:
+        d1 = h*f(x, y)
+        d2 = h*f(x+h/2, y+d1/2)
+        d3 = h*f(x+h/2, y+d2/2)
+        d4 = h*f(x+h, y+d3)
+        y += (d1/6 + d2/3 + d3/3 + d4/6)
+        x += h
+    return y
+
+def RK4(f, x0, xf, y0, h):
+    while True:
+        s = RK4Step(f, x0, xf, y0, h)
+        sp = RK4Step(f, x0, xf, y0, h/2)
+        spp = RK4Step(f, x0, xf, y0, h/4)
+        qc = (sp-s)/(spp-sp)
+        print(qc)
+        input()
+        if abs(qc-16) < 2:
+            break
+        h = h/2
+    print("RK4\nS= ", s, "\nQc= ", qc)
+
+
+#print("ALINEA a)\n")
+#print("y(0.7)")
+#print("Euler: ", EulerStep(yp, 0, 0.7, 0, 0.1)   )
+#print("RK4: ", RK4Step(yp, 0, 0.7, 0, 0.1))
+
+#print("\ny(1.4)")
+#print("Euler: ", EulerStep(yp, 0, 1.4, 0, 0.1))
+#print("RK4: ", RK4Step(yp, 0, 1.4, 0, 0.1))
+
+
+#print("ALINEA b)\n")
+#print("h'\n")
+#print("y(0.7)")
+#print("Euler: ", EulerStep(yp, 0, 0.7, 0, 0.1/2))
+#print("RK4: ", RK4Step(yp, 0, 0.7, 0, 0.1/2))
+
+#print("\ny(1.4)")
+#print("Euler: ", EulerStep(yp, 0, 1.4, 0, 0.1/2))
+#print("RK4: ", RK4Step(yp, 0, 1.4, 0, 0.1/2))
+
+#print("h''\n")
+#print("y(0.7)")
+#print("Euler: ", EulerStep(yp, 0, 0.7, 0, 0.1/4)   )
+#print("RK4: ", RK4Step(yp, 0, 0.7, 0, 0.1/4))
+
+#print("\ny(1.4)")
+#print("Euler: ", EulerStep(yp, 0, 1.4, 0, 0.1/4))
+#print("RK4: ", RK4Step(yp, 0, 1.4, 0, 0.1/4))
+
+
+#print("ALIENEA C")
+#print("Euler:\n Qc= ")
+se = EulerStep(yp, 0, 0.7, 0, 0.1)
+spe = EulerStep(yp, 0, 0.7, 0, 0.1/2)
+sppe = EulerStep(yp, 0, 0.7, 0, 0.1/4)
+qc = (spe-se)/(sppe-spe)
+#print(qc)
+
+#print("RK4:\n Qc= ")
+s = RK4Step(yp, 0, 0.7, 0, 0.1)
+sp = RK4Step(yp, 0, 0.7, 0, 0.1/2)
+spp = RK4Step(yp, 0, 0.7, 0, 0.1/4)
+qc2 = (sp-s)/(spp-sp)
+#print((sp-s)/(spp-sp))
+
+print("ALINEA D")
+e_euler = (sppe-spe)/(2-1)
+e_rk4 = (spp-sp)/(16 - 1)
+print("Euler error = ", e_euler)
+print("RK4 error = ", e_rk4)

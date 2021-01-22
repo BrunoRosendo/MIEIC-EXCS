@@ -1,0 +1,61 @@
+import math
+
+def f(x):
+    return math.sin(x)
+
+def trapezio(h, f, n, xi, xf):
+    area = f(xi) + f(xf)
+    sum = 0
+    for i in range(1, n-1):
+        sum += f(h*i)
+    area += 2*sum
+    area = (h/2)*area
+    return area
+
+
+def simpson(h, f, n, xi, xf):
+    area = f(xi) + f(xf)
+    sum1 = 0
+    sum2 = 0
+    for i in range(1, 2*n-1, 2):
+        sum1 += f(i*h)
+    for i in range(2, 2*n-2, 2):
+        sum2 += f(i*h)
+    area += 4*sum1 + 2* sum2
+    area *= (h/3)
+    return area
+
+xf = math.pi
+sol = 2
+
+print("REGRA DOS TRAPEZIOS")
+print()
+for n in [4, 8, 16, 64]:
+    h = xf/n
+    s = trapezio(h, f, n, 0, xf)
+    sp = trapezio(h/2, f, n, 0, xf)
+    spp = trapezio(h/4, f, n, 0, xf)
+    qc = (sp-s)/(spp-sp)
+    print("n= ", n)
+    print("h= ", h)
+    print("s= ", s)
+    print("e= ", abs(sol-s))
+    print("qc = ", qc)
+    print()
+
+
+print("REGRA DE SIMPSON")
+print()
+
+for n in [4, 8, 16, 64]:
+    h = xf/(2*n)
+    s = simpson(h, f, n, 0, xf)
+    sp = simpson(h/2, f, n, 0, xf)
+    spp = simpson(h/4, f, n, 0, xf)
+    qc = (sp-s)/(spp-sp)
+    print("n= ", n)
+    print("h= ", h)
+    print("s= ", s)
+    print("e= ", abs(sol-s))
+    print("qc = ", qc)
+    print()

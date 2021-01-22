@@ -1,0 +1,44 @@
+import math
+
+def RK4(yp, zp, x, xf, y, z, h):
+    while round(x, 2) < xf:
+        yd1 = h*yp(x, y, z)
+        zd1 = h*zp(x, y, z)
+        yd2 = h*yp(x + h/2, y + yd1/2, z + zd1/2)
+        zd2 = h*zp(x + h/2, y + yd1/2, z + zd1/2)
+        yd3 = h*yp(x + h/2, y + yd2/2, z + zd2/2)
+        zd3 = h*zp(x + h/2, y + yd2/2, z + zd2/2)
+        yd4 = h*yp(x + h, y + yd3, z + zd3)
+        zd4 = h*zp(x + h, y + yd3, z + zd3)
+
+        y = y + yd1/6 + yd2/3 + yd3/3 + yd4/6
+        z = z + zd1/6 + zd2/3 + zd3/3 + zd4/6
+        x += h
+    return (y, z)
+
+def yp(x, y, z):
+    return z
+
+def zp(x, y, z):
+    return -0.6*z -8*y
+
+print("x=0.1:")
+s1 = RK4(yp, zp, 0, 0.1, 4, 0, 0.1)
+s1p = RK4(yp, zp, 0, 0.1, 4, 0, 0.1/2)
+s1pp = RK4(yp, zp, 0, 0.1, 4, 0, 0.1/4)
+qc = ((s1p[0]-s1[0])/(s1pp[0]-s1p[0]), (s1p[1]-s1[1])/(s1pp[1]-s1p[1]))
+e = ((s1pp[0]-s1p[0])/(16-1), (s1pp[1]-s1p[1])/(16-1))
+print("S= ", s1)
+print("Qc= ", qc)
+print("E= ", e)
+
+
+print("\nx=0.5")
+s2 = RK4(yp, zp, 0, 0.5, 4, 0, 0.1)
+s2p = RK4(yp, zp, 0, 0.5, 4, 0, 0.1/2)
+s2pp = RK4(yp, zp, 0, 0.5, 4, 0, 0.1/4)
+qc2 = ((s2p[0]-s2[0])/(s2pp[0]-s2p[0]), (s2p[1]-s2[1])/(s2pp[1]-s2p[1]))
+e2 = ((s2pp[0]-s2p[0])/(16-1), (s2pp[1]-s2p[1])/(16-1))
+print("S= ", s2)
+print("Qc= ", qc2)
+print("E= ", e2)

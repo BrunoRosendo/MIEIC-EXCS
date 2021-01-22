@@ -1,0 +1,47 @@
+import math
+
+def Trapezio(f, h, x0, xf):
+    n = int((xf-x0)//h)
+    result = f(x0)+f(xf)
+    sum = 0;
+    for i in range(1, n):
+        sum += f(x0 + h*i)
+    result = (h/2)*(result + 2*sum)
+    return result
+
+
+def Simpson(f, h, x0, xf):
+    n = int((xf-x0)//(2*h))
+    sum1 = 0
+    sum2 = 0
+    for i in range(1, 2*n, 2):
+        sum1 += f(x0+h*i)
+    for i in range(2, 2*n -1, 2):
+        sum2 += f(x0 + h*i)
+    result = (h/3) * (f(x0) + f(xf) + 4*sum1 +2*sum2)
+    return result
+
+def f(x):
+    return (math.e**(x-2))/x
+
+trap1 = Trapezio(f, 1, 1, 5)
+trap2 = Trapezio(f, 0.5, 1, 5)
+trap3 = Trapezio(f, 0.25, 1, 5)
+qc = (trap2-trap1)/(trap3-trap2)
+
+simp1 = Simpson(f, 1, 1, 5)
+simp2 = Simpson(f, 0.5, 1, 5)
+simp3 = Simpson(f, 0.25, 1, 5)
+qc2 = (simp2-simp1)/(simp3-simp2)
+
+print("TRAPEZIO")
+print(trap1)
+print(trap2)
+print(trap3)
+print("QC= ", qc)
+
+print("\nSIMPSON")
+print(simp1)
+print(simp2)
+print(simp3)
+print("QC= ", qc2)

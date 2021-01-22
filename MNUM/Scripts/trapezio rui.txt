@@ -1,0 +1,26 @@
+import math
+import decimal
+
+def float_range(start, stop, step):
+  while start < stop:
+    yield float(start)
+    start += step
+
+#funcao dentro do integral
+def f1(num):
+    return 1-math.exp(1)**(-2*num)
+
+#min é o limite inferior
+#max e o limite superior
+#n é o numero de divisoes do intervalo
+def trapezio(min, max, n):
+    h1 = float((max-min)/n)
+    result1 = h1/2*(f1(min) + f1(max) + 2*(sum(f1(i) for i in float_range(min + h1, max, h1))))
+    return result1
+        
+
+print(trapezio(0, 4, 32))
+
+QC1 = (trapezio(0, 4, 8) - trapezio(0, 4, 4))/(trapezio(0, 4, 16)-trapezio(0, 4, 8))
+QC2 = (trapezio(0, 4, 32) - trapezio(0, 4, 16))/(trapezio(0, 4, 64)-trapezio(0, 4, 32))
+print("QC:",QC2)

@@ -1,0 +1,59 @@
+import math
+
+tol = 0.001
+
+def gradienteMin(f, dfdx, dfdy, x, y, h):
+    while True:
+        fa = f(x, y)
+        xa = x
+        ya = y
+        x = x - h*dfdx(x, y)
+        y = y - h*dfdy(xa, y)
+        ex = abs(xa-x)
+        ey = abs(ya-y)
+        if ex <= tol and ey <= tol:
+            return (x, y)
+        if f(x, y) < fa:
+            h *= 2
+        else:
+            h /= 2
+            x = xa
+            y = ya
+
+def gradienteMax(f, dfdx, dfdy, x, y, h):
+    while True:
+        fa = f(x, y)
+        xa = x
+        ya = y
+        x = x + h*dfdx(x, y)
+        y = y + h*dfdy(xa, y)
+        ex = abs(xa-x)
+        ey = abs(ya-y)
+        if ex <= tol and ey <= tol:
+            return (x, y)
+        if f(x, y) > fa:
+            h *= 2
+        else:
+            h /= 2
+
+def f(x, y):
+    return y**2 - 2*x*y - 6*y +2*x**2 + 12
+
+def dfdx(x, y):
+    return -2*y + 4*x
+
+def dfdy(x, y):
+    return 2*y -2*x -6
+
+print("Minimo= ", gradienteMin(f, dfdx, dfdy, 1, 1, 1))
+
+def f2(x, y):
+    return x*y*2 +2*x - x**2 -2*y**2
+
+def df2dx(x, y):
+    return 2*y + 2 - 2*x
+
+def df2dy(x, y):
+    return 2*x - 4*y
+
+print("Maximo= ", gradienteMax(f2, df2dx, df2dy, -1, 1, 1))

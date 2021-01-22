@@ -1,0 +1,35 @@
+def f(x, y):
+    return x**2 - 2*y**2 + x*y**3
+
+x0 = 0
+xf = 2
+hx = (xf-x0)//2
+y0 = -1
+yf =1
+hy = (yf-y0)//2
+
+
+E0 = f(x0, y0) + f(x0, yf) + f(xf, y0) + f(xf, yf)
+E1 = 0
+for x in range(x0+hx, xf, hx):
+    E1 += f(x, y0) + f(x, yf)
+
+for y in range(y0+hy, yf, hy):
+    E1 += f(x0, y) + f(xf, y)
+
+E2 = 0
+
+for x in range(x0 + hx, xf, hx):
+    for y in range(y0 + hy, yf, hy):
+        E2 += f(x, y)
+
+
+print("TRAPEZIO")
+
+trap = (hx*hy)/4*(E0 + 2*E1 + 4*E2)
+print(trap)
+
+print("\nSIMPSON")
+
+simp = (hx*hy)/9*(E0 + 4*E1 + 16*E2)
+print(simp)

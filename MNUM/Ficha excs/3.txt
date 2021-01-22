@@ -1,0 +1,38 @@
+import math
+
+def RK4(yp, zp, x, xf, y, z, h):
+    while round(x, 2) < xf:
+        yd1 = h*yp(x, y, z)
+        zd1 = h*zp(x, y, z)
+        yd2 = h*yp(x + h/2, y + yd1/2, z + zd1/2)
+        zd2 = h*zp(x + h/2, y + yd1/2, z + zd1/2)
+        yd3 = h*yp(x + h/2, y + yd2/2, z + zd2/2)
+        zd3 = h*zp(x + h/2, y + yd2/2, z + zd2/2)
+        yd4 = h*yp(x + h, y + yd3, z + zd3)
+        zd4 = h*zp(x + h, y + yd3, z + zd3)
+
+        y = y + yd1/6 + yd2/3 + yd3/3 + yd4/6
+        z = z + zd1/6 + zd2/3 + zd3/3 + zd4/6
+        x += h
+    return (y, z)
+
+def yp0(x, y, z):
+    return 4*math.e**(-x)
+
+def yp2(x, y, z):
+    return -2*y + 4*math.e**(-x)    # Works for K = 2
+
+def yp6(x, y, z):
+    return -6*y + 4*math.e**(-x)
+
+def zp(x, y, z):
+    return -(y*z**2)/3
+
+
+s1 = RK4(yp0, zp, 0, 0.1, 2, 4, 0.1)
+s2 = RK4(yp2, zp, 0, 0.1, 2, 4, 0.1)
+s3 = RK4(yp6, zp, 0, 0.1, 2, 4, 0.1)
+
+print(s1[0], " ", s1[1])
+print(s2[0], " ", s2[1])
+print(s3[0], " ", s3[1])

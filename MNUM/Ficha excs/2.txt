@@ -1,0 +1,69 @@
+import math
+
+def yp(x, y, z):
+    return z*y +x
+
+def zp(x, y, z):
+    return z*x + y
+
+
+def Euler(yp, zp, x0, xf, y0, z0, h):
+    y = y0
+    z = z0
+    while (round(x0, 2) < xf):
+        ya = y
+        y = y + yp(x0, y, z) * h
+        z = z + zp(x0, ya, z)*h
+        x0 += h
+    return (y, z)
+
+def RK2(yp, zp, x0, xf, y0, z0, h):
+    y = y0
+    z = z0
+    while (round(x0, 2) < xf):
+        ya = y
+        y = y + h*yp(x0 + h/2, y + (h/2)*yp(x0, y, z), z + (h/2)*zp(x0, y, z))
+        z = z + h*zp(x0 + h/2, ya + (h/2)*yp(x0, ya, z), z + (h/2)*zp(x0, ya, z))
+        x0 += h
+    return (y, z)
+
+
+
+#print("ALINEA A\n")
+#print("Euler: ")
+euler1 = Euler(yp, zp, 0, 0.1, 1, 1, 0.05)
+euler2 = Euler(yp, zp, 0, 0.5, 1, 1, 0.05)
+#print("(x=0.1) y= ", euler1[0], " z= ", euler1[1])
+#print("(x=0.5) y= ", euler2[0], " z= ", euler2[1])
+
+rk1 = RK2(yp, zp, 0, 0.1, 1, 1, 0.05)
+rk2 = RK2(yp, zp, 0, 0.5, 1, 1, 0.05)
+
+#print("RK2: ")
+#print("(x=0.1) y= ", rk1[0], " z= ", rk1[1])
+#print("(x=0.5) y= ", rk2[0], " z= ", rk2[1])4
+
+print("ALINEA B\n")
+print("Euler: ")
+sp = Euler(yp, zp, 0, 0.5, 1, 1, 0.05/2)
+spp = Euler(yp, zp, 0, 0.5, 1, 1, 0.05/4)
+qcy = (sp[0]-euler2[0])/(spp[0]-sp[0])
+qcz = (sp[1]-euler2[1])/(spp[1]-sp[1])
+print("qcy: ", qcy, " qcz: ", qcz)
+
+ey = (spp[0]-sp[0])/(2-1)
+ez = (spp[1]-sp[1])/(2-1) # 2 porque é o mais proximo de qc
+print("ey: ", ey, " ez: ", ez)
+
+print("\nRK2: ")
+
+sp2 = RK2(yp, zp, 0, 0.5, 1, 1, 0.05/2)
+spp2 = RK2(yp, zp, 0, 0.5, 1, 1, 0.05/4)
+qcy2 = (sp2[0]-rk2[0])/(spp2[0]-sp2[0])
+qcz2 = (sp2[1]-rk2[1])/(spp2[1]-sp2[1])
+print(rk2[0], " ", sp2[0], " ", spp2[0])
+print("qcy: ", qcy2, " qcz: ", qcz2)
+
+ey2 = (spp2[0]-sp2[0])/(4-1)
+ez2 = (spp2[1]-sp2[1])/(4-1) 
+print("ey: ", ey2, " ez: ", ez2)

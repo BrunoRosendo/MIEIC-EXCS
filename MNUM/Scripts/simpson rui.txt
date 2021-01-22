@@ -1,0 +1,27 @@
+import math
+import decimal
+
+def float_range(start, stop, step):
+  while start < stop:
+    yield float(start)
+    start += step
+
+#funcao dentro do integral
+def f1(num):
+    return 1-math.exp(1)**(-2*num)
+
+
+#min é o limite inferior
+#max e o limite superior
+#n é o numero de divisoes do intervalo
+def simpson(min, max, n):
+    h = float((max-min)/n)/2
+    sum1= sum(f1(i) for i in float_range(min + h, max, 2*h))
+    sum2= sum(f1(i) for i in float_range(min+2*h, max-h, 2*h))
+    result = h/3*(f1(min) + f1(max) + 4*sum1+ 2*sum2)
+    return result
+
+print(simpson(0, 4, 64))
+
+QC = (simpson(0, 4, 32) - simpson(0, 4, 16))/(simpson(0, 4, 64)-simpson(0, 4, 32))
+print("QC:",QC)

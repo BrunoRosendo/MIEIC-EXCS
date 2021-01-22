@@ -1,0 +1,24 @@
+import math
+
+def dxdy(y, x):
+    return x*y**2-1.1*x
+
+def EulerStep(f, x0, xf, y0, h):
+    y = y0
+    x = x0
+    while round(x, 2) < xf:
+        y += f(x, y)*h
+        x += h
+    return y
+
+s = EulerStep(dxdy, 0, 2.4, 1, 0.8)
+sp = EulerStep(dxdy, 0, 2.4, 1, 0.4)
+spp= EulerStep(dxdy, 0, 2.4, 1, 0.2)
+print(s)
+print(sp)
+print(spp)
+
+qc = (sp-s)/(spp-sp)
+print("Qc= ", qc)
+e = (sp-s)/(2-1)
+print("E= ", e)
