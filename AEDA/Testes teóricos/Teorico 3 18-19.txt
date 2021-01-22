@@ -1,0 +1,22 @@
+1-D
+2-A
+3-B
+4-D
+5-D
+6-C
+7-B
+8-A
+
+9-Penso que a estrutura mais adequada seria a tabela de dispersão, usando o prefixo como
+chave para a tabela, tendo um array (ou uma lista ligada) com o conjunto de palavras que
+usa esse prefixo
+
+10- Conjuntos:
+
+1, 11
+5
+6, 8, 0, 2, 12, 9, 7, 3, 4
+10
+
+Eu verifiquei o que pude mas as respostas podem não estar 100% certas
+(Podem mandar PM para corrigir)

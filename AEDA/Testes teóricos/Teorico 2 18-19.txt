@@ -1,0 +1,15 @@
+1-A
+2-D
+3-A
+4-D
+5-C
+6-C
+7-E
+8-B
+
+9-Lista duplamente ligada, visto que é apenas necessário trocar o head e a tail,
+e trocar os pointers para avançar e recuar, em cada nó.
+
+10- O vetor tem acesso em tempo constante mas inserção e remoçao em tempo linear numa posiçao dada,
+enquanto que a lista tem acesso em tempo linear e inserção e remoçao em tempo constante.
+

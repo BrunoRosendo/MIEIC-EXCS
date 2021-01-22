@@ -1,0 +1,16 @@
+1-B
+2-C
+3-C
+4-B
+5-A
+6-C
+7-B
+8-C
+
+9- A afirmação é verdadeira, visto que podemos usar métodos "virtual" para especificar
+funções de acordo com o contexto, ou seja, de acordo com a classe derivada (ou base).
+
+10- A vantagem é que a pesquisa binária tem uma complexidade temporal O(log(n)), enquanto
+que a pesquisa sequencial tem complexidade temporal O(n).
+A desvantagem é que, para usar pesquisa binária, o vetor tem que estar ordenada, ao
+contrário da pesquisa sequencial.
