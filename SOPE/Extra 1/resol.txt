@@ -1,0 +1,8 @@
+1- a) | for pipeline and & for background
+
+2- b) Um programa em C precisa sempre duma funcao main para ser compilado
+
+7- b) O ultimo handler a ser instalado é o primeiro a ser executado.
+É possivel instalar um handler mais que uma vez.
+Os handlers nao sao ativados, visto que foi uma paragem anormal do programa.
+Os handlers correm normalmente (paragem normal do programa).

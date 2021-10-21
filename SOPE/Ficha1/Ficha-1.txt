@@ -1,0 +1,30 @@
+1-
+a) F
+b) Usando -Wall, recebemos o warning de unused variables, por exemplo
+
+2- Com dynamic linking, o tamanho do programa vai ser significativamente menor, já que não sao copiadas as dependências do
+programa para o executável, ocorrendo estas em runtime, podendo eventualmente ser partilhadas com outros programas, 
+poupando memória e disco.
+Programas dynamic linked normalmente são mais lentos que os statically linked, visto que os primeiros têm de copiar as
+dependências em runtime, que ainda nao estejam presentes e a ser usadas por outros programas.
+
+3-
+a) atexit won't be useful when a running program is suddenly terminated, since atexit is only called on normal
+program termination and ctrl-C is considered abnormal program termination
+
+5- Command line arguments sao os argumentos passados para o programa através da linha de comandos. Estes são parametrizados
+no main com argc e argv, onde argc é o numero de arugmentos e argv um array com os argumentos em si.
+Environment variables are global variables that can affect the way the running process will behave on the system
+
+6- A system call open pode falhar por varias razoes, entre elas, por o pathname ser demasiado longo, criando o erro
+ENAMETOOLONG. Ou entao, por ter a flag O_RDONLY (apenas ler) e o ficheiro nao existir
+
+7- Management of computers resources such as CPU, memory, etc.
+   Execution of services provided by application software.
+
+8- iii
+
+9-
+a) sudo date -s "20220913"
+b) read/write
+

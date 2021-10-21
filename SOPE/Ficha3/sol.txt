@@ -1,0 +1,38 @@
+4-
+A mutex provides mutual exclusion, either producer or consumer can have the key (mutex) and proceed with their work.
+As long as the buffer is filled by producer, the consumer needs to wait, and vice versa.
+
+A semaphore is a generalized mutex. Instead of a single buffer, we can split a 4 KB buffer into four 1 KB buffers
+(identical resources). A semaphore can be associated with these four buffers. The consumer and producer can work on different
+buffers at the same time.
+
+5- O process a espera nao vai conseguir fazer mais nada e vai gastar CPU na mesma (busy waiting).
+Alem disso, os processos têm de completar o que querem fazer até ao fim para o próximo poder usar a regiao (strict alternation)
+Race condition???
+
+6- pause only returns when a signal was caught and the signal-catching function returned.
+If the function doesn't return, the child will wait forever.
+Also, there may be race conditions. For example, a different signal might arrive which will cancel the activation of
+our handler function and it will never be called, and so, the child process will wait forever.
+
+8-
+i) Se houver uma situacao (que é possivel neste exemplo) onde todos os filósofos pegam no garfo da esquerda
+"ao mesmo tempo", o programa fica parado e todos ficam à espera do garfo da direita 
+ii) Pode ocorrer starvation se forem sempre apenas os mesmos 2/3 filósofos a comer e os outros so esperarem
+
+9-
+i) Os clientes podem chegar ao mesmo tempo e, como o tempo de ver o que o barbeiro está a fazer é indeterminado,
+podem decidir os 2 sentar numa mesma cadeira à espera que ele acabe de cortar. O mesmo pode acontecer se ele estiver a dormir,
+indo os dois cortar o cabelo ao mesmo tempo (overbooking).
+
+ii) Um cliente, ao chegar, pode ver o barbeiro a cortar o cabelo e ir para a sala de espera. No entanto, antes do cliente se sentar,
+o barbeiro acaba o corte e verifica se está alguém na sala de espera. Como o cliente ainda não chegou ao local (o barbeiro é mais
+rápido), o barbeiro pensa que não está ningúem e vai dormir. Aí, o cliente senta-se na sala de espera e ficam os dois à espera
+um do outro (deadlock)
+
+10-
+i) Se um thread tiver uma operação na memória partilhada que demora muito tempo e o fizer frequentemente, os outros threads
+vão estar bloquados a maior parte do tempo.
+ii) Para resolver o problema, pode-se fazer com que nenhum thread acesse a memória partilhada ao mesmo tempo.
+No entanto, isto é desnecessário para threads que só querem ler a memória e vai baixar a taxa de transferência mais do que é
+preciso.

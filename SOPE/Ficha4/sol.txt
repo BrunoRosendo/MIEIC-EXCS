@@ -1,0 +1,45 @@
+1-a)
+i) 20, 10, 18 (17)
+ii) 18, 10, 20 (17)
+iii) 12, 10, 9 (0)
+iv) 20, 18, 15 (22)
+
+b) iii, i/ii, iv
+
+2-
+Advantages of Variable partitioning:
+- No internal fragmentation, since memory is allocated strictly according to the need of the process
+- No limitation on the size of the process, since the memory is allocated according to its size
+- Degree of multiprogramming is dynamic (since there isn't internal fragmentation)
+
+Disadvantages of Variable partitioning:
+- External fragmentation (empty blocks of memory)
+- Complex memory allocation
+
+Advantages of paging:
+- External fragmentation can be avoided by using the same size to all pages (frames)
+- Frames do not need to be contiguous, hence no unecessary empty blocks of memory
+- Swapping is easy between equal-sized pages
+
+Disadvantages of paging:
+- May cause internal fragmentation (i.e. older systems)
+- Page tables consume extra memory
+
+3- That would be limiting each process's memory to be contiguous, which is not the point of paging. A process can have its
+memory shared between multiple pages. We'd be falling into the same problems as in variable partitioning
+
+9- a) Since we are using gets, an unsafe function which does not take the size of the buffer into account, the user
+could overflow the stack and change the pass variable by himself, gaining acccess to the privileges
+
+10- We can overflow the function's return value
+
+11- Segmentation is slower than pagination and can have external fragmentation
+Segmentation allows programs and data to be broken up into logically independent address spaces and to aid sharing and protection
+
+We can combine both to get the best of both worlds but there are still some disadvantages like internal fragmentation
+, higher complexity and that page tables need to be contiguously stored in memory
+
+12- i) 2
+ii) 1
+iii) 3
+iv) 1 (it already had a second chance)

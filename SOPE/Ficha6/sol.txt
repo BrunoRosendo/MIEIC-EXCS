@@ -1,0 +1,84 @@
+1- Advantages:
+    - We can have random access, meaning we can read in whatever order we prefer
+    - We can also access it sequentally, with normal automatism (on reading, the marker is updated forward)
+Disadvantage:
+    - By having a mere array, it might be hard to allocate memory while preserving disk space
+
+2- i) Besides being able to sort them by name, the user can also identify the type of file by its extension
+Ex: A C program to calculate sums might be identified as sum.c
+ii) Since the web search engines access countless databases, the names for their files should be
+unique enough to allow for users to find them easily
+
+3-i) Linux doesn't use file extensions to know how to open a file but it does use them to know which program to use to
+open them. Also, it's good for convention and easier access.
+For example, a .pdf file might be open by a program like Xpfg. The user can also easily know the type of file they're opening:
+it's probably a document file in a pdf form.
+
+ii) Windows uses the file extensions to know how to open a file. If you change it, the OS also changes the way it opens
+the file and might fail to do so. That's why the file extensions are hidden by default
+
+6-
+name: Just the name of the file (ex. sol.txt)
+
+attributes: meta-data that describe and may modify how files and/or directories in a filesystem behave.
+For example, who can access the file, its password, its owner and whether it's visible or not
+
+modes: files can be open in different modes. For example, for reading only, writing only or both reading and writing
+
+permissions: files have different permissions based on the type of user and type of mode being open. For examples,
+a file can be read, executed and written by the owner but only read by the group and others.
+
+7- i) Both files and directories can be similarly created (creat and mkdir),
+open (open and opendir) and closed (close and closedir)
+ii) A file is just an array of bites, meaning that we can read a specified number of them and store them somewhere
+(buffer). The directory, in the other hand, doesn't have actual bytes stored, it just has information to files or 
+other directories, so it make sense that their read functions have different invocations
+
+9)
+1 (contiguous):
+- Easy block allocation
+- Blocks can be read sequentally and are accessed linearly
+
+- Since blocks are allocated contiguosly, space could be waster when their files are deleted in the middle. For example,
+if a bigger file has to be allocated next, it can't use the new free space (bad space management)
+
+2 (linked list):
+- Since blocks don't need to be allocated contiguosly, the memory management will be better. After a file it's deleted,
+another file can easily use the new free memory. No space is waster
+
+- Random access is slow, since we have to traverse the whole file until the point we want to access
+
+3 (linked list using allocation table in RAM):
+- No space is wasted and random access is quick, since all block pointers are stored in the index table
+
+- Table grows linearly with the disk
+
+4 (I-node):
+- No space is wasted
+- Since each file has its table with the block pointers, random access is possible and quick
+- Since only open files need to have i-nodes, it doesn't take too much memory
+
+- It is possible for a device to run out of inodes. 
+When this happens, new files cannot be created on the device, even though there may be free space available
+This is probably not a big concern
+
+10- A symbolic or soft link is an actual link to the original file,
+whereas a hard link is a mirror copy of the original file
+
+A soft link allows you to link between different directories and only has the path to the original file
+
+A hard link has the actual contents of the file, so you can still see its contents even if the original was moved
+or removed
+
+11- Using linked list, we use some free blocks (not so free anymore...) to store the free block numbers. They are linked
+to each other, connecting them
+Using a bitmap, there is a bit to each block on the disk (if the bit is 1, the block is free)
+
+Example (500 GiB disk with 4 KiB blocks):
+Assuming 16-bit number to store the block number
+
+Linked list:
+We need, at most, 64031 blocks to store all information
+
+Bit map:
+We need 64000 blocks to store all the information

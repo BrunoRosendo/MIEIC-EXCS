@@ -1,0 +1,52 @@
+1- A program is an executable file which contains certain instructions and can be read as source code.
+A process is the said program while running. A thread is a task of the process (a small unit, the process is made by threads)
+
+2- a) PID (process identifier), PPID (parent process identifier), U/GID (user/group identifier who initiated the process),
+priority, current directory.
+
+b) PC (program counter), registers, stack, state, accouting information (from the process)
+
+c) ???
+
+3- a) Simple ps gives PID, terminal, cumulated cpu time and executable name of processes with the same effective user
+ps a shows all processes of a terminal (not just with the same euid)
+ps u displays user oriented format
+ps x lists all processes owned by euid
+You can combine all the commands for extra information
+
+b) ps -ejHC aux (also works without ej)
+
+c) pstree -ph ?
+
+6) Por threads:
+    Usam todas a mesma memória (do processo a que pertencem). Pode criar confusao mas tambem pode ser util
+    Sao operações mais leves, individualmente
+    Comunicaçao normalmente mais rapida
+    Sao mais vulneraveis
+Por Processos:
+    Sao independentes uns dos outros
+    Contrario da informacao dos threads
+
+7) The problem of signals is that system calls can be interrupted by them and they need special handling
+Useless as a message passing method since they dont have any kind of data content
+Subsequent signals of the same type are not queued, they are merged into just One instance.
+If multiple standard signals are pending for a process, the order they will be delivered is unspecified.
+A signal might be lost forever if not read at the right time.
+
+11) The pipe has no name, it is created for one use and both ends must be inherited from the single process which created the pipe.
+The FIFO has a name or names like any other file. Processes open the FIFO by name to communicate through it.
+
+A pipe is a communication device that permits unidirectional communication.
+It is a method of connecting the standard output (Read End) of one process to the standard input (write End) of another process.
+
+A FIFO(First In First Out) is similar to a pipe. The principal difference is that a FIFO has a name within the file system and
+is opened in the same way as a regular file. This allows a FIFO to be used for communication between unrelated processes.
+A FIFO(First In First Out) is similar to a pipe. The principal difference is that a FIFO has a name within the file system
+and is opened in the same way as a regular file. This allows a FIFO to be used for communication between unrelated processes.
+
+12) i) One process can send the color to the FIFO. Each of the other processes will then read that color from the FIFO
+and give and provide an answer (ignoring other answers)
+ii) This would only word with processes with a common ancestor. We'd have to use a pipe for sending the color and reading it on other
+processes and another to send the answer if they had the color or not
+iii) We can send a given signal when we get a color and other processes will handle that signal and send another one saying if 
+they had that color or not.
