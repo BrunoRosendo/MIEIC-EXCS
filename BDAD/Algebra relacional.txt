@@ -1,0 +1,42 @@
+1) π nr (Aluno)
+2) π cod, design (σ curso='AC' Cadeira)
+3) π Aluno.Nome (Aluno ⨝ Prof)
+4) (π Nome Aluno) - (π Nome Prof) 
+5) (π Nome Aluno) ∪ (π Nome Prof) 
+6) π Nome (Aluno ⨝  (σ cod='TS1' Prova))
+7) π nr (Aluno ⨝ (Prova ⨝ (σ curso='IS' Cadeira)))
+8) cadeiras = π cod (σ curso='IS' Cadeira)
+provas_IS = cadeiras ⨝ Prova
+provas_IS_pos = σ nota>=10 provas_IS
+alunos_pos = π cod, Nome (provas_IS_pos ⨝ Aluno)
+alunos_pos ÷ cadeiras
+
+9) γ max(nota)→max Prova
+10) γ avg(nota)->Average (σ cod='BD' Prova)
+11) γ count(*)->Number Aluno
+12) γ curso; count(*)->count Cadeira
+13) (γ nr; count(*)->count Prova) ⨝ Aluno
+14) γ avg(count)->Average (γ nr; count(*)->count Prova)
+15) provas_pos = σ nota>=10 Prova
+provas_aluno = γ nr, cod; max(nota)->max provas_pos
+medias_aluno = γ nr; avg(max)->Average provas_aluno
+medias_aluno ⨝ Aluno
+
+16) 
+max_cadeiras = γ cod; max(nota)->nota Prova
+π nota, cod, aluno γ cod, nota; min(nr)->aluno ((max_cadeiras ⨝ Prova))
+
+17) 
+provas_pos = π nr, cod (σnota>=10 Prova)
+cadeiras = π cod, curso Cadeira
+provas_por_cadeira = provas_pos ⨝ cadeiras
+
+cadeiras_aluno_curso = γ nr, curso; count(cod)->cadeiras_feitas provas_por_cadeira -- numero de cadeiras a que passou num curso
+cadeiras_curso = γ curso; count(cod)->cadeiras_totais Cadeira
+
+aluno_curso = cadeiras_aluno_curso ⨝ cadeiras_curso
+alunos_formados = πnr, curso (σcadeiras_totais=cadeiras_feitas aluno_curso)
+nomes_formados = π nr, curso, Nome (alunos_formados ⨝ Aluno)
+
+nomes_ordenados = τ curso (π Nome, curso nomes_formados)
+nomes_ordenados
