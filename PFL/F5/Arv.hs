@@ -1,3 +1,5 @@
+module Arv where
+
 data Arv a = Vazia | No a (Arv a) (Arv a)
 
 sumArv :: Num a => Arv a -> a
