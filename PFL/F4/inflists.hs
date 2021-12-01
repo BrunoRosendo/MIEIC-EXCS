@@ -1,3 +1,20 @@
+primos :: [Int]
+primos = crivo [2..]
+
+crivo :: [Int] -> [Int]
+crivo (p:xs) = p : crivo [x | x<-xs, x`mod`p/=0]
+
+fatoresAux :: Int -> [Int] -> [Int] -> [Int]
+fatoresAux 1 _ fat = fat
+fatoresAux n prime fat
+        | n `mod` next == 0 = fatoresAux (n `div` next) prime (next:fat)
+        | otherwise = fatoresAux n (tail prime) fat
+        where next = head prime
+
+fatores :: Int -> [Int]
+fatores n = fatoresAux n prime []
+  where prime = reverse (takeWhile (<= n) primos)
+
 calcPi1 :: Int -> Double
 calcPi1 n = sum (take n (zipWith (/) num den))
   where den = [1, 3..]

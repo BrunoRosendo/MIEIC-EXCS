@@ -53,8 +53,16 @@ auxPalavras xs c
               | c == ' ' = xs ++ [""]
               | otherwise = init xs ++ [last xs ++ [c]]
 
+palavrasRaw :: String -> [String]
+palavrasRaw = foldl auxPalavras [""]
+
 palavras :: String -> [String]
-palavras = foldl auxPalavras [""]
+palavras frase = filter (/= "") (palavrasRaw frase)
 
 despalavras :: [String] -> String
 despalavras = foldl (\acc x -> acc ++ x ++ " ") ""
+
+myscanl :: (b -> a -> b) -> b -> [a] -> [b]
+myscanl _ start [] = [start]
+myscanl f start (x:xs) = start : myscanl f res xs
+ where res = f start x

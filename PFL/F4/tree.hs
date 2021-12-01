@@ -54,3 +54,7 @@ remover x (No y esq dir) -- dois descendentes
         | x>y = No y esq (remover x dir)
         | x==y = let z = maisDir esq
         in No z (remover z esq) dir
+
+listarDec :: Arv a -> [a]
+listarDec Vazia = []
+listarDec (No x left right) = listarDec right ++ [x] ++ listarDec left
