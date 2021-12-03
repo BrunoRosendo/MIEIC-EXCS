@@ -1,0 +1,19 @@
+a) [[], [], [], []]
+b) 4
+c) [0, 0, 0, 1, 1, 1, 1, 2, 2, 2]
+d) [1, 3, 9, 27, 81]
+e) [4, 8]
+f) [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+g) [if even x then 2*x else 2^x - 1 | x<-[1..]]
+h) False
+i) Integral a => [a -> Bool]
+
+even :: Integral a => a -> Bool
+== 2 :: Eq a => a -> Bool
+> 1 :: Ord a => a -> Bool
+
+Integral ja é Eq e Ord
+
+j) String -> Int
+k) data Arv a = Vazia | No (Arv a) a (Arv a)
+l) (a -> b -> c) -> b -> a -> c

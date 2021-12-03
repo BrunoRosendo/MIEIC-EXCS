@@ -12,6 +12,7 @@ rfc notas = length [xs | xs <- notas, any (< 8) xs]
 type Vert = Int
 type Graph = [(Vert, Vert)]
 
+-- Nao percebi mt bem a pergunta. Provavelmente é mais simples que isto, eu procurei por uma relacao transitiva no grafo
 transitiva :: Graph -> Bool
 transitiva [] = False
 transitiva ((v1, v2):g) = findFirstV v2 g || findSecondV v1 g || transitiva g
