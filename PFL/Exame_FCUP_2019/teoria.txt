@@ -1,0 +1,19 @@
+a) 3
+b) [[1, 2], [3]]
+c) [11, 12, 13, 14, 15]
+d) 240
+e) []
+f) False
+g) [(1, 1), (4, 4), (9, 7), (16, 10), (25, 13), (36, 16)]
+h) [(1 + i*2, 10 - i *2) | i <- [0..]]
+i) [5, 4, 3, 2, 1]
+j) Num a => a -> a
+k) [(Bool -> Bool) -> [Bool] -> [Bool]]
+
+map :: (a -> b) -> [a] -> [b]
+filter :: (a -> Bool) -> [a] -> [a]
+
+l) data Arv a = F a | N (Arv a) (Arv a)
+m) (a -> Bool) -> [a] -> [a]
+
+Ignorei a pergunta de recursao porque nao esteve no nosso programa ate agora
