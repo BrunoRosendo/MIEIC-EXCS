@@ -1,0 +1,18 @@
+6)
+Experimenta primeiro o pair(X, Y)
+Resolve o d(x) (com d(2)) e vai ver o q(x)
+Encontra o q(4) e pergunta: X=2, Y=4 ?
+[no]
+Vai fazer backtracking e voltar a tentar com o d(2)
+Encontra o q(16) e pergunta: X=2, Y=16 ?
+[no]
+Nao ha mais para q(y) por isso volta a ver d(x)
+Encontra d(4), encontra q(4) e pergunta: X=4, Y=4 ?
+[no]
+faz backtracking, encontra q(16) e pergunta: X=4, Y=16 ?
+[no]
+Nao encontra mais q(x) nem d(x)
+Agora vai tentar com pair(X, X), pq nada nos diz que X \= Y
+Procura u(x), encontra u(1) e pergunta: X=1, Y=1 ?
+[no]
+Nao encontra mais u(x) por isso diz: no

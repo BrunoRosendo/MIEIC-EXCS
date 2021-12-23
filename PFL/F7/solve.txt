@@ -1,0 +1,13 @@
+4.
+a) yes
+b) error
+c) yes
+d) yes
+e) yes
+f) yes
+g) no
+h) yes
+i) yes
+j) yes
+k) yes
+l) yes se Rest = [Two | Tail]
