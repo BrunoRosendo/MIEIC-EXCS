@@ -1,3 +1,5 @@
+:-dynamic male/1, female/1, parent/2.
+
 male('George').
 male('Poppy').
 male('Dylan').

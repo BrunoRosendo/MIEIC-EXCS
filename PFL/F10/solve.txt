@@ -1,0 +1,10 @@
+3-
+a) O ra em cima
+b) Nenhuma, um so associa a esquerda e outro nao associa
+c) O la em cima
+d) Nao da, mesma coisa que b) mas a direita
+e) nao da, nao sao associativos
+f) b la c em cima
+g) a ra b em cima
+
+4- mt desenho (numero menor -> mais precedencia)
