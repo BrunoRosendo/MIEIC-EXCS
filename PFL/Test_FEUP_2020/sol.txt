@@ -1,0 +1,12 @@
+4- C
+5- E
+7-
+a) Verifica se um número N está presente num intervale entre A e B.
+Este predicado funciona tanto para A<=B como B<=A, tirando partido da funcao sign(),
+que incremente ou decrementa A consoante o caso.
+
+b) É verde porque a sua presença em nada altera o resultados obtidos. Serve apenas para reduzir backtracking
+desnecessário
+
+10- E
+11- E
