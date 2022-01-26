@@ -42,7 +42,19 @@ my_arg(Index, Term, Arg) :-
     Term =.. [_ | Args],
     nth1(Index, Args, Arg).
 
+my_functor(Term, Name, Arity) :-
+    length(Args, Arity),
+    Term =.. [Name | Args].
+
 univ(Term, [Name | Args]) :-
     length(Args, NumArgs),
     functor(Term, Name, NumArgs),
-    findall(Arg, (between(1, NumArgs, Idx), nth1(Idx, Args, Arg), arg(Idx, Term, Arg)), Args).
+    findall(Arg, (between(1, NumArgs, Idx), nth1(Idx, Args, Arg)), Args),
+    univ_aux(Term, Args), !.
+
+univ_aux(Term, Args) :- univ_aux(Term, Args, 1).
+univ_aux(Term, [], _).
+univ_aux(Term, [Arg | T], Counter) :-
+    arg(Counter, Term, Arg),
+    Counter1 is Counter + 1,
+    univ_aux(Term, T, Counter1).
