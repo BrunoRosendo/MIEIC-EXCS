@@ -1,0 +1,10 @@
+9) O predicado verifica se todos os participantes em Rs com idade menor ou igual a Q têm
+a performance correspondente em Ps. O cut é vermelhor porque altera os resultados do predicado.
+Se houver, na base de dados de conhecimento, um participante com a mesma performance e com duas
+idades diferentes, o resultado será diferente.
+
+10) Verifica se a lista L satisfaz a condição enunciada para um número X, da seguinte forma:
+- Declara uma lista Mid, que terá obrigatoriamente length de X
+- Usando append, gera uma lista L1, que representa todos os números até X na lista L
+- Finalmente, usando append de novo, verifica que L1 contém uma sublista começada em X seguido
+de X elementos (lista com length de Mid), utilizando a lista Mid declarada a cima
