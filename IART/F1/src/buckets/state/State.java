@@ -8,6 +8,7 @@ public class State {
     private final Bucket b1;
     private final Bucket b2;
     private final State parent; // Auxiliary for constructing path
+    private final int depth; // Auxiliary for IDS
 
     public State() { // Example default
         this(0, 0, 4, 3);
@@ -25,6 +26,7 @@ public class State {
         this.b1 = b1;
         this.b2 = b2;
         this.parent = parent;
+        this.depth = parent == null ? 0 : parent.getDepth() + 1;
     }
 
     public List<State> getPossibleStates() {
@@ -48,6 +50,10 @@ public class State {
 
     public State getParent() {
         return parent;
+    }
+
+    public int getDepth() {
+        return depth;
     }
 
     private State transfer(Bucket b1, Bucket b2, boolean revert) {

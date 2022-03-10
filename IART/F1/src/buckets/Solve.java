@@ -5,6 +5,7 @@ import buckets.state.State;
 import java.util.*;
 
 public class Solve {
+    public static final int IDS_DEPTH_LIMIT = 100;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -106,6 +107,42 @@ public class Solve {
     }
 
     List<State> ids(State start, int target) {
-        return Collections.emptyList();
+        List<State> visitedStates = new ArrayList<>();
+        Stack<State> nextStates = new Stack<>();
+        State curState = start;
+
+        int maxDepth = 1;
+
+        while (curState.hasNotReachedTarget(target)) {
+            visitedStates.add(curState);
+            List<State> possibleStates = curState.getPossibleStates();
+            for (State state : possibleStates) {
+                if (!visitedStates.contains(state) && state.getDepth() <= maxDepth)
+                    nextStates.push(state);
+            }
+
+            try {
+                curState = nextStates.pop();
+            } catch (EmptyStackException e) {
+                if (maxDepth == IDS_DEPTH_LIMIT) {
+                    System.out.println("No solution found :( Try to increase the depth limit");
+                    return Collections.emptyList();
+                }
+
+                maxDepth++;
+                curState = start;
+                visitedStates.clear();
+                nextStates.clear();
+            }
+        }
+
+        List<State> path = new ArrayList<>();
+        do {
+            path.add(curState);
+            curState = curState.getParent();
+        } while (curState != null);
+        Collections.reverse(path);
+
+        return path;
     }
 }
