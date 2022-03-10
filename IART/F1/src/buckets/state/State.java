@@ -7,18 +7,18 @@ import java.util.Objects;
 public class State {
     private final Bucket b1;
     private final Bucket b2;
-    private final State parent; // Auxiliary for BFS
-
-    public State(int start_b1, int start_b2, int max_b1, int max_b2) {
-        this.b1 = new Bucket(max_b1, start_b1);
-        this.b2 = new Bucket(max_b2, start_b2);
-        this.parent = null;
-    }
+    private final State parent; // Auxiliary for constructing path
 
     public State() { // Example default
-        this.b1 = new Bucket(4, 0);
-        this.b2 = new Bucket(3, 0);
-        this.parent = null;
+        this(0, 0, 4, 3);
+    }
+
+    public State(int start_b1, int start_b2, int max_b1, int max_b2) {
+        this(
+                new Bucket(max_b1, start_b1),
+                new Bucket(max_b2, start_b2),
+                null
+        );
     }
 
     private State(Bucket b1, Bucket b2, State parent) {
@@ -42,8 +42,8 @@ public class State {
         return possibleStates;
     }
 
-    public boolean validate(int target) {
-        return b1.getQuantity() == target;
+    public boolean hasNotReachedTarget(int target) {
+        return b1.getQuantity() != target;
     }
 
     public State getParent() {

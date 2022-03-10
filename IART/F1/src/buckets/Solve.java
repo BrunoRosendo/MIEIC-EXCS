@@ -51,7 +51,7 @@ public class Solve {
         List<State> visitedStates = new ArrayList<>();
         Queue<State> nextStates = new LinkedList<>();
 
-        while (!start.validate(target)) {
+        while (start.hasNotReachedTarget(target)) {
             visitedStates.add(start);
             List<State> possibleStates = start.getPossibleStates();
             for (State state : possibleStates) {
@@ -79,7 +79,7 @@ public class Solve {
         List<State> visitedStates = new ArrayList<>();
         Stack<State> nextStates = new Stack<>();
 
-        while (!start.validate(target)) {
+        while (start.hasNotReachedTarget(target)) {
             visitedStates.add(start);
             List<State> possibleStates = start.getPossibleStates();
             for (State state : possibleStates) {
