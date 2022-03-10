@@ -48,7 +48,6 @@ public class Solve {
     }
 
     List<State> bfs(State start, int target) {
-        List<State> path = new ArrayList<>();
         List<State> visitedStates = new ArrayList<>();
         Queue<State> nextStates = new LinkedList<>();
 
@@ -66,6 +65,7 @@ public class Solve {
             }
         }
 
+        List<State> path = new ArrayList<>();
         do {
             path.add(start);
             start = start.getParent();
@@ -76,7 +76,33 @@ public class Solve {
     }
 
     List<State> dfs(State start, int target) {
-        return Collections.emptyList();
+        List<State> visitedStates = new ArrayList<>();
+        Stack<State> nextStates = new Stack<>();
+
+        while (!start.validate(target)) {
+            visitedStates.add(start);
+            List<State> possibleStates = start.getPossibleStates();
+            for (State state : possibleStates) {
+                if (!visitedStates.contains(state))
+                    nextStates.push(state);
+            }
+
+            try {
+                start = nextStates.pop();
+            } catch (EmptyStackException e) {
+                System.out.println("No solution found :(");
+                return Collections.emptyList();
+            }
+        }
+
+        List<State> path = new ArrayList<>();
+        do {
+            path.add(start);
+            start = start.getParent();
+        } while (start != null);
+        Collections.reverse(path);
+
+        return path;
     }
 
     List<State> ids(State start, int target) {
