@@ -1,4 +1,4 @@
-package buckets.state;
+package buckets;
 
 class Bucket {
     private final int capacity;

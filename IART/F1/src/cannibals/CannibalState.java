@@ -1,10 +1,12 @@
-package cannibals.state;
+package cannibals;
+
+import problemSolver.state.State;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class State {
+public class CannibalState extends State {
     private enum BoatPos {
         START,
         DEST
@@ -16,29 +18,22 @@ public class State {
     private final int nCanDest;
     private final BoatPos boatPos;
 
-    private final State parent; // Auxiliary for constructing path
-    private final int depth; // Auxiliary for IDS
-
-    public State() { // Example default
-        this(3, 3);
-    }
-
-    public State(int nMisStart, int nCanStart) {
+    public CannibalState(int nMisStart, int nCanStart) {
         this(nMisStart, nCanStart, 0, 0, BoatPos.START, null);
     }
 
-    private State(int nMisStart, int nCanStart, int nMisDest, int nCanDest, BoatPos boatPos, State parent) {
+    private CannibalState(int nMisStart, int nCanStart, int nMisDest, int nCanDest, final BoatPos boatPos, final CannibalState parent) {
+        super(parent);
         this.nMisStart = nMisStart;
         this.nCanStart = nCanStart;
         this.nMisDest = nMisDest;
         this.nCanDest = nCanDest;
         this.boatPos = boatPos;
-        this.parent = parent;
-        this.depth = parent == null ? 0 : parent.getDepth() + 1;
     }
 
+    @Override
     public List<State> getPossibleStates() {
-        List<State> possibleStates = new ArrayList<>();
+        final List<State> possibleStates = new ArrayList<>();
 
         switch (this.boatPos) {
             case START -> {
@@ -70,13 +65,14 @@ public class State {
         return possibleStates;
     }
 
-    public boolean anyoneOnStart() {
-        return this.nMisStart != 0 || this.nCanStart != 0;
+    @Override
+    public boolean test(final State target) {
+        return this.nMisStart == 0 && this.nCanStart == 0;
     }
 
-    private State transportMissionaries(int numMis) {
+    private CannibalState transportMissionaries(int numMis) {
         return this.boatPos == BoatPos.START ?
-                new State(
+                new CannibalState(
                         this.nMisStart - numMis,
                         this.nCanStart,
                         this.nMisDest + numMis,
@@ -84,7 +80,7 @@ public class State {
                         switchBoatPos(),
                         this
                 ) :
-                new State(
+                new CannibalState(
                         this.nMisStart + numMis,
                         this.nCanStart,
                         this.nMisDest - numMis,
@@ -94,9 +90,9 @@ public class State {
                 );
     }
 
-    private State transportCannibals(int numCan) {
+    private CannibalState transportCannibals(int numCan) {
         return this.boatPos == BoatPos.START ?
-                new State(
+                new CannibalState(
                         this.nMisStart,
                         this.nCanStart - numCan,
                         this.nMisDest,
@@ -104,7 +100,7 @@ public class State {
                         switchBoatPos(),
                         this
                 ) :
-                new State(
+                new CannibalState(
                         this.nMisStart,
                         this.nCanStart + numCan,
                         this.nMisDest,
@@ -114,9 +110,9 @@ public class State {
                 );
     }
 
-    private State transportCannibalAndMissionary() {
+    private CannibalState transportCannibalAndMissionary() {
         return this.boatPos == BoatPos.START ?
-                new State(
+                new CannibalState(
                         this.nMisStart - 1,
                         this.nCanStart - 1,
                         this.nMisDest + 1,
@@ -124,7 +120,7 @@ public class State {
                         switchBoatPos(),
                         this
                 ) :
-                new State(
+                new CannibalState(
                         this.nMisStart + 1,
                         this.nCanStart + 1,
                         this.nMisDest - 1,
@@ -137,14 +133,6 @@ public class State {
     private BoatPos switchBoatPos() {
         return this.boatPos == BoatPos.START ?
                 BoatPos.DEST : BoatPos.START;
-    }
-
-    public State getParent() {
-        return parent;
-    }
-
-    public int getDepth() {
-        return depth;
     }
 
     @Override
@@ -165,11 +153,11 @@ public class State {
             return true;
         }
 
-        if (!(obj instanceof State)) {
+        if (!(obj instanceof CannibalState)) {
             return false;
         }
 
-        State state = (State) obj;
+        final CannibalState state = (CannibalState) obj;
         return this.nMisStart == state.nMisStart && this.nCanStart == state.nCanStart
                 && this.nMisDest == state.nMisDest && this.nCanDest == state.nCanDest
                 && this.boatPos == state.boatPos;
