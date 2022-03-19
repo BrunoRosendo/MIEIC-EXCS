@@ -1,6 +1,8 @@
 package nPuzzle;
 
+import problemSolver.CostfulProblemSolver;
 import problemSolver.ProblemSolver;
+import problemSolver.state.CostfulState;
 import problemSolver.state.State;
 
 import java.util.List;
@@ -16,24 +18,28 @@ public class Main {
 
         System.out.println("Choose the type of algorithm:");
         System.out.println("1- Uniform Cost (BFS)");
+        System.out.println("2- Greedy");
+        System.out.println("3- A*");
         int choice = scanner.nextInt();
 
-        final State targetState = PuzzleState.getWinningState(n);
-        final State start = new PuzzleState(n);
-        /*
+        final CostfulState targetState = PuzzleState.getWinningState(n);
+        // final CostfulState start = new PuzzleState(n);
+
         int[][] matrix = {
                 {5, 1, 3, 4},
                 {2, 0, 7, 8},
                 {10, 6, 11, 12},
                 {9, 13, 14, 15}
         };
-        final State start = new PuzzleState(matrix);*/
+        final CostfulState start = new PuzzleState(matrix);
 
-        final ProblemSolver solver = new ProblemSolver(targetState);
+        final CostfulProblemSolver solver = new CostfulProblemSolver(targetState);
         final List<State> states;
 
         switch (choice) {
             case 1 -> states = solver.bfs(start);
+            case 2 -> states = solver.greedy(start);
+            case 3 -> states = solver.AStar(start);
             default -> {
                 System.out.println("Invalid choice!");
                 return;

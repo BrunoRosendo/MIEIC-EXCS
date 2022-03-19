@@ -6,7 +6,7 @@ public abstract class State {
     private final State parent; // Auxiliary for constructing path
     private final int depth; // State's depth in the tree
 
-    public State(State parent) {
+    public State(final State parent) {
         this.parent = parent;
         this.depth = parent == null ? 0 : parent.getDepth() + 1;
     }

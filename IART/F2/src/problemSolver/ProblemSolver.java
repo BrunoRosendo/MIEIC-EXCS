@@ -5,8 +5,8 @@ import problemSolver.state.State;
 import java.util.*;
 
 public class ProblemSolver {
-    private int depthLimit = 100;
-    private final State targetState;
+    protected int depthLimit = 100;
+    protected final State targetState;
 
     public ProblemSolver(final State targetState) {
         this.targetState = targetState;
@@ -95,7 +95,7 @@ public class ProblemSolver {
         this.depthLimit = limit;
     }
 
-    private List<State> getPathFromFinalNode(State curNode) {
+    protected List<State> getPathFromFinalNode(State curNode) {
         final List<State> path = new ArrayList<>();
 
         do {

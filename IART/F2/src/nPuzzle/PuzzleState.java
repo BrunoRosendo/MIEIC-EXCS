@@ -1,5 +1,6 @@
 package nPuzzle;
 
+import problemSolver.state.CostfulState;
 import problemSolver.state.State;
 
 import java.util.ArrayList;
@@ -10,24 +11,25 @@ import java.util.stream.Collectors;
 
 import static java.lang.Math.pow;
 
-public class PuzzleState extends State {
+public class PuzzleState extends CostfulState {
     private final int[][] matrix;
     private int emptyRow;
     private int emptyCol;
 
     public PuzzleState(int n) {
-        this(buildWinningMatrix(n), 0, 0, null);
+        this(buildWinningMatrix(n), 0, 0, null, 0);
         this.shuffle(matrix);
         this.setEmptyCell();
     }
 
     public PuzzleState(final int[][] matrix) {
-        this(matrix, 0, 0, null);
+        this(matrix, 0, 0, null, 0);
         this.setEmptyCell();
     }
 
-    private PuzzleState(final int[][] matrix, int emptyRow, int emptyCol, final State parent) {
-        super(parent);
+    private PuzzleState(final int[][] matrix, int emptyRow, int emptyCol,
+                        final PuzzleState parent, final int transitionCost) {
+        super(parent, transitionCost);
         this.matrix = matrix;
         this.emptyRow = emptyRow;
         this.emptyCol = emptyCol;
@@ -44,7 +46,7 @@ public class PuzzleState extends State {
     }
 
     public static PuzzleState getWinningState(int n) {
-        return new PuzzleState(buildWinningMatrix(n), n - 1, n - 1, null);
+        return new PuzzleState(buildWinningMatrix(n), n - 1, n - 1, null, 0);
     }
 
     @Override
@@ -55,25 +57,25 @@ public class PuzzleState extends State {
             int[][] newMatrix = Arrays.stream(matrix).map(int[]::clone).toArray(int[][]::new);
             newMatrix[emptyRow][emptyCol] = matrix[emptyRow][emptyCol + 1];
             newMatrix[emptyRow][emptyCol + 1] = 0;
-            possibleStates.add(new PuzzleState(newMatrix, emptyRow, emptyCol + 1, this));
+            possibleStates.add(new PuzzleState(newMatrix, emptyRow, emptyCol + 1, this, 1));
         }
         if (emptyCol > 0) {
             int[][] newMatrix = Arrays.stream(matrix).map(int[]::clone).toArray(int[][]::new);
             newMatrix[emptyRow][emptyCol] = matrix[emptyRow][emptyCol - 1];
             newMatrix[emptyRow][emptyCol - 1] = 0;
-            possibleStates.add(new PuzzleState(newMatrix, emptyRow, emptyCol - 1, this));
+            possibleStates.add(new PuzzleState(newMatrix, emptyRow, emptyCol - 1, this, 1));
         }
         if (emptyRow < matrix.length - 1) {
             int[][] newMatrix = Arrays.stream(matrix).map(int[]::clone).toArray(int[][]::new);
             newMatrix[emptyRow][emptyCol] = matrix[emptyRow + 1][emptyCol];
             newMatrix[emptyRow + 1][emptyCol] = 0;
-            possibleStates.add(new PuzzleState(newMatrix, emptyRow + 1, emptyCol, this));
+            possibleStates.add(new PuzzleState(newMatrix, emptyRow + 1, emptyCol, this, 1));
         }
         if (emptyRow > 0) {
             int[][] newMatrix = Arrays.stream(matrix).map(int[]::clone).toArray(int[][]::new);
             newMatrix[emptyRow][emptyCol] = matrix[emptyRow - 1][emptyCol];
             newMatrix[emptyRow - 1][emptyCol] = 0;
-            possibleStates.add(new PuzzleState(newMatrix, emptyRow - 1, emptyCol, this));
+            possibleStates.add(new PuzzleState(newMatrix, emptyRow - 1, emptyCol, this, 1));
         }
 
         return possibleStates;
@@ -139,5 +141,26 @@ public class PuzzleState extends State {
 
         final PuzzleState state = (PuzzleState) obj;
         return Arrays.deepEquals(state.matrix, matrix);
+    }
+
+    /**
+      Number of incorrectly placed pieces
+     */
+    @Override
+    public int getHeuristicCost() {
+        int incorrectPieces = 0;
+        int[][] correctMatrix = PuzzleState.buildWinningMatrix(matrix.length);
+
+        for (int i = 0; i < matrix.length; ++i)
+            for (int j = 0; j < matrix[i].length; ++j)
+                if (matrix[i][j] != correctMatrix[i][j])
+                    incorrectPieces++;
+
+        return incorrectPieces;
+    }
+
+    @Override
+    public int compareTo(CostfulState state) {
+        return this.getHeuristicCost() - state.getHeuristicCost();
     }
 }
