@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import static java.lang.Math.pow;
 
 public class PuzzleState extends CostfulState {
-    private final int[][] matrix;
+    protected final int[][] matrix;
     private int emptyRow;
     private int emptyCol;
 
@@ -90,7 +90,7 @@ public class PuzzleState extends CostfulState {
         return this.equals(puzzleTarget);
     }
 
-    private static int[][] buildWinningMatrix(int n) {
+    protected static int[][] buildWinningMatrix(int n) {
         final int[][] winMatrix = new int[n][n];
         winMatrix[n-1][n-1] = 0;
         for (int i = 0; i < pow(n, 2) - 1; ++i) {

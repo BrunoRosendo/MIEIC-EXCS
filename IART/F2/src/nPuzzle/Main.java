@@ -22,16 +22,16 @@ public class Main {
         System.out.println("3- A*");
         int choice = scanner.nextInt();
 
-        final CostfulState targetState = PuzzleState.getWinningState(n);
-        // final CostfulState start = new PuzzleState(n);
-
+        final CostfulState targetState = GoodPuzzleState.getWinningState(n);
+        final CostfulState start = new GoodPuzzleState(n);
+/*
         int[][] matrix = {
                 {5, 1, 3, 4},
                 {2, 0, 7, 8},
                 {10, 6, 11, 12},
                 {9, 13, 14, 15}
         };
-        final CostfulState start = new PuzzleState(matrix);
+        final CostfulState start = new GoodPuzzleState(matrix);*/
 
         final CostfulProblemSolver solver = new CostfulProblemSolver(targetState);
         final List<State> states;
