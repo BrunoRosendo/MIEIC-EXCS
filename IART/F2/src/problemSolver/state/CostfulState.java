@@ -1,6 +1,6 @@
 package problemSolver.state;
 
-public abstract class CostfulState extends State implements Comparable<CostfulState> {
+public abstract class CostfulState extends State {
     private final int cost;
 
     public CostfulState(final CostfulState parent, final int transitionCost) {

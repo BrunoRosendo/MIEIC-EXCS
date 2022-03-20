@@ -1,7 +1,6 @@
 package nPuzzle;
 
 import problemSolver.CostfulProblemSolver;
-import problemSolver.ProblemSolver;
 import problemSolver.state.CostfulState;
 import problemSolver.state.State;
 

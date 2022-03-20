@@ -158,9 +158,4 @@ public class PuzzleState extends CostfulState {
 
         return incorrectPieces;
     }
-
-    @Override
-    public int compareTo(CostfulState state) {
-        return this.getHeuristicCost() - state.getHeuristicCost();
-    }
 }
