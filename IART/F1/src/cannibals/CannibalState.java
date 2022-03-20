@@ -35,33 +35,13 @@ public class CannibalState extends State {
     public List<State> getPossibleStates() {
         final List<State> possibleStates = new ArrayList<>();
 
-        switch (this.boatPos) {
-            case START -> {
-                if ((nMisStart > nCanStart || nMisStart == 1) && nMisDest + 1 >= nCanDest)
-                    possibleStates.add(transportMissionaries(1));
-                if ((nMisStart > nCanStart + 1 || nMisStart == 2) && nMisDest + 2 >= nCanDest)
-                    possibleStates.add(transportMissionaries(2));
-                if ((nMisDest > nCanDest || nMisDest == 0) && nCanStart > 0)
-                    possibleStates.add(transportCannibals(1));
-                if ((nMisDest > nCanDest + 1 || nMisDest == 0) && nCanStart > 1)
-                    possibleStates.add(transportCannibals(2));
-                if (nMisStart > 0 && nCanStart > 0 && nMisDest >= nCanDest)
-                    possibleStates.add(transportCannibalAndMissionary());
-            }
-            case DEST -> {
-                if ((nMisDest > nCanDest || nMisDest == 1) && nMisStart + 1 >= nCanStart)
-                    possibleStates.add(transportMissionaries(1));
-                if ((nMisDest > nCanDest + 1 || nMisDest == 2) && nMisStart + 2 >= nCanStart)
-                    possibleStates.add(transportMissionaries(2));
-                if ((nMisStart > nCanStart || nMisStart == 0) && nCanDest > 0)
-                    possibleStates.add(transportCannibals(1));
-                if ((nMisStart > nCanStart + 1 || nMisStart == 0) && nCanDest > 1)
-                    possibleStates.add(transportCannibals(2));
-                if (nMisDest > 0 && nCanDest > 0 && nMisDest >= nCanDest)
-                    possibleStates.add(transportCannibalAndMissionary());
-            }
-        }
+        possibleStates.add(transportMissionaries(1));
+        possibleStates.add(transportMissionaries(2));
+        possibleStates.add(transportCannibals(1));
+        possibleStates.add(transportCannibals(2));
+        possibleStates.add(transportCannibalAndMissionary());
 
+        possibleStates.removeIf(s -> !CannibalState.isStateValid(s));
         return possibleStates;
     }
 
@@ -133,6 +113,20 @@ public class CannibalState extends State {
     private BoatPos switchBoatPos() {
         return this.boatPos == BoatPos.START ?
                 BoatPos.DEST : BoatPos.START;
+    }
+
+    private static boolean isStateValid(final State state) {
+        if (!(state instanceof CannibalState))
+            return false;
+        final CannibalState cannibalState = (CannibalState) state;
+
+        return (
+                cannibalState.nMisStart >= cannibalState.nCanStart ||
+                cannibalState.nMisStart == 0
+        ) && (
+                cannibalState.nMisDest >= cannibalState.nCanDest ||
+                cannibalState.nMisDest == 0
+            );
     }
 
     @Override
