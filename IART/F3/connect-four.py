@@ -176,13 +176,16 @@ def eval1(player = turn, matrix = board):
 def eval2(player = turn, matrix = board):
     return 100 * eval1(player, matrix) + nlines3(player, matrix) - nlines3(3 - player, matrix)
 
+def eval3(player = turn, matrix = board):
+    return 100 * eval1(player, matrix) + central(player, matrix) - central(3 - player, matrix)
+
 while True:
     printBoard()
 
     if turn == 1:
         col = int(input("Select the column: "))
     else:
-        col = minimaxPlay(turn, MINIMAX_DEPTH, eval2)[1]
+        col = minimaxPlay(turn, MINIMAX_DEPTH, eval3)[1]
         input("The bot chose column {}".format(col))
 
     playPiece(col, board, turn)
