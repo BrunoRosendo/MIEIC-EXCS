@@ -1,7 +1,7 @@
 import numpy as np
 import math
 
-MINIMAX_DEPTH = 6
+MINIMAX_DEPTH = 4
 BOARD_NUM_ROWS = 6
 BOARD_NUM_COLS = 7
 
@@ -173,13 +173,16 @@ def minimaxPlay(player, depth, eval, matrix = board, alpha = -math.inf, beta = m
 def eval1(player = turn, matrix = board):
     return nlines4(player, matrix) - nlines4(3 - player, matrix)
 
+def eval2(player = turn, matrix = board):
+    return 100 * eval1(player, matrix) + nlines3(player, matrix) - nlines3(3 - player, matrix)
+
 while True:
     printBoard()
 
     if turn == 1:
         col = int(input("Select the column: "))
     else:
-        col = minimaxPlay(turn, MINIMAX_DEPTH, eval1)[1]
+        col = minimaxPlay(turn, MINIMAX_DEPTH, eval2)[1]
         input("The bot chose column {}".format(col))
 
     playPiece(col, board, turn)
