@@ -179,6 +179,9 @@ def eval2(player = turn, matrix = board):
 def eval3(player = turn, matrix = board):
     return 100 * eval1(player, matrix) + central(player, matrix) - central(3 - player, matrix)
 
+def eval4(player = turn, matrix = board):
+    return 5 * eval2(player, matrix) + eval3(player, matrix)
+
 while True:
     printBoard()
 
