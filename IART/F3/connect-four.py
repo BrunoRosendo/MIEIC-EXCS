@@ -199,3 +199,5 @@ while True:
         break
 
     turn = 3 - turn
+
+# Alinea g) para melhorar e mesmo dar fix a isto, esta podre
